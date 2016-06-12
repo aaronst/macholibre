@@ -37,13 +37,13 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 # Functions
-def processFile(path):
+def processFile(path, f=None):
     p = Parser(path=path)
     p.parseFile()
     a = Analyzer(parser=p)
     a.analyze()
     j = Packer(analyzer=a)
-    if data.o is None:
+    if f is None:
         j.pack()
     else:
         j.pack(f=f)
@@ -55,10 +55,12 @@ if __name__ == '__main__':
 
     if data.o is not None:
         f = codecs.open(data.o, 'w', encoding='utf-8')
+    else:
+	f = None
 
     if data.r is None:
         try:
-            processFile(sys.argv[1])
+            processFile(sys.argv[1], f=f)
         except Exception as e:
             print ('Bad file: ' + sys.argv[1])
             logging.error(traceback.format_exc())
@@ -66,11 +68,9 @@ if __name__ == '__main__':
         f.write('[')
         count = 1
         for i in glob(data.r):
-            #if count > 1241:
-            #    break
             try:
                 print ('Processing file #' + str(count) + ': ' + i)
-                processFile(i)
+                processFile(i, f=f)
                 if count < len(glob(data.r)):
                     f.write(',')
             except Exception as e:

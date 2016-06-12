@@ -14,11 +14,10 @@ ease of analysis and integration.
 
 ## Dependencies
 I tried to make this tool with as little external dependencies as possible, and
-I think I did pretty well.  The only 2 modules I import are for parsing plists
-and CMS signatures.  You can get plistlib with pip, ctypescrypto you'll have to
-download from github and install yourself.
+I think I did pretty well on that front.  The only module I import is for parsing
+CMS signatures.  I've configured the setup.py to automatically install it with
+the module, but you can also install it seperately with pip or manually from github.
 * [Python 2.7](https://www.python.org/download/releases/2.7/)
-  - [plistlib](https://docs.python.org/2.7/library/plistlib.html)
   - [ctypescrypto](https://github.com/vbwagner/ctypescrypto)
     + ctypescrypto depends on openssl under the hood, on linux it should be
       installed by default but on other OS's you might have to do this
@@ -28,24 +27,46 @@ download from github and install yourself.
 ## How To
 
 ### Usage
-`python macholibre.py (-r <directory|glob> | <file>) [options]`
+#### As a Module
+```python
+from macholibre import macholibre
 
-### Options
+# mach-o file path
+path = '/home/aaron/my_macho'
+
+# return json
+json_data = macholibre.parseFile(path)
+
+# write json to file
+out_file = open('/home/aaron/macholibre_output.json', 'w')
+macholibre.parseFile(path, f=out_file)
+```
+
+#### As a Script
+```python
+python macholibre.py (-r <directory|glob> | <file>) [options]
+```
+
+##### Options
 * -h: Help
 * -r: Parse directory of glob
 * -o: Specify output file
 
-### Note
+##### Note
 For single files, make sure you put the filename first, before any options.  
 Also, globs need to be in quotes and paths need to be absolute.
 
-### Examples
+##### Examples
 
-#### Single File
-`python macholibre.py otool -o otool.json`
+###### Single File
+```python
+python macholibre.py otool -o otool.json
+```
 
-#### Glob
-`python macholibre.py -r "machos/*" -o machos.json`
+###### Glob
+```python
+python macholibre.py -r "machos/*" -o machos.json
+```
 
 ## Output Format
 macholibre formats all of its output into a JSON blob.  The hierarchy is 
