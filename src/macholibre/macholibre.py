@@ -44,7 +44,7 @@ def processFile(path, f=None):
     a.analyze()
     j = Packer(analyzer=a)
     if f is None:
-        j.pack()
+        return j.pack()
     else:
         j.pack(f=f)
 
