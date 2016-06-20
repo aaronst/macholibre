@@ -21,21 +21,13 @@ class Expression(object):
 
     # Constructor
     def __init__(self, operator=None):
-        self._operator = operator
-        self._operands = []
-
-    # Getters
-    def getOperator(self): return self._operator
-
-    # Setters
-    def setOperator(self, operator): self._operator = operator
-
-    def setOperands(self, operands): self._operands = operands
+        self.operator = operator
+        self.operands = []
 
     # Generators
-    def genOperands(self):
-        for i in self._operands:
+    def gen_operands(self):
+        for i in self.operands:
             yield i
 
     # Functions
-    def addOperand(self, operand): self._operands.append(operand)
+    def add_operand(self, operand): self.operands.append(operand)

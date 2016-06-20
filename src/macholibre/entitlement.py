@@ -21,15 +21,6 @@ class Entitlement(object):
 
     # Constructor
     def __init__(self, size=None, plist=None):
-        self._size = size
-        self._plist = plist
+        self.size = size
+        self.plist = plist
 
-    # Getters
-    def getSize(self): return self._size
-
-    def getPlist(self): return self._plist
-
-    # Setters
-    def setSize(self, size): self._size = size
-
-    def setPlist(self, plist): self._plist = plist

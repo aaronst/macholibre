@@ -23,63 +23,22 @@ class Section(object):
     def __init__(self, name=None, segname=None, addr=None, offset=None,
                  align=None, reloff=None, nreloc=None, size=None):
         # Fields
-        self._name = name
-        self._segname = segname
-        self._addr = addr
-        self._offset = offset
-        self._align = align
-        self._reloff = reloff
-        self._nreloc = nreloc
-        self._size = size
-        self._type = None
-        self._attrs = []
-
-    # Getters
-    def getName(self): return self._name
-
-    def getSegName(self): return self._segname
-
-    def getAddr(self): return self._addr
-
-    def getOffset(self): return self._offset
-
-    def getAlign(self): return self._align
-
-    def getRelOff(self): return self._reloff
-
-    def getNReloc(self): return self._nreloc
-
-    def getSize(self): return self._size
-
-    def getType(self): return self._type
-
-    def getAttrs(self): return self._attrs
-
-    # Setters
-    def setName(self, name): self._name = name
-
-    def setSegName(self, segname): self._segname = segname
-
-    def setAddr(self, addr): self._addr = addr
-
-    def setOffset(self, offset): self._offset = offset
-
-    def setAlign(self, align): self._align = align
-
-    def setRelOff(self, reloff): self._reloff = reloff
-
-    def setNReloc(self, nreloc): self._nreloc = nreloc
-
-    def setSize(self, size): self._size = size
-
-    def setType(self, section_type): self._type = section_type
-
-    def setAttrs(self, attrs): self._attrs = attrs
+        self.name = name
+        self.segname = segname
+        self.addr = addr
+        self.offset = offset
+        self.align = align
+        self.reloff = reloff
+        self.nreloc = nreloc
+        self.size = size
+        self.type = None
+        self.attrs = []
 
     # Generators
-    def genAttrs(self):
-        for i in self._attrs:
+    def gen_attrs(self):
+        for i in self.attrs:
             yield i
 
     # Functions
-    def addAttr(self, attr): self._attrs.append(attr)
+    def add_attr(self, attr): self.attrs.append(attr)
+

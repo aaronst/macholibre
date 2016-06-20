@@ -17,25 +17,17 @@ limitations under the License.
 '''
 
 
+# An abonormality is the object that wraps parsing error
+# information for inclusion into JSON output.
 class Abnormality(object):
 
     # Constructor
     def __init__(self, title=None, data=None):
-        self._title = title
-        self._data = data
-
-    # Getters
-    def getTitle(self): return self._title
-
-    def getData(self): return self._data
-
-    # Setters
-    def setTitle(self, title): self._title = title
-
-    def setData(self, data): self._data = data
+        self.title = title
+        self.data = data
 
     # Functions
-    def addData(self, key, value): self._data[key] = value
+    def add_data(self, key, value): self.data[key] = value
 
 
 def bad_content(thing, offset):
@@ -56,3 +48,4 @@ def out_of_bounds(child, size, offset, parent, parent_size, parent_offset):
                ' of {4} bytes at offset {5}.')
     return a_type + message.format(child, size, offset, parent,
                                    parent_size, parent_offset)
+

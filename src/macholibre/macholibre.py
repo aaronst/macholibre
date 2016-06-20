@@ -37,9 +37,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 # Functions
-def processFile(path, f=None):
+def parse(path, f=None):
     p = Parser(path=path)
-    p.parseFile()
+    p.parse_file()
     a = Analyzer(parser=p)
     a.analyze()
     j = Packer(analyzer=a)
@@ -53,26 +53,31 @@ if __name__ == '__main__':
     h = Handler()
     h.digest(sys.argv)
 
+    # If an output file was specified via the command line...
     if data.o is not None:
         f = codecs.open(data.o, 'w', encoding='utf-8')
     else:
 	f = None
 
+    # If recursion was not specified via the command line...
     if data.r is None:
         try:
-            processFile(sys.argv[1], f=f)
+            parse(sys.argv[1], f=f)
+	# Need to make this better than generic error.
         except Exception as e:
             print ('Bad file: ' + sys.argv[1])
             logging.error(traceback.format_exc())
+    # If recursion was specified (for a directory/glob)
     else:
         f.write('[')
         count = 1
         for i in glob(data.r):
             try:
                 print ('Processing file #' + str(count) + ': ' + i)
-                processFile(i, f=f)
+                parse(i, f=f)
                 if count < len(glob(data.r)):
                     f.write(',')
+	    # Again, need to make error handling better.
             except Exception as e:
                 print ('Bad file: ' + i)
                 logging.error(traceback.format_exc())
@@ -81,6 +86,7 @@ if __name__ == '__main__':
                 f.write(']')
             count += 1
 
+    # Close output file if necessary
     if data.o is not None:
         f.close()
 

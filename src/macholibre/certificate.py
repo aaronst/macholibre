@@ -21,26 +21,10 @@ class Certificate(object):
 
     # Constructor
     def __init__(self, serial=None, subject=None, issuer=None, ca=None):
-        self._serial = serial
-        self._subject = subject
-        self._issuer = issuer
-        self._ca = ca
-
-    # Getters
-    def getSerial(self): return self._serial
-
-    def getSubject(self): return self._subject
-
-    def getIssuer(self): return self._issuer
-
-    # Setters
-    def setSerial(self, serial): self._serial = serial
-
-    def setSubject(self, subject): self._subject = subject
-
-    def setIssuer(self, issuer): self._issuer = issuer
-
-    def setCA(self, ca): self._ca = ca
+        self.serial = serial
+        self.subject = subject
+        self.issuer = issuer
+        self.ca = ca
 
     # Functions
-    def isCA(self): return self._ca
+    def is_ca(self): return self.ca

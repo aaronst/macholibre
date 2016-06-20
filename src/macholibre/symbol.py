@@ -23,65 +23,27 @@ class Symbol(object):
     def __init__(self, index=None, stab=None, pext=None, sym_type=None,
                  ext=None, sect=None, dylib=None, ref=None, value=None):
         # Fields
-        self._index = index
-        self._stab = stab
-        self._pext = pext
-        self._type = sym_type
-        self._ext = ext
-        self._sect = sect
-        self._dylib = dylib
-        self._ref = ref
-        self._value = value
-
-    # Getters
-    def getIndex(self): return self._index
-
-    def getStab(self): return self._stab
-
-    def getPext(self): return self._pext
-
-    def getType(self): return self._type
-
-    def getExt(self): return self._ext
-
-    def getSect(self): return self._sect
-
-    def getDylib(self): return self._dylib
-
-    def getRef(self): return self._ref
-
-    def getValue(self): return self._value
-
-    # Setters
-    def setIndex(self, index): self._index = index
-
-    def setStab(self, stab): self._stab = stab
-
-    def setPext(self, pext): self._pext = pext
-
-    def setType(self, sym_type): self._type = sym_type
-
-    def setExt(self, ext): self._ext = ext
-
-    def setSect(self, sect): self._sect = sect
-
-    def setDylib(self, dylib): self._dylib = dylib
-
-    def setRef(self, ref): self._ref = ref
-
-    def setValue(self, value): self._value = value
+        self.index = index
+        self.stab = stab
+        self.pext = pext
+        self.type = sym_type
+        self.ext = ext
+        self.sect = sect
+        self.dylib = dylib
+        self.ref = ref
+        self.value = value
 
     # Functions
-    def isStab(self): return self._stab is not None
+    def is_stab(self): return self.stab is not None
 
-    def isType(self, type): return self._type == type
+    def is_type(self, type): return self.type == type
 
     # I am defining an imported symbol as an undefined,
     # non-private, external symbol.  See below url for
     # a more in depth explanation of symbols.
     # http://math-atlas.sourceforge.net/devel/assembly/MachORuntime.pdf
-    def isImp(self):
-        return (self._pext == 0 and self._ext == 1 and
-                (self._type == 'UNDF' or self._type == 'PBUD') and
-                ((self._ref & 0xf == 0) or (self._ref & 0xf == 1)))
+    def is_imp(self):
+        return (self.pext == 0 and self.ext == 1 and
+                (self.type == 'UNDF' or self.type == 'PBUD') and
+                ((self.ref & 0xf == 0) or (self.ref & 0xf == 1)))
 

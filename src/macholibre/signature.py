@@ -21,52 +21,34 @@ class Signature(object):
 
     # Constructor
     def __init__(self, offset=None, size=None, count=None):
-        self._offset = offset
-        self._size = size
-        self._count = count
-        self._codedirectory = None
-        self._entitlements = []
-        self._requirements = []
-        self._certs = []
-
-    # Getters
-    def getOffset(self): return self._offset
-
-    def getSize(self): return self._size
-
-    def getCount(self): return self._count
-
-    def getCodeDirectory(self): return self._codedirectory
-
-    # Setters
-    def setOffset(self, offset): self._offset = offset
-
-    def setSize(self, size): self._size = size
-
-    def setCount(self, count): self._count = count
-
-    def setCodeDirectory(self, codedirectory):
-        self._codedirectory = codedirectory
+        self.offset = offset
+        self.size = size
+        self.count = count
+        self.codedirectory = None
+        self.entitlements = []
+        self.requirements = []
+        self.certs = []
 
     # Generators
-    def genEntitlements(self):
-        for i in self._entitlements:
+    def gen_entitlements(self):
+        for i in self.entitlements:
             yield i
 
-    def genRequirements(self):
-        for i in self._requirements:
+    def gen_requirements(self):
+        for i in self.requirements:
             yield i
 
-    def genCerts(self):
-        for i in self._certs:
+    def gen_certs(self):
+        for i in self.certs:
             yield i
 
     # Functions
-    def addEntitlement(self, entitlement):
-        self._entitlements.append(entitlement)
+    def add_entitlement(self, entitlement):
+        self.entitlements.append(entitlement)
 
-    def addRequirement(self, requirement):
-        self._requirements.append(requirement)
+    def add_requirement(self, requirement):
+        self.requirements.append(requirement)
 
-    def addCert(self, cert):
-        self._certs.append(cert)
+    def add_cert(self, cert):
+        self.certs.append(cert)
+

@@ -27,70 +27,29 @@ class Segment(loadcommand.LoadCommand):
                  name=None, offset=None, segsize=None, maxprot=None,
                  initprot=None, nsects=None):
         # Fields
-        self._name = name
-        self._vmaddr = vmaddr
-        self._vmsize = vmsize
-        self._offset = offset
-        self._segsize = segsize
-        self._maxprot = maxprot
-        self._initprot = initprot
-        self._nsects = nsects
-        self._sects = []
-        self._flags = []
+        self.name = name
+        self.vmaddr = vmaddr
+        self.vmsize = vmsize
+        self.offset = offset
+        self.segsize = segsize
+        self.maxprot = maxprot
+        self.initprot = initprot
+        self.nsects = nsects
+        self.sects = []
+        self.flags = []
         super(Segment, self).__init__(cmd, size)
 
-    # Getters
-    def getName(self): return self._name
-
-    def getVMAddr(self): return self._vmaddr
-
-    def getVMSize(self): return self._vmsize
-
-    def getOffset(self): return self._offset
-
-    def getSegSize(self): return self._segsize
-
-    def getMaxProt(self): return self._maxprot
-
-    def getInitProt(self): return self._initprot
-
-    def getNSects(self): return self._nsects
-
-    def getSects(self): return self._sects
-
-    def getFlags(self): return self._flags
-
-    # Setters
-    def setName(self, name): self._name = name
-
-    def setVMAddr(self, vmaddr): self._vmaddr = vmaddr
-
-    def setVMSize(self, vmsize): self._vmsize = vmsize
-
-    def setOffset(self, offset): self._offset = offset
-
-    def setSegSize(self, segsize): self._segsize = segsize
-
-    def setMaxProt(self, maxprot): self._maxprot = maxprot
-
-    def setInitProt(self, initprot): self._initprot = initprot
-
-    def setNSects(self, nsects): self._nsects = nsects
-
-    def setSects(self, sects): self._sects = sects
-
-    def setFlags(self, flags): self._flags = flags
-
     # Generators
-    def genSects(self):
-        for i in self._sects:
+    def gen_sects(self):
+        for i in self.sects:
             yield i
 
-    def genFlags(self):
-        for i in self._flags:
+    def gen_flags(self):
+        for i in self.flags:
             yield i
 
     # Functions
-    def addSect(self, sect): self._sects.append(sect)
+    def add_sect(self, sect): self.sects.append(sect)
 
-    def addFlag(self, flag): self._flags.append(flag)
+    def add_flag(self, flag): self.flags.append(flag)
+

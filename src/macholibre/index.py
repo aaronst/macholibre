@@ -21,15 +21,6 @@ class Index(object):
 
     # Constructor
     def __init__(self, type=None, offset=None):
-        self._type = type
-        self._offset = offset
+        self.type = type
+        self.offset = offset
 
-    # Getters
-    def getType(self): return self._type
-
-    def getOffset(self): return self._offset
-
-    # Setters
-    def setType(self, type): self._type = type
-
-    def setOffset(self, offset): self._offset = offset

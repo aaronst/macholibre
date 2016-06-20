@@ -1,0 +1,6 @@
+src/macholibre/*.pyc
+src/macholibre/classify.py
+src/macholibre/cms_parse_test.py
+src/macholibre/create_model.py
+src/macholibre/fit_model.py
+src/macholibre/stats.py

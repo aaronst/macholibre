@@ -22,28 +22,15 @@ class StringTable(object):
     # Constructor
     def __init__(self, offset=None, size=None):
         # Fields
-        self._offset = offset
-        self._size = size
-        self._strings = []
-
-    # Getters
-    def getOffset(self): return self._offset
-
-    def getSize(self): return self._size
-
-    def getStrings(self): return self._strings
-
-    # Setters
-    def setOffset(self, offset): self._offset = offset
-
-    def setSize(self, size): self._size = size
-
-    def setStrings(self, strings): self._strings = strings
+        self.offset = offset
+        self.size = size
+        self.strings = []
 
     # Generators
-    def genStrings(self):
-        for i in self._strings:
+    def gen_strings(self):
+        for i in self.strings:
             yield i
 
     # Functions
-    def addString(self, string): self._strings.append(string)
+    def add_string(self, string): self.strings.append(string)
+

@@ -66,13 +66,14 @@ def readstring(f):
     return string.decode('utf_8', errors='replace')
 
 
-def getInt(f): return int(f.read(4).encode('hex'), 16)
+def get_int(f): return int(f.read(4).encode('hex'), 16)
 
 
-def getLL(f): return int(f.read(8).encode('hex'), 16)
+def get_ll(f): return int(f.read(8).encode('hex'), 16)
 
 
-def getFileName(path): return re.split(r'\\|/', path)[-1]
+def get_file_name(path): return re.split(r'\\|/', path)[-1]
 
 
 def strip(s): return s.strip('\0')
+

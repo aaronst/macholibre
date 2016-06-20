@@ -21,15 +21,6 @@ class Match(object):
 
     # Constructor
     def __init__(self, match_type=None, value=None):
-        self._type = match_type
-        self._value = value
+        self.type = match_type
+        self.value = value
 
-    # Getters
-    def getType(self): return self._type
-
-    def getValue(self): return self._value
-
-    # Setters
-    def setType(self, match_type): self._type = match_type
-
-    def setValue(self, value): self._value = value

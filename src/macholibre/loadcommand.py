@@ -22,31 +22,18 @@ class LoadCommand(object):
     # Constructor
     def __init__(self, cmd=None, size=None):
         # Fields
-        self._cmd = cmd
-        self._size = size
-        self._data = {}
-
-    # Getters
-    def getCmd(self): return self._cmd
-
-    def getSize(self): return self._size
-
-    def getData(self): return self._data
-
-    # Setters
-    def setCmd(self, cmd): self._cmd = cmd
-
-    def setSize(self, size): self._size = size
-
-    def setData(self, data): self._data = data
+        self.cmd = cmd
+        self.size = size
+        self.data = {}
 
     # Generators
-    def genData(self):
-        for i in self._data.iteritems():
+    def gen_data(self):
+        for i in self.data.iteritems():
             yield i
 
     # Functions
-    def addData(self, key, value): self._data[key] = value
+    def add_data(self, key, value): self.data[key] = value
 
-    def isSegment(self):
-        return self._cmd == 'SEGMENT' or self._cmd == 'SEGMENT_64'
+    def is_segment(self):
+        return self.cmd == 'SEGMENT' or self.cmd == 'SEGMENT_64'
+

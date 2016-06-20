@@ -21,20 +21,7 @@ class Requirement(object):
 
     # Constructor
     def __init__(self, req_type=None, offset=None):
-        self._type = req_type
-        self._offset = offset
-        self._expression = None
+        self.type = req_type
+        self.offset = offset
+        self.expression = None
 
-    # Getters
-    def getType(self): return self._type
-
-    def getOffset(self): return self._offset
-
-    def getExpression(self): return self._expression
-
-    # Setters
-    def setType(self, req_type): self._type = req_type
-
-    def setOffset(self, offset): self._offset = offset
-
-    def setExpression(self, expression): self._expression = expression

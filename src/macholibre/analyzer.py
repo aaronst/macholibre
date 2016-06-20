@@ -24,54 +24,51 @@ class Analyzer(object):
 
     # Constructor
     def __init__(self, parser=None):
-        self._parser = parser
-
-    # Getters
-    def getParser(self): return self._parser
-
-    # Setters
-    def setParser(self, parser): self._parser = parser
+        self.parser = parser
 
     # Functions
-    def calcNImps(self, macho):
-        macho.addAnalytic('nimps', len(macho.getImports()))
+    def calc_n_imps(self, macho):
+        macho.add_analytic('nimps', len(macho.imports))
 
-    def calcNDylibs(self, macho):
-        macho.addAnalytic('ndylibs', len(macho.getDylibs()))
+    def calc_n_dylibs(self, macho):
+        macho.add_analytic('ndylibs', len(macho.dylibs))
 
-    def calcSNLCR(self, macho):
-        slcs = 1.0 * macho.getSLCs()
-        nlcs = 1.0 * macho.getNLCs()
-        macho.addAnalytic('snlcr', slcs / nlcs)
+    # Currently not included in JSON output (see packer.py)
+    def calc_snlcr(self, macho):
+        slcs = float(macho.slcs)
+        nlcs = float(macho.nlcs)
+        macho.add_analytic('snlcr', slcs / nlcs)
 
-    def calcEntropy(self, macho):
-        byteCounts = {}
-        f = self._parser.getF()
-        f.seek(macho.getOffset())
+    # Need to extend this to segment/section granularity
+    def calc_entropy(self, macho):
+        byte_counts = {}
+        f = self.parser.f
+        f.seek(macho.offset)
         for i in range(256):
-            byteCounts[i] = 0
-        for i in bytearray(f.read(macho.getSize())):
-            byteCounts[i] += 1
+            byte_counts[i] = 0
+        for i in bytearray(f.read(macho.size)):
+            byte_counts[i] += 1
 
-        total = float(sum(byteCounts.values()))
+        total = float(sum(byte_counts.values()))
         entropy = 0
-        for count in byteCounts.itervalues():
+        for count in byte_counts.itervalues():
             if count == 0:
                 continue
             p = float(count) / total
             entropy -= p * math.log(p, 256)
 
-        macho.addAnalytic('entropy', entropy)
+        macho.add_analytic('entropy', entropy)
 
-    def populateAnalytics(self, macho):
-        self.calcNImps(macho)
-        self.calcNDylibs(macho)
-        # self.calcSNLCR(macho)
-        self.calcEntropy(macho)
+    def populate_analytics(self, macho):
+        self.calc_n_imps(macho)
+        self.calc_n_dylibs(macho)
+        # self.calc_snlcr(macho)
+        self.calc_entropy(macho)
 
     def analyze(self):
-        if self._parser.getFile().isUniversal():
-            for i in self._parser.getFile().getContent().getMachOs():
-                self.populateAnalytics(i)
+        if self.parser.file.is_universal():
+            for i in self.parser.file.content.machos:
+                self.populate_analytics(i)
         else:
-            self.populateAnalytics(self._parser.getFile().getContent())
+            self.populate_analytics(self.parser.file.content)
+

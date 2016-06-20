@@ -22,18 +22,9 @@ class FunctionImport(object):
     # Constructor
     def __init__(self, func=None, dylib=None):
         # Fields
-        self._func = func
-        self._dylib = dylib
-
-    # Getters
-    def getFunc(self): return self._func
-
-    def getDylib(self): return self._dylib
-
-    # Setters
-    def setFunc(self, func): self._func = func
-
-    def setDylib(self, dylib): self._dylib = dylib
+        self.func = func
+        self.dylib = dylib
 
     # Functions
-    def hasDylib(self): return self._dylib is not None
+    def has_dylib(self): return self.dylib is not None
+

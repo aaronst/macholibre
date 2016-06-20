@@ -22,7 +22,7 @@ import logging
 import traceback
 
 from uuid import UUID
-from utilities import little, getInt, getLL, readstring, strip
+from utilities import little, get_int, get_ll, readstring, strip
 from segment import Segment
 from section import Section
 from osversion import OSVersion
@@ -37,49 +37,40 @@ class LoadCommander(object):
     # Constructor
     def __init__(self, f=None, macho=None, file_size=None):
         # Fields
-        self._f = f
-        self._macho = macho
-        self._file_size = file_size
-        self._abnormalities = []
-
-    # Getters
-    def getMachO(self): return self._macho
-
-    def getAbnormalities(self): return self._abnormalities
-
-    # Setters
-    def setMachO(self, macho): self._macho = macho
+        self.f = f
+        self.macho = macho
+        self.file_size = file_size
+        self.abnormalities = []
 
     # Functions
-    def addAbnormality(self, abnormality): self._abnormalities.append(abnormality)
+    def add_abnormality(self, abnormality): self.abnormalities.append(abnormality)
 
-    def parseSectionAttrs(self, section, attrs):
+    def parse_section_attrs(self, section, attrs):
         for a in dictionary.section_attrs:
             if attrs & a == a:
-                section.addAttr(dictionary.section_attrs[a])
+                section.add_attr(dictionary.section_attrs[a])
 
-    def parseSectionFlags(self, section, flags):
-        section_type = dictionary.section_types[flags & 0xff]
-        section.setType(section_type)
+    def parse_section_flags(self, section, flags):
+        section.type = dictionary.section_types[flags & 0xff]
         attrs = flags & 0xffffff00
-        self.parseSectionAttrs(section, attrs)
+        self.parse_section_attrs(section, attrs)
 
-    def parseSection(self):
-        name = strip(self._f.read(16))
-        segname = strip(self._f.read(16))
-        addr = getInt(self._f) if self._macho.is32Bit() else getLL(self._f)
-        size = getInt(self._f) if self._macho.is32Bit() else getLL(self._f)
-        offset = getInt(self._f)
-        align = getInt(self._f)
-        reloff = getInt(self._f)
-        nreloc = getInt(self._f)
-        flags = getInt(self._f)
-        self._f.read(8) if self._macho.is32Bit() else self._f.read(12)
+    def parse_section(self):
+        name = strip(self.f.read(16))
+        segname = strip(self.f.read(16))
+        addr = get_int(self.f) if self.macho.is_32_bit() else get_ll(self.f)
+        size = get_int(self.f) if self.macho.is_32_bit() else get_ll(self.f)
+        offset = get_int(self.f)
+        align = get_int(self.f)
+        reloff = get_int(self.f)
+        nreloc = get_int(self.f)
+        flags = get_int(self.f)
+        self.f.read(8) if self.macho.is_32_bit() else self.f.read(12)
 
-        if self._macho.isLittle():
-            addr = little(addr, 'I') if self._macho.is32Bit() \
+        if self.macho.is_little():
+            addr = little(addr, 'I') if self.macho.is_32_bit() \
                 else little(addr, 'Q')
-            size = little(size, 'I') if self._macho.is32Bit() \
+            size = little(size, 'I') if self.macho.is_32_bit() \
                 else little(size, 'Q')
             offset = little(offset, 'I')
             align = little(align, 'I')
@@ -89,36 +80,36 @@ class LoadCommander(object):
 
         section = Section(name=name, segname=segname, addr=addr, offset=offset,
                           align=align, reloff=reloff, nreloc=nreloc, size=size)
-        self.parseSectionFlags(section, flags)
+        self.parse_section_flags(section, flags)
 
         return section
 
-    def parseSegmentFlags(self, segment, flags):
+    def parse_segment_flags(self, segment, flags):
         j = 1
         while j < 9:
             if flags & j == j:
-                segment.addFlag(dictionary.segment_flags[j])
+                segment.add_flag(dictionary.segment_flags[j])
             j <<= 1
 
-    def parseSegment(self, lc):
-        name = strip(self._f.read(16))
-        vmaddr = getInt(self._f) if self._macho.is32Bit() else getLL(self._f)
-        vmsize = getInt(self._f) if self._macho.is32Bit() else getLL(self._f)
-        offset = getInt(self._f) if self._macho.is32Bit() else getLL(self._f)
-        segsize = getInt(self._f) if self._macho.is32Bit() else getLL(self._f)
-        maxprot = getInt(self._f)
-        initprot = getInt(self._f)
-        nsects = getInt(self._f)
-        flags = getInt(self._f)
+    def parse_segment(self, lc):
+        name = strip(self.f.read(16))
+        vmaddr = get_int(self.f) if self.macho.is_32_bit() else get_ll(self.f)
+        vmsize = get_int(self.f) if self.macho.is_32_bit() else get_ll(self.f)
+        offset = get_int(self.f) if self.macho.is_32_bit() else get_ll(self.f)
+        segsize = get_int(self.f) if self.macho.is_32_bit() else get_ll(self.f)
+        maxprot = get_int(self.f)
+        initprot = get_int(self.f)
+        nsects = get_int(self.f)
+        flags = get_int(self.f)
 
-        if self._macho.isLittle():
-            vmaddr = little(vmaddr, 'I') if self._macho.is32Bit() \
+        if self.macho.is_little():
+            vmaddr = little(vmaddr, 'I') if self.macho.is_32_bit() \
                 else little(vmaddr, 'Q')
-            vmsize = little(vmsize, 'I') if self._macho.is32Bit() \
+            vmsize = little(vmsize, 'I') if self.macho.is_32_bit() \
                 else little(vmsize, 'Q')
-            offset = little(offset, 'I') if self._macho.is32Bit() \
+            offset = little(offset, 'I') if self.macho.is_32_bit() \
                 else little(offset, 'Q')
-            segsize = little(segsize, 'I') if self._macho.is32Bit() \
+            segsize = little(segsize, 'I') if self.macho.is_32_bit() \
                 else little(segsize, 'Q')
             maxprot = little(maxprot, 'I')
             initprot = little(initprot, 'I') 
@@ -128,73 +119,70 @@ class LoadCommander(object):
         maxprot = dictionary.protections[maxprot & 0b111]
         initprot = dictionary.protections[initprot & 0b111]        
 
-        segment = Segment(cmd=lc.getCmd(), size=lc.getSize(), name=name,
+        segment = Segment(cmd=lc.cmd, size=lc.size, name=name,
                           vmaddr=vmaddr, vmsize=vmsize, offset=offset,
                           segsize=segsize, maxprot=maxprot, initprot=initprot,
                           nsects=nsects)
 
-        if self._macho.is32Bit():
+        if self.macho.is_32_bit():
             sect_size = 68
         else:
             sect_size = 80
-        for i in range(segment.getNSects()):
-            if self._f.tell() + sect_size > self._file_size:
+        for i in range(segment.nsects):
+            if self.f.tell() + sect_size > self.file_size:
                 data = {
-                    'offset': self._f.tell(),
-                    'file_size': self._file_size
+                    'offset': self.f.tell(),
+                    'file_size': self.file_size
                 }
                 a = Abnormality(title='SECTION OUT OF BOUNDS', data=data)
                 break
-            sect = self.parseSection()
-            segment.addSect(sect)
+            sect = self.parse_section()
+            segment.add_sect(sect)
 
-        self.parseSegmentFlags(segment, flags)
-        self._macho.addLC(segment)
+        self.parse_segment_flags(segment, flags)
+        self.macho.add_lc(segment)
 
-    def parseSymTab(self, lc):
-        symoff = getInt(self._f)
-        nsyms = getInt(self._f)
-        stroff = getInt(self._f)
-        strsize = getInt(self._f)
+    def parse_symtab(self, lc):
+        symoff = get_int(self.f)
+        nsyms = get_int(self.f)
+        stroff = get_int(self.f)
+        strsize = get_int(self.f)
 
-        if self._macho.isLittle():
+        if self.macho.is_little():
             symoff = little(symoff, 'I')
             nsyms = little(nsyms, 'I')
             stroff = little(stroff, 'I')
             strsize = little(strsize, 'I')
 
-        symtab = SymbolTable(offset=symoff, nsyms=nsyms)
-        strtab = StringTable(offset=stroff, size=strsize)
+        self.macho.symtab = SymbolTable(offset=symoff, nsyms=nsyms)
+        self.macho.strtab = StringTable(offset=stroff, size=strsize)
 
-        self._macho.setSymTab(symtab)
-        self._macho.setStrTab(strtab)
+        lc.add_data('symoff', symoff)
+        lc.add_data('nsyms', nsyms)
+        lc.add_data('stroff', stroff)
+        lc.add_data('strsize', strsize)
 
-        lc.addData('symoff', symoff)
-        lc.addData('nsyms', nsyms)
-        lc.addData('stroff', stroff)
-        lc.addData('strsize', strsize)
+        self.macho.add_lc(lc)
 
-        self._macho.addLC(lc)
+    def parse_sym_seg(self, lc):
+        offset = get_int(self.f)
+        size = get_int(self.f)
 
-    def parseSymSeg(self, lc):
-        offset = getInt(self._f)
-        size = getInt(self._f)
-
-        if self._macho.isLittle():
+        if self.macho.is_little():
             offset = little(offset, 'I')
             size = little(size, 'I')
 
-        lc.addData('offset', offset)
-        lc.addData('size', size)
+        lc.add_data('offset', offset)
+        lc.add_data('size', size)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseThread(self, lc):
-        state = getInt(self._f)
-        count = getInt(self._f)
-        self._f.read(lc.getSize() - 16)
+    def parse_thread(self, lc):
+        state = get_int(self.f)
+        count = get_int(self.f)
+        self.f.read(lc.size - 16)
 
-        if self._macho.isLittle():
+        if self.macho.is_little():
             state = little(state, 'I')
             count = little(count, 'I')
 
@@ -202,208 +190,201 @@ class LoadCommander(object):
             state = dictionary.thread_states[state]
         except:
             data = {
-                'offset': self._f.tell() - lc.getSize(),
+                'offset': self.f.tell() - lc.size,
                 'state': state
             }
             a = Abnormality(title='INVALID THREAD STATE FLAVOR', data=data)
-            self.addAbnormality(a)
+            self.add_abnormality(a)
 
-        lc.addData('state', state)
-        lc.addData('count', count)
+        lc.add_data('state', state)
+        lc.add_data('count', count)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseFVMLib(self, lc):
-        self._f.read(lc.getSize() - 8)
-        lc.addData('msg', 'OBSOLETE')
-        self._macho.addLC(lc)
+    def parse_fvmlib(self, lc):
+        self.f.read(lc.size - 8)
+        lc.add_data('msg', 'OBSOLETE')
+        self.macho.add_lc(lc)
 
-    def parseIdent(self, lc):
-        self._f.read(lc.getSize() - 8)
-        lc.addData('msg', 'OBSOLETE')
-        self._macho.addLC(lc)
+    def parse_ident(self, lc):
+        self.f.read(lc.size - 8)
+        lc.add_data('msg', 'OBSOLETE')
+        self.macho.add_lc(lc)
 
-    def parseFVMFile(self, lc):
-        self._f.read(lc.getSize() - 8)
-        lc.addData('msg', 'INTERNAL ONLY')
-        self._macho.addLC(lc)
+    def parse_fvmfile(self, lc):
+        self.f.read(lc.size - 8)
+        lc.add_data('msg', 'INTERNAL ONLY')
+        self.macho.add_lc(lc)
 
-    def parsePrePage(self, lc):
-        self._f.read(lc.getSize() - 8)
-        lc.addData('msg', 'INTERNAL ONLY')
-        self._macho.addLC(lc)
+    def parse_prepage(self, lc):
+        self.f.read(lc.size - 8)
+        lc.add_data('msg', 'INTERNAL ONLY')
+        self.macho.add_lc(lc)
 
-    def parseDySymTab(self, lc):
-        il = getInt(self._f)
-        nl = getInt(self._f)
-        ie = getInt(self._f)
-        ne = getInt(self._f)
-        iu = getInt(self._f)
-        nu = getInt(self._f)
-        self._f.read(lc.getSize() - 32)
+    def parse_dysymtab(self, lc):
+        il = get_int(self.f)
+        nl = get_int(self.f)
+        ie = get_int(self.f)
+        ne = get_int(self.f)
+        iu = get_int(self.f)
+        nu = get_int(self.f)
+        self.f.read(lc.size - 32)
 
-        if self._macho.isLittle():
-            il = little(il, 'I')
-            nl = little(nl, 'I')
-            ie = little(ie, 'I')
-            ne = little(ne, 'I')
-            iu = little(iu, 'I')
-            nu = little(nu, 'I')
+        if self.macho.is_little():
+            self.macho.symtab.il = little(il, 'I')
+            self.macho.symtab.nl = little(nl, 'I')
+            self.macho.symtab.ie = little(ie, 'I')
+            self.macho.symtab.ne = little(ne, 'I')
+            self.macho.symtab.iu = little(iu, 'I')
+            self.macho.symtab.nu = little(nu, 'I')
 
-        self._macho.getSymTab().setIL(il)
-        self._macho.getSymTab().setNL(nl)
-        self._macho.getSymTab().setIE(ie)
-        self._macho.getSymTab().setNE(ne)
-        self._macho.getSymTab().setIU(iu)
-        self._macho.getSymTab().setNU(nu)
+        lc.add_data('il', il)
+        lc.add_data('nl', nl)
+        lc.add_data('ie', ie)
+        lc.add_data('ne', ne)
+        lc.add_data('iu', iu)
+        lc.add_data('nu', nu)
 
-        lc.addData('il', il)
-        lc.addData('nl', nl)
-        lc.addData('ie', ie)
-        lc.addData('ne', ne)
-        lc.addData('iu', iu)
-        lc.addData('nu', nu)
+        self.macho.add_lc(lc)
 
-        self._macho.addLC(lc)
+    def parse_load_dylib(self, lc):
+        offset = get_int(self.f)
 
-    def parseLoadDylib(self, lc):
-        offset = getInt(self._f)
-
-        if self._macho.isLittle():
+        if self.macho.is_little():
             offset = little(offset, 'I')
 
         # skip to dylib
-        self._f.read(offset - 12)
-        dylib = strip(self._f.read(lc.getSize() - 24))
-        self._macho.addDylib(dylib)
+        self.f.read(offset - 12)
+        dylib = strip(self.f.read(lc.size - 24))
+        self.macho.add_dylib(dylib)
 
-        lc.addData('dylib', dylib)
+        lc.add_data('dylib', dylib)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseLoadDylinker(self, lc):
+    def parse_load_dylinker(self, lc):
         # first char is \n
-        name = strip(self._f.read(lc.getSize() - 8)[1:])
-        lc.addData('name', name)
+        name = strip(self.f.read(lc.size - 8)[1:])
+        lc.add_data('name', name)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parsePreboundDylib(self, lc):
-        dylib = readstring(self._f)
-        self._f.read(lc.getSize() - (9 + len(dylib)))
+    def parse_prebound_dylib(self, lc):
+        dylib = readstring(self.f)
+        self.f.read(lc.size - (9 + len(dylib)))
 
-        lc.addData('dylib', dylib)
+        lc.add_data('dylib', dylib)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseRoutines(self, lc):
-        if lc.getCmd() == 'ROUTINES':
-            init_address = getInt(self._f)
-            init_module = getInt(self._f)
-            if self._macho.isLittle():
+    def parse_routines(self, lc):
+        if lc.cmd == 'ROUTINES':
+            init_address = get_int(self.f)
+            init_module = get_int(self.f)
+            if self.macho.is_little():
                 init_address = little(init_address, 'I')
                 init_module = little(init_module, 'I')
-            self._f.read(24)
+            self.f.read(24)
         else:
-            init_address = getLL(self._f)
-            init_module = getLL(self._f)
-            if self._macho.isLittle():
+            init_address = get_ll(self.f)
+            init_module = get_ll(self.f)
+            if self.macho.is_little():
                 init_address = little(init_address, 'Q')
                 init_module = little(init_module, 'Q')
-            self._f.read(48)
+            self.f.read(48)
 
-        lc.addData('init_address', init_address)
-        lc.addData('init_module', init_module)
+        lc.add_data('init_address', init_address)
+        lc.add_data('init_module', init_module)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseSubStuff(self, lc):
-        name = strip(self._f.read(lc.getSize() - 8))
-        lc.addData('name', name)
+    def parse_sub_stuff(self, lc):
+        name = strip(self.f.read(lc.size - 8))
+        lc.add_data('name', name)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseTwoLevelHints(self, lc):
-        offset = getInt(self._f)
-        nhints = getInt(self._f)
+    def parse_twolevel_hints(self, lc):
+        offset = get_int(self.f)
+        nhints = get_int(self.f)
 
-        if self._macho.isLittle():
+        if self.macho.is_little():
             offset = little(offset, 'I')
             nhints = little(nhints, 'I')
 
-        lc.addData('offset', offset)
-        lc.addData('nhints', nhints)
+        lc.add_data('offset', offset)
+        lc.add_data('nhints', nhints)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parsePrebindCksum(self, lc):
-        cksum = getInt(self._f)
+    def parse_prebind_cksum(self, lc):
+        cksum = get_int(self.f)
 
-        if self._macho.isLittle():
+        if self.macho.is_little():
             cksum = little(cksum, 'I')
 
-        lc.addData('cksum', cksum)
+        lc.add_data('cksum', cksum)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseUUID(self, lc):
-        uuid = self._f.read(16)
+    def parse_uuid(self, lc):
+        uuid = self.f.read(16)
 
-        if self._macho.isLittle():
+        if self.macho.is_little():
             uuid = UUID(bytes=little(uuid, '16s'))
         else:
             uuid = UUID(bytes=uuid)
 
-        lc.addData('uuid', uuid.hex)
+        lc.add_data('uuid', uuid.hex)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseLinkedITData(self, lc):
-        offset = getInt(self._f)
-        size = getInt(self._f)
+    def parse_linkedit_data(self, lc):
+        offset = get_int(self.f)
+        size = get_int(self.f)
 
-        if self._macho.isLittle():
+        if self.macho.is_little():
             offset = little(offset, 'I')
             size = little(size, 'I')
 
-        lc.addData('offset', offset)
-        lc.addData('size', size)
+        lc.add_data('offset', offset)
+        lc.add_data('size', size)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseEncryptionInfo(self, lc):
-        offset = getInt(self._f)
-        size = getInt(self._f)
-        id = getInt(self._f)
+    def parse_encryption_info(self, lc):
+        offset = get_int(self.f)
+        size = get_int(self.f)
+        id = get_int(self.f)
 
-        if self._macho.isLittle():
+        if self.macho.is_little():
             offset = little(offset, 'I')
             size = little(size, 'I')
             id = little(id, 'I')
 
-        lc.addData('offset', offset)
-        lc.addData('size', size)
-        lc.addData('id', id)
+        lc.add_data('offset', offset)
+        lc.add_data('size', size)
+        lc.add_data('id', id)
 
-        if lc.getCmd() == 'ENCRYPTION_INFO_64':
+        if lc.cmd == 'ENCRYPTION_INFO_64':
             # Skip padding
-            self._f.read(4)
+            self.f.read(4)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseDyldInfo(self, lc):
-        rebase_off = getInt(self._f)
-        rebase_size = getInt(self._f)
-        bind_off = getInt(self._f)
-        bind_size = getInt(self._f)
-        weak_bind_off = getInt(self._f)
-        weak_bind_size = getInt(self._f)
-        lazy_bind_off = getInt(self._f)
-        lazy_bind_size = getInt(self._f)
-        export_off = getInt(self._f)
-        export_size = getInt(self._f)
+    def parse_dyld_info(self, lc):
+        rebase_off = get_int(self.f)
+        rebase_size = get_int(self.f)
+        bind_off = get_int(self.f)
+        bind_size = get_int(self.f)
+        weak_bind_off = get_int(self.f)
+        weak_bind_size = get_int(self.f)
+        lazy_bind_off = get_int(self.f)
+        lazy_bind_size = get_int(self.f)
+        export_off = get_int(self.f)
+        export_size = get_int(self.f)
 
-        if self._macho.isLittle():
+        if self.macho.is_little():
             rebase_off = little(rebase_off, 'I')
             rebase_size = little(rebase_size, 'I')
             bind_off = little(bind_off, 'I')
@@ -415,24 +396,24 @@ class LoadCommander(object):
             export_off = little(export_off, 'I')
             export_size = little(export_size, 'I')
 
-        lc.addData('rebase_off', rebase_off)
-        lc.addData('rebase_size', rebase_size)
-        lc.addData('bind_off', bind_off)
-        lc.addData('bind_size', bind_size)
-        lc.addData('weak_bind_off', weak_bind_off)
-        lc.addData('weak_bind_size', weak_bind_size)
-        lc.addData('lazy_bind_off', lazy_bind_off)
-        lc.addData('lazy_bind_size', lazy_bind_size)
-        lc.addData('export_off', export_off)
-        lc.addData('export_size', export_size)
+        lc.add_data('rebase_off', rebase_off)
+        lc.add_data('rebase_size', rebase_size)
+        lc.add_data('bind_off', bind_off)
+        lc.add_data('bind_size', bind_size)
+        lc.add_data('weak_bind_off', weak_bind_off)
+        lc.add_data('weak_bind_size', weak_bind_size)
+        lc.add_data('lazy_bind_off', lazy_bind_off)
+        lc.add_data('lazy_bind_size', lazy_bind_size)
+        lc.add_data('export_off', export_off)
+        lc.add_data('export_size', export_size)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseVersionMinOS(self, lc):
-        version = getInt(self._f)
-        sdk = getInt(self._f)
+    def parse_version_min_os(self, lc):
+        version = get_int(self.f)
+        sdk = get_int(self.f)
 
-        if self._macho.isLittle():
+        if self.macho.is_little():
             version = little(version, 'I')
             sdk = little(sdk, 'I')
 
@@ -446,15 +427,15 @@ class LoadCommander(object):
         sz = str(sdk & 0xff)
         sdk = sx + '.' + sy + '.' + sz
 
-        lc.addData('version', version.getVersion())
-        lc.addData('sdk', sdk)
+        lc.add_data('version', version.version)
+        lc.add_data('sdk', sdk)
 
-        self._macho.setMinOS(version)
-        self._macho.addLC(lc)
+        self.macho.minos = version
+        self.macho.add_lc(lc)
 
-    def parseSourceVersion(self, lc):
-        version = getLL(self._f)
-        if self._macho.isLittle():
+    def parse_source_version(self, lc):
+        version = get_ll(self.f)
+        if self.macho.is_little():
             version = little(version, 'Q')
 
         a = str((version >> 40) & 0xffffff)
@@ -466,132 +447,130 @@ class LoadCommander(object):
         # TODO: fix source version.
         version = a + '.' + b + '.' + c + '.' + d + '.' + e
 
-        lc.addData('version', version)
+        lc.add_data('version', version)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseLinkerOption(self, lc):
-        count = getInt(self._f)
-        if self._macho.isLittle():
+    def parse_linker_option(self, lc):
+        count = get_int(self.f)
+        if self.macho.is_little():
             count = little(count, 'I')
         linker_options = []
-        start = self._f.tell()
+        start = self.f.tell()
         for i in range(count):
-            linker_option = readstring(self._f)
+            linker_option = readstring(self.f)
             linker_options.append(linker_option)
 
-        length = self._f.tell() - start
-        self._f.read(lc.getSize() - length - 12)
+        length = self.f.tell() - start
+        self.f.read(lc.size - length - 12)
 
-        lc.addData('count', count)
-        lc.addData('linker_options', linker_options)
+        lc.add_data('count', count)
+        lc.add_data('linker_options', linker_options)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseRPath(self, lc):
+    def parse_rpath(self, lc):
         # first char is \n
-        path = strip(self._f.read(lc.getSize() - 8)[1:])
-        lc.addData('path', path)
+        path = strip(self.f.read(lc.size - 8)[1:])
+        lc.add_data('path', path)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseMain(self, lc):
-        offset = getLL(self._f)
-        size = getLL(self._f)
+    def parse_main(self, lc):
+        offset = get_ll(self.f)
+        size = get_ll(self.f)
 
-        if self._macho.isLittle():
+        if self.macho.is_little():
             offset = little(offset, 'Q')
             size = little(size, 'Q')
 
-        lc.addData('offset', offset)
-        lc.addData('size', size)
+        lc.add_data('offset', offset)
+        lc.add_data('size', size)
 
-        self._macho.addLC(lc)
+        self.macho.add_lc(lc)
 
-    def parseLCs(self):
-        for i in range(self._macho.getNLCs()):
-            cmd = getInt(self._f)
-            size = getInt(self._f)
+    def parse_lcs(self):
+        for i in range(self.macho.nlcs):
+            cmd = get_int(self.f)
+            size = get_int(self.f)
 
-            if self._macho.getEndi() == 'little':
+            if self.macho.endi == 'little':
                 cmd = little(cmd, 'I')
                 size = little(size, 'I')
-
-            # print ('(offset, cmd, size): (' + str(self._f.tell() - 8) + ', ' +
-            #       str(cmd) + ', ' + str(size) + ')')
 
             try:
                 cmd = dictionary.loadcommands[cmd]
             except:
                 data = {
-                    'offset': self._f.tell() - 8,
+                    'offset': self.f.tell() - 8,
                     'cmd': cmd
                 }
                 a = Abnormality(title='UNKNOWN LOADCOMMAND', data=data)
                 self.addAbnormality(a)
                 lc = LoadCommand(cmd=cmd, size=size)
-                self._macho.addLC(lc)
-                self._f.read(size - 8)
+                self.macho.add_lc(lc)
+                self.f.read(size - 8)
                 continue
 
             lc = LoadCommand(cmd=cmd, size=size)
 
             if cmd == 'SEGMENT' or cmd == 'SEGMENT_64':
-                self.parseSegment(lc)
+                self.parse_segment(lc)
             elif cmd == 'SYMTAB':
-                self.parseSymTab(lc)
+                self.parse_symtab(lc)
             elif cmd == 'SYMSEG':
-                self.parseSymSeg(lc)
+                self.parse_symseg(lc)
             elif cmd == 'THREAD' or cmd == 'UNIXTHREAD':
-                self.parseThread(lc)
+                self.parse_thread(lc)
             elif cmd == 'LOADFVMLIB' or cmd == 'IDFVMLIB':
-                self.parseFVMLib(lc)
+                self.parse_fvmlib(lc)
             elif cmd == 'IDENT':
-                self.parseIdent(lc)
+                self.parse_ident(lc)
             elif cmd == 'FVMFILE':
-                self.parseFVMFile(lc)
+                self.parse_fvmfile(lc)
             elif cmd == 'PREPAGE':
-                self.parsePrePage(lc)
+                self.parse_prepage(lc)
             elif cmd == 'DYSYMTAB':
-                self.parseDySymTab(lc)
+                self.parse_dysymtab(lc)
             elif (cmd == 'LOAD_DYLIB' or cmd == 'ID_DYLIB' or
                   cmd == 'LAZY_LOAD_DYLIB' or cmd == 'LOAD_WEAK_DYLIB' or
                   cmd == 'REEXPORT_DYLIB' or cmd == 'LOAD_UPWARD_DYLIB'):
-                self.parseLoadDylib(lc)
+                self.parse_load_dylib(lc)
             elif (cmd == 'LOAD_DYLINKER' or cmd == 'ID_DYLINKER' or
                   cmd == 'DYLD_ENVIRONMENT'):
-                self.parseLoadDylinker(lc)
+                self.parse_load_dylinker(lc)
             elif cmd == 'PREBOUND_DYLIB':
-                self.parsePreboundDylib(lc)
+                self.parse_prebound_dylib(lc)
             elif cmd == 'ROUTINES' or cmd == 'ROUTINES_64':
-                self.parseRoutines(lc)
+                self.parse_routines(lc)
             elif (cmd == 'SUB_FRAMEWORK' or cmd == 'SUB_UMBRELLA' or
                   cmd == 'SUB_CLIENT' or cmd == 'SUB_LIBRARY'):
-                self.parseSubStuff(lc)
+                self.parse_sub_stuff(lc)
             elif cmd == 'TWOLEVEL_HINTS':
-                self.parseTwoLevelHints(lc)
+                self.parse_twolevel_hints(lc)
             elif cmd == 'PREBIND_CKSUM':
-                self.parsePrebindCksum(lc)
+                self.parse_prebind_cksum(lc)
             elif cmd == 'UUID':
-                self.parseUUID(lc)
+                self.parse_uuid(lc)
             elif (cmd == 'CODE_SIGNATURE' or cmd == 'SEGMENT_SPLIT_INFO' or
                   cmd == 'FUNCTION_STARTS' or cmd == 'DATA_IN_CODE' or
                   cmd == 'DYLIB_CODE_SIGN_DRS' or
                   cmd == 'LINKER_OPTIMIZATION_HINT'):
-                self.parseLinkedITData(lc)
+                self.parse_linkedit_data(lc)
             elif cmd == 'ENCRYPTION_INFO' or cmd == 'ENCRYPTION_INFO_64':
-                self.parseEncryptionInfo(lc)
+                self.parse_encryption_info(lc)
             elif cmd == 'DYLD_INFO' or cmd == 'DYLD_INFO_ONLY':
-                self.parseDyldInfo(lc)
+                self.parse_dyld_info(lc)
             elif (cmd == 'VERSION_MIN_MACOSX' or
                   cmd == 'VERSION_MIN_IPHONEOS' or
                   cmd == 'VERSION_MIN_WATCHOS'):
-                self.parseVersionMinOS(lc)
+                self.parse_version_min_os(lc)
             elif cmd == 'SOURCE_VERSION':
-                self.parseSourceVersion(lc)
+                self.parse_source_version(lc)
             elif cmd == 'LINKER_OPTION':
-                self.parseLinkerOption(lc)
+                self.parse_linker_option(lc)
             elif cmd == 'RPATH':
-                self.parseRPath(lc)
+                self.parse_rpath(lc)
             elif cmd == 'MAIN':
-                self.parseMain(lc)
+                self.parse_main(lc)
+

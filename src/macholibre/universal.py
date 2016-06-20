@@ -19,29 +19,16 @@ limitations under the License.
 
 class Universal(object):
 
-    # Fields
-    _nmachos = None
-    _machos = []
-
     # Constructor
     def __init__(self, nmachos=None):
-        self._nmachos = nmachos
-        self._machos = []
-
-    # Getters
-    def getNMachOs(self): return self._nmachos
-
-    def getMachOs(self): return self._machos
-
-    # Setters
-    def setNMachOs(self, nmachos): self._nmachos = nmachos
-
-    def setMachOs(self, machos): self._machos = machos
+        self.nmachos = nmachos
+        self.machos = []
 
     # Generators
-    def genMachOs(self):
-        for i in self._machos:
+    def gen_machos(self):
+        for i in self.machos:
             yield i
 
     # Functions
-    def addMachO(self, macho): self._machos.append(macho)
+    def add_macho(self, macho): self.machos.append(macho)
+

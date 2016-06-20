@@ -25,32 +25,15 @@ class File(object):
 
     # Constructor
     def __init__(self, name=None, size=None, content=None):
-        self._name = name
-        self._size = size
-        self._hashes = {}
-        self._content = content
-
-    # Getters
-    def getName(self): return self._name
-
-    def getSize(self): return self._size
-
-    def getHashes(self): return self._hashes
-
-    def getContent(self): return self._content
-
-    # Setters
-    def setName(self, name): self._name = name
-
-    def setSize(self, size): self._size = size
-
-    def setHashes(self, hashes): self._hashes = hashes
-
-    def setContent(self, content): self._content = content
+        self.name = name
+        self.size = size
+        self.hashes = {}
+        self.content = content
 
     # Functions
-    def addHash(self, key, value): self._hashes[key] = value
+    def add_hash(self, key, value): self.hashes[key] = value
 
-    def isMachO(self): return type(self._content) is MachO
+    def is_macho(self): return type(self.content) is MachO
 
-    def isUniversal(self): return type(self._content) is Universal
+    def is_universal(self): return type(self.content) is Universal
+

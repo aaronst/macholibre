@@ -46,7 +46,7 @@ class Handler(object):
 
         exit(0)
 
-    def parseOptions(self, args):
+    def parse_options(self, args):
         i = 0
         while i < len(args):
             if args[i] == '-h':
@@ -64,6 +64,7 @@ class Handler(object):
         if len(args) < 2:
             self.help()
         else:
-            self.parseOptions(args)
+            self.parse_options(args)
             if data.h:
                 self.help()
+

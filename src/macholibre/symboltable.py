@@ -22,58 +22,21 @@ class SymbolTable(object):
     # Constructor
     def __init__(self, offset=None, nsyms=None):
         # Fields
-        self._offset = offset
-        self._nsyms = nsyms
-        self._il = None
-        self._nl = None
-        self._ie = None
-        self._ne = None
-        self._iu = None
-        self._nu = None
-        self._syms = []
-
-    # Getters
-    def getOffset(self): return self._offset
-
-    def getNSyms(self): return self._nsyms
-
-    def getIL(self): return self._il
-
-    def getNL(self): return self._nl
-
-    def getIE(self): return self._ie
-
-    def getNE(self): return self._ne
-
-    def getIU(self): return self._iu
-
-    def getNU(self): return self._nu
-
-    def getSyms(self): return self._syms
-
-    # Setters
-    def setOffset(self, offset): self._offset = offset
-
-    def setNSyms(self, nsyms): self._nsyms = nsyms
-
-    def setIL(self, il): self._il = il
-
-    def setNL(self, nl): self._nl = nl
-
-    def setIE(self, ie): self._ie = ie
-
-    def setNE(self, ne): self._ne = ne
-
-    def setIU(self, iu): self._iu = iu
-
-    def setNU(self, nu): self._nu = nu
-
-    def setSyms(self, syms): self._syms = syms
+        self.offset = offset
+        self.nsyms = nsyms
+        self.il = None
+        self.nl = None
+        self.ie = None
+        self.ne = None
+        self.iu = None
+        self.nu = None
+        self.syms = []
 
     # Generators
-    def genSyms(self):
-        for i in self._syms:
+    def gen_syms(self):
+        for i in self.syms:
             yield i
 
     # Functions
-    def addSym(self, sym): self._syms.append(sym)
+    def add_sym(self, sym): self.syms.append(sym)
+
