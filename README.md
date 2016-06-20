@@ -35,11 +35,11 @@ from macholibre import macholibre
 path = '/home/aaron/my_macho'
 
 # return json
-json_data = macholibre.parseFile(path)
+json_data = macholibre.parse(path)
 
 # write json to file
 out_file = open('/home/aaron/macholibre_output.json', 'w')
-macholibre.parseFile(path, f=out_file)
+macholibre.parse(path, f=out_file)
 ```
 
 #### As a Script
