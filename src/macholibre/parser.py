@@ -296,10 +296,6 @@ class Parser(object):
             self.f.seek(prev)
             return
         size = get_int(self.f) - 8
-        # out = open('cms', 'wb')
-        # out.write(self.f.read(size))
-        # out.close()
-        # exit(0)
         if size > 0:
             signed_data = cms.CMS(self.f.read(size), format='DER')
             for cert in signed_data.certs:

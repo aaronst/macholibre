@@ -15,6 +15,10 @@ install_requires = [
     'ctypescrypto'
 ]
 
+dependency_links=[
+    'git+https://github.com/vbwagner/ctypescrypto.git'
+]
+
 
 setup(name='macholibre',
     version=version,
@@ -37,3 +41,4 @@ setup(name='macholibre',
             ['macholibre=macholibre:main']
     }
 )
+
