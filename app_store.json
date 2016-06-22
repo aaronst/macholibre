@@ -1,1 +1,1195 @@
-{"abnormalities": [], "hashes": {"sha256": "24663ce8bd265fceb24d664c056156fd39651f34ebfd8b110380e51a300d3485", "sha1": "371100c818c041f3cfaa4e3d79b77f57fd7a746c", "md5": "7fed1c45ff97390938c77cf92b1e8e3c"}, "macho": {"slcs": 3872, "nlcs": 28, "lcs": [{"sects": [], "name": "__PAGEZERO", "maxprot": "---", "vmsize": 4294967296, "cmd": "SEGMENT_64", "nsects": 0, "flags": [], "initprot": "---", "offset": 0, "vmaddr": 0, "segsize": 0, "size": 72}, {"sects": [{"segname": "__TEXT", "reloff": 0, "name": "__text", "align": 0, "nreloc": 0, "offset": 6301, "attributes": ["PURE_INSTRUCTIONS", "SOME_INSTRUCTIONS"], "size": 2913, "type": "REGULAR", "addr": 4294973597}, {"segname": "__TEXT", "reloff": 0, "name": "__stubs", "align": 1, "nreloc": 0, "offset": 9214, "attributes": ["PURE_INSTRUCTIONS", "SOME_INSTRUCTIONS"], "size": 54, "type": "SYMBOL_STUBS", "addr": 4294976510}, {"segname": "__TEXT", "reloff": 0, "name": "__stub_helper", "align": 2, "nreloc": 0, "offset": 9268, "attributes": ["PURE_INSTRUCTIONS", "SOME_INSTRUCTIONS"], "size": 106, "type": "REGULAR", "addr": 4294976564}, {"segname": "__TEXT", "reloff": 0, "name": "__objc_methname", "align": 0, "nreloc": 0, "offset": 9374, "attributes": [], "size": 4113, "type": "CSTRING_LITERALS", "addr": 4294976670}, {"segname": "__TEXT", "reloff": 0, "name": "__const", "align": 3, "nreloc": 0, "offset": 13488, "attributes": [], "size": 8, "type": "REGULAR", "addr": 4294980784}, {"segname": "__TEXT", "reloff": 0, "name": "__cstring", "align": 0, "nreloc": 0, "offset": 13496, "attributes": [], "size": 506, "type": "CSTRING_LITERALS", "addr": 4294980792}, {"segname": "__TEXT", "reloff": 0, "name": "__objc_classname", "align": 0, "nreloc": 0, "offset": 14002, "attributes": [], "size": 88, "type": "CSTRING_LITERALS", "addr": 4294981298}, {"segname": "__TEXT", "reloff": 0, "name": "__objc_methtype", "align": 0, "nreloc": 0, "offset": 14090, "attributes": [], "size": 2092, "type": "CSTRING_LITERALS", "addr": 4294981386}, {"segname": "__TEXT", "reloff": 0, "name": "__unwind_info", "align": 2, "nreloc": 0, "offset": 16184, "attributes": [], "size": 124, "type": "REGULAR", "addr": 4294983480}, {"segname": "__TEXT", "reloff": 0, "name": "__eh_frame", "align": 3, "nreloc": 0, "offset": 16312, "attributes": [], "size": 72, "type": "REGULAR", "addr": 4294983608}], "name": "__TEXT", "maxprot": "rwx", "vmsize": 16384, "cmd": "SEGMENT_64", "nsects": 10, "flags": [], "initprot": "r-x", "offset": 0, "vmaddr": 4294967296, "segsize": 16384, "size": 872}, {"sects": [{"segname": "__DATA", "reloff": 0, "name": "__nl_symbol_ptr", "align": 3, "nreloc": 0, "offset": 16384, "attributes": [], "size": 16, "type": "NON_LAZY_SYMBOL_POINTERS", "addr": 4294983680}, {"segname": "__DATA", "reloff": 0, "name": "__got", "align": 3, "nreloc": 0, "offset": 16400, "attributes": [], "size": 40, "type": "NON_LAZY_SYMBOL_POINTERS", "addr": 4294983696}, {"segname": "__DATA", "reloff": 0, "name": "__la_symbol_ptr", "align": 3, "nreloc": 0, "offset": 16440, "attributes": [], "size": 72, "type": "LAZY_SYMBOL_POINTERS", "addr": 4294983736}, {"segname": "__DATA", "reloff": 0, "name": "__const", "align": 4, "nreloc": 0, "offset": 16512, "attributes": [], "size": 48, "type": "REGULAR", "addr": 4294983808}, {"segname": "__DATA", "reloff": 0, "name": "__cfstring", "align": 3, "nreloc": 0, "offset": 16560, "attributes": [], "size": 160, "type": "REGULAR", "addr": 4294983856}, {"segname": "__DATA", "reloff": 0, "name": "__objc_classlist", "align": 3, "nreloc": 0, "offset": 16720, "attributes": ["NO_DEAD_STRIP"], "size": 16, "type": "REGULAR", "addr": 4294984016}, {"segname": "__DATA", "reloff": 0, "name": "__objc_protolist", "align": 3, "nreloc": 0, "offset": 16736, "attributes": [], "size": 24, "type": "REGULAR", "addr": 4294984032}, {"segname": "__DATA", "reloff": 0, "name": "__objc_imageinfo", "align": 2, "nreloc": 0, "offset": 16760, "attributes": [], "size": 8, "type": "REGULAR", "addr": 4294984056}, {"segname": "__DATA", "reloff": 0, "name": "__objc_const", "align": 3, "nreloc": 0, "offset": 16768, "attributes": [], "size": 5320, "type": "REGULAR", "addr": 4294984064}, {"segname": "__DATA", "reloff": 0, "name": "__objc_selrefs", "align": 3, "nreloc": 0, "offset": 22088, "attributes": ["NO_DEAD_STRIP"], "size": 440, "type": "LITERAL_POINTERS", "addr": 4294989384}, {"segname": "__DATA", "reloff": 0, "name": "__objc_classrefs", "align": 3, "nreloc": 0, "offset": 22528, "attributes": ["NO_DEAD_STRIP"], "size": 104, "type": "REGULAR", "addr": 4294989824}, {"segname": "__DATA", "reloff": 0, "name": "__objc_superrefs", "align": 3, "nreloc": 0, "offset": 22632, "attributes": ["NO_DEAD_STRIP"], "size": 16, "type": "REGULAR", "addr": 4294989928}, {"segname": "__DATA", "reloff": 0, "name": "__objc_ivar", "align": 3, "nreloc": 0, "offset": 22648, "attributes": [], "size": 24, "type": "REGULAR", "addr": 4294989944}, {"segname": "__DATA", "reloff": 0, "name": "__objc_data", "align": 3, "nreloc": 0, "offset": 22672, "attributes": [], "size": 160, "type": "REGULAR", "addr": 4294989968}, {"segname": "__DATA", "reloff": 0, "name": "__data", "align": 3, "nreloc": 0, "offset": 22832, "attributes": [], "size": 264, "type": "REGULAR", "addr": 4294990128}], "name": "__DATA", "maxprot": "rwx", "vmsize": 8192, "cmd": "SEGMENT_64", "nsects": 15, "flags": [], "initprot": "rw-", "offset": 16384, "vmaddr": 4294983680, "segsize": 8192, "size": 1272}, {"sects": [], "name": "__LINKEDIT", "maxprot": "rwx", "vmsize": 20480, "cmd": "SEGMENT_64", "nsects": 0, "flags": [], "initprot": "r--", "offset": 24576, "vmaddr": 4294991872, "segsize": 16960, "size": 72}, {"export_size": 32, "lazy_bind_size": 256, "cmd": "DYLD_INFO_ONLY", "weak_bind_size": 0, "lazy_bind_off": 25784, "export_off": 26040, "rebase_size": 352, "bind_off": 24928, "rebase_off": 24576, "bind_size": 856, "weak_bind_off": 0, "size": 48}, {"stroff": 26764, "nsyms": 35, "cmd": "SYMTAB", "strsize": 872, "symoff": 26104, "size": 24}, {"nl": 16777216, "cmd": "DYSYMTAB", "iu": 33554432, "ne": 16777216, "il": 0, "ie": 16777216, "nu": 553648128, "size": 80}, {"cmd": "LOAD_DYLINKER", "name": "/usr/lib/dyld", "size": 32}, {"cmd": "UUID", "uuid": "f7e817328b4138b3b817beaf763b0a5a", "size": 24}, {"sdk": "10.11.0", "cmd": "VERSION_MIN_MACOSX", "version": "10.11.0", "size": 16}, {"cmd": "SOURCE_VERSION", "version": "463.9.0.0.0", "size": 16}, {"cmd": "MAIN", "offset": 6301, "size": 0}, {"dylib": "/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement", "cmd": "LOAD_DYLIB", "size": 112}, {"dylib": "/System/Library/Frameworks/Security.framework/Versions/A/Security", "cmd": "LOAD_DYLIB", "size": 96}, {"dylib": "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Frameworks/CommerceCore.framework/Versions/A/CommerceCore", "cmd": "LOAD_DYLIB", "size": 152}, {"dylib": "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation", "cmd": "LOAD_DYLIB", "size": 112}, {"dylib": "/System/Library/PrivateFrameworks/StoreJavaScript.framework/Versions/A/StoreJavaScript", "cmd": "LOAD_DYLIB", "size": 112}, {"dylib": "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI", "cmd": "LOAD_DYLIB", "size": 96}, {"dylib": "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit", "cmd": "LOAD_DYLIB", "size": 104}, {"dylib": "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa", "cmd": "LOAD_DYLIB", "size": 88}, {"dylib": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation", "cmd": "LOAD_DYLIB", "size": 96}, {"dylib": "/usr/lib/libobjc.A.dylib", "cmd": "LOAD_DYLIB", "size": 56}, {"dylib": "/usr/lib/libSystem.B.dylib", "cmd": "LOAD_DYLIB", "size": 56}, {"dylib": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit", "cmd": "LOAD_DYLIB", "size": 88}, {"dylib": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation", "cmd": "LOAD_DYLIB", "size": 104}, {"cmd": "FUNCTION_STARTS", "offset": 26072, "size": 32}, {"cmd": "DATA_IN_CODE", "offset": 26104, "size": 0}, {"cmd": "CODE_SIGNATURE", "offset": 27648, "size": 13888}], "analytics": {"entropy": 0.6070310412138289, "nimps": 33, "ndylibs": 13}, "imports": [["_NSApp", "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"], ["_NSApplicationMain", "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"], ["_OBJC_CLASS_$_CKPushNotificationManager", "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"], ["_OBJC_CLASS_$_CKUpdateController", "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"], ["_OBJC_CLASS_$_FRAppDelegate", "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"], ["_OBJC_CLASS_$_FRDebugMenuController", "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"], ["_OBJC_CLASS_$_FRDockTileManager", "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"], ["_OBJC_CLASS_$_FRStoreViewController", "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"], ["_OBJC_CLASS_$_FRStoreWindowController", "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"], ["_OBJC_CLASS_$_NSApplication", "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"], ["_OBJC_CLASS_$_NSBundle", "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"], ["_OBJC_CLASS_$_NSDate", "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"], ["_OBJC_CLASS_$_NSUserDefaults", "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"], ["_OBJC_CLASS_$_NSView", "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"], ["_OBJC_CLASS_$_SSLogManager", "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"], ["_OBJC_METACLASS_$_FRAppDelegate", "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"], ["_OBJC_METACLASS_$_FRStoreWindowController", "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"], ["_OBJC_METACLASS_$_NSObject", "/usr/lib/libobjc.A.dylib"], ["__NSConcreteStackBlock", "/usr/lib/libSystem.B.dylib"], ["___CFConstantStringClassReference", "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"], ["__objc_empty_cache", "/usr/lib/libobjc.A.dylib"], ["_markMainQueue", "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"], ["_objc_autoreleasePoolPop", "/usr/lib/libobjc.A.dylib"], ["_objc_autoreleasePoolPush", "/usr/lib/libobjc.A.dylib"], ["_objc_getProperty", "/usr/lib/libobjc.A.dylib"], ["_objc_msgSend", "/usr/lib/libobjc.A.dylib"], ["_objc_msgSendSuper2", "/usr/lib/libobjc.A.dylib"], ["_objc_msgSend_stret", "/usr/lib/libobjc.A.dylib"], ["_objc_release", "/usr/lib/libobjc.A.dylib"], ["_objc_retain", "/usr/lib/libobjc.A.dylib"], ["_objc_retainAutoreleasedReturnValue", "/usr/lib/libobjc.A.dylib"], ["_objc_storeStrong", "/usr/lib/libobjc.A.dylib"], ["dyld_stub_binder", "/usr/lib/libSystem.B.dylib"]], "filetype": "EXECUTE", "signature": {"count": 4, "requirements": [{"expression": "identity \"com.apple.appstore\" and anchor apple", "type": "DesignatedRequirementType", "offset": 20}], "codedirectory": {"n_code_slots": 7, "n_special_slots": 5, "page_size": 4096, "hash_type": "SHA-1", "version": 131328, "flags": 0, "code_limit": 27648, "identity": "com.apple.appstore", "hashes": ["fd67d49ca7dbca2b35d3faa4a9b942a861e6bb48", "0000000000000000000000000000000000000000", "9c18ea24a48972f207eb9af3ec0035c60851d8d4", "3aeb01c288eefe23de22019563ce5fe250829895", "fd3bdaf2c4af3e74201af7b6a007c1ecaf363ead", "45a9463f474b43486bc60509fc6d59703958b413", "5d4f1b02b041fadeab05e2e81f62ad5fa7f77c54", "aa66f39f3a3cba98c440f8f2f87c5821986b862c", "08a3d1c5e7382353f54e5e0b63be7a440048256e", "3cec15764a12af43d2f2ecfa4c4fa34e8099b8b1", "35f225a7f76c92f13f2b0f74dab0f8edf58676f8", "02f30b3462c63133488596277c26c60c42e87c0b"], "hash_offset": 167, "scatter_offset": 0, "hash_size": 20}, "certs": [{"serial": 33, "issuer": {"common_name": "Apple Root CA", "country": "US", "org_unit": "Apple Certification Authority", "org": "Apple Inc."}, "ca": true, "subject": {"common_name": "Apple Code Signing Certification Authority", "country": "US", "org_unit": "Apple Certification Authority", "org": "Apple Inc."}}, {"serial": 2, "issuer": {"common_name": "Apple Root CA", "country": "US", "org_unit": "Apple Certification Authority", "org": "Apple Inc."}, "ca": true, "subject": {"common_name": "Apple Root CA", "country": "US", "org_unit": "Apple Certification Authority", "org": "Apple Inc."}}, {"serial": 3087905541007939487, "issuer": {"common_name": "Apple Code Signing Certification Authority", "country": "US", "org_unit": "Apple Certification Authority", "org": "Apple Inc."}, "ca": false, "subject": {"common_name": "Software Signing", "country": "US", "org_unit": "Apple Software", "org": "Apple Inc."}}], "offset": 27648, "entitlements": [{"plist": {"com.apple.private.accounts.allaccounts": true, "com.apple.developer.notificationcenter-identifiers": ["com.apple.appstore"], "com.apple.security.temporary-exception.mach-lookup.global-name": ["com.apple.storeagent-xpc", "com.apple.storeaccountd", "com.apple.storeassetd", "com.apple.storeuid", "com.apple.storedownloadd", "com.apple.maspushagent-xpc", "com.apple.softwareupdated", "com.apple.dock.appstore", "com.apple.familycircle.agent", "com.apple.askpermissiond", "com.apple.ak.auth.xpc", "com.apple.ak.anisette.xpc"], "com.apple.security.app-sandbox": true, "com.apple.security.temporary-exception.files.absolute-path.read-only": ["/Library/Preferences/com.apple.storeagent.plist", "/Library/Preferences/com.apple.commerce.plist"], "com.apple.security.temporary-exception.sbpl": ["\n                (allow mach-issue-extension\n                (require-all (extension-class \"com.apple.app-sandbox.mach\")\n                (require-any\n                (global-name \"com.apple.storeagent-xpc\")\n                (global-name \"com.apple.storedownloadd\")\n                (global-name \"com.apple.storeaccountd\")\n                (global-name \"com.apple.storeassetd\")\n                (global-name \"com.apple.storeuid\")\n                (global-name \"com.apple.storehelper\")\n\t\t\t\t(global-name \"com.apple.coreservices.launchservicesd\")\n                (global-name \"com.apple.suhelperd\")\n                (global-name \"com.apple.installd\")\n                (global-name \"com.apple.pbs.fetch_services\")\n                (global-name \"com.apple.suhelperd\")\n\t\t\t\t(global-name \"com.apple.cfnetwork.cfnetworkagent\")\n                (global-name \"com.apple.familycircle.agent\")\n                (global-name \"com.apple.askpermissiond\")\n                (global-name \"com.apple.cfnetwork.AuthBrokerAgent\")\n                (global-name \"com.apple.softwareupdated\"))))\n            ", "\n                (read-write-and-issue-extensions\n                (require-any\n                (home-literal \"/Library/Caches/com.apple.WebKit.WebContent\")\n                (home-literal \"/Library/Logs/appstore.log\")\n                (home-literal \"/Library/Preferences/com.apple.appstore.plist\")\n                (home-literal \"/Library/Preferences/com.apple.commerce.plist\")\n                (home-literal \"/Library/Preferences/com.apple.storeagent.plist\")))\n            ", "\n                (read-only-and-issue-extensions\n                (require-any\n                (literal \"/Library/Preferences/SystemConfiguration/preferences.plist\")\n                (home-literal \"/Library/Preferences/com.apple.SoftwareUpdate.plist\")\n                (home-literal \"/Library/Preferences/com.apple.iTunes.plist\")\n                (literal \"/private/var/run/SoftwareUpdatesAvailable\")\n                (literal \"/Library/Preferences/com.apple.SoftwareUpdate.plist\")\n                (literal \"/Library/Updates\")\n                (literal \"/Applications\")\n                (home-literal \"/Library/Preferences/pbs.plist\")\n                (literal \"/Library/Caches/com.apple.DiagnosticReporting.Networks.plist\")\n\t\t\t\t(literal \"/Library/Preferences/com.apple.storeagent.plist\")\n\t\t\t\t(literal \"/Library/Preferences/com.apple.commerce.plist\")\n\t\t\t\t(regex #\"^/Users/Shared\")\n                (regex #\"^/private/var/folders/[a-z0-9]+/[a-z0-9_]+/[A-Z]/com\\.apple\\.WebProcess\\+com\\.apple\\.appstore/\")))\n            ", "\n\t\t(allow distributed-notification-post)\n            "], "com.apple.security.device.camera": true, "com.apple.private.domain-extension": true, "com.apple.authkit.client.internal": true, "com.apple.security.temporary-exception.shared-preference.read-only": ["com.apple.storeagent", "com.apple.appstore", "com.apple.commerce"], "com.apple.security.network.client": true}, "size": 4456}], "size": 8996}, "symtab": {"syms": [{"index": 855, "stab": "OPT", "sect": 0, "value": 90260802}, {"index": 4, "pext": 0, "type": "SECT", "value": 4294967296, "ext": 1, "sect": 1, "dylib": 0, "ref": 16}, {"index": 24, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 12, "ref": 0}, {"index": 31, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 12, "ref": 0}, {"index": 50, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 7, "ref": 0}, {"index": 90, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 7, "ref": 0}, {"index": 123, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 6, "ref": 0}, {"index": 151, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 6, "ref": 0}, {"index": 187, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 6, "ref": 0}, {"index": 219, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 6, "ref": 0}, {"index": 255, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 6, "ref": 0}, {"index": 293, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 12, "ref": 0}, {"index": 321, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 9, "ref": 0}, {"index": 344, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 13, "ref": 0}, {"index": 365, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 13, "ref": 0}, {"index": 394, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 12, "ref": 0}, {"index": 415, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 4, "ref": 0}, {"index": 442, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 6, "ref": 0}, {"index": 474, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 6, "ref": 0}, {"index": 516, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 543, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 11, "ref": 0}, {"index": 566, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 13, "ref": 0}, {"index": 600, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 619, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 4, "ref": 0}, {"index": 634, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 659, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 685, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 703, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 717, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 737, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 757, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 771, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 784, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 820, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 10, "ref": 0}, {"index": 838, "pext": 0, "type": "UNDF", "value": 0, "ext": 1, "sect": 0, "dylib": 11, "ref": 0}], "iexternal": 1, "nsyms": 35, "ilocal": 0, "nundefined": 33, "nexternal": 1, "offset": 26104, "iundefined": 2, "nlocal": 1}, "subtype": "X86_ALL, X86_64_ALL, I386_ALL, or 386", "dylibs": ["/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement", "/System/Library/Frameworks/Security.framework/Versions/A/Security", "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Frameworks/CommerceCore.framework/Versions/A/CommerceCore", "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation", "/System/Library/PrivateFrameworks/StoreJavaScript.framework/Versions/A/StoreJavaScript", "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI", "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit", "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa", "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation", "/usr/lib/libobjc.A.dylib", "/usr/lib/libSystem.B.dylib", "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit", "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"], "flags": ["NOUNDEFS", "DYLDLINK", "TWOLEVEL", "PIE"], "offset": 0, "cputype": "X86_64", "minos": "10.11.0", "strtab": {"size": 872, "strings": ["radr://5614542", "__mh_execute_header"], "offset": 26764}, "size": 41536}, "name": "App Store", "size": 41536}
+{
+  "abnormalities": [],
+  "hashes": {
+    "sha256": "24663ce8bd265fceb24d664c056156fd39651f34ebfd8b110380e51a300d3485",
+    "sha1": "371100c818c041f3cfaa4e3d79b77f57fd7a746c",
+    "md5": "7fed1c45ff97390938c77cf92b1e8e3c"
+  },
+  "macho": {
+    "slcs": 3872,
+    "nlcs": 28,
+    "lcs": [
+      {
+        "sects": [],
+        "name": "__PAGEZERO",
+        "maxprot": "---",
+        "vmsize": 4294967296,
+        "cmd": "SEGMENT_64",
+        "nsects": 0,
+        "flags": [],
+        "initprot": "---",
+        "offset": 0,
+        "vmaddr": 0,
+        "segsize": 0,
+        "size": 72
+      },
+      {
+        "sects": [
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__text",
+            "align": 0,
+            "nreloc": 0,
+            "offset": 6301,
+            "attributes": [
+              "PURE_INSTRUCTIONS",
+              "SOME_INSTRUCTIONS"
+            ],
+            "size": 2913,
+            "type": "REGULAR",
+            "addr": 4294973597
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__stubs",
+            "align": 1,
+            "nreloc": 0,
+            "offset": 9214,
+            "attributes": [
+              "PURE_INSTRUCTIONS",
+              "SOME_INSTRUCTIONS"
+            ],
+            "size": 54,
+            "type": "SYMBOL_STUBS",
+            "addr": 4294976510
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__stub_helper",
+            "align": 2,
+            "nreloc": 0,
+            "offset": 9268,
+            "attributes": [
+              "PURE_INSTRUCTIONS",
+              "SOME_INSTRUCTIONS"
+            ],
+            "size": 106,
+            "type": "REGULAR",
+            "addr": 4294976564
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__objc_methname",
+            "align": 0,
+            "nreloc": 0,
+            "offset": 9374,
+            "attributes": [],
+            "size": 4113,
+            "type": "CSTRING_LITERALS",
+            "addr": 4294976670
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__const",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 13488,
+            "attributes": [],
+            "size": 8,
+            "type": "REGULAR",
+            "addr": 4294980784
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__cstring",
+            "align": 0,
+            "nreloc": 0,
+            "offset": 13496,
+            "attributes": [],
+            "size": 506,
+            "type": "CSTRING_LITERALS",
+            "addr": 4294980792
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__objc_classname",
+            "align": 0,
+            "nreloc": 0,
+            "offset": 14002,
+            "attributes": [],
+            "size": 88,
+            "type": "CSTRING_LITERALS",
+            "addr": 4294981298
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__objc_methtype",
+            "align": 0,
+            "nreloc": 0,
+            "offset": 14090,
+            "attributes": [],
+            "size": 2092,
+            "type": "CSTRING_LITERALS",
+            "addr": 4294981386
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__unwind_info",
+            "align": 2,
+            "nreloc": 0,
+            "offset": 16184,
+            "attributes": [],
+            "size": 124,
+            "type": "REGULAR",
+            "addr": 4294983480
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__eh_frame",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 16312,
+            "attributes": [],
+            "size": 72,
+            "type": "REGULAR",
+            "addr": 4294983608
+          }
+        ],
+        "name": "__TEXT",
+        "maxprot": "rwx",
+        "vmsize": 16384,
+        "cmd": "SEGMENT_64",
+        "nsects": 10,
+        "flags": [],
+        "initprot": "r-x",
+        "offset": 0,
+        "vmaddr": 4294967296,
+        "segsize": 16384,
+        "size": 872
+      },
+      {
+        "sects": [
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__nl_symbol_ptr",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 16384,
+            "attributes": [],
+            "size": 16,
+            "type": "NON_LAZY_SYMBOL_POINTERS",
+            "addr": 4294983680
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__got",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 16400,
+            "attributes": [],
+            "size": 40,
+            "type": "NON_LAZY_SYMBOL_POINTERS",
+            "addr": 4294983696
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__la_symbol_ptr",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 16440,
+            "attributes": [],
+            "size": 72,
+            "type": "LAZY_SYMBOL_POINTERS",
+            "addr": 4294983736
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__const",
+            "align": 4,
+            "nreloc": 0,
+            "offset": 16512,
+            "attributes": [],
+            "size": 48,
+            "type": "REGULAR",
+            "addr": 4294983808
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__cfstring",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 16560,
+            "attributes": [],
+            "size": 160,
+            "type": "REGULAR",
+            "addr": 4294983856
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__objc_classlist",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 16720,
+            "attributes": [
+              "NO_DEAD_STRIP"
+            ],
+            "size": 16,
+            "type": "REGULAR",
+            "addr": 4294984016
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__objc_protolist",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 16736,
+            "attributes": [],
+            "size": 24,
+            "type": "REGULAR",
+            "addr": 4294984032
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__objc_imageinfo",
+            "align": 2,
+            "nreloc": 0,
+            "offset": 16760,
+            "attributes": [],
+            "size": 8,
+            "type": "REGULAR",
+            "addr": 4294984056
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__objc_const",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 16768,
+            "attributes": [],
+            "size": 5320,
+            "type": "REGULAR",
+            "addr": 4294984064
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__objc_selrefs",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 22088,
+            "attributes": [
+              "NO_DEAD_STRIP"
+            ],
+            "size": 440,
+            "type": "LITERAL_POINTERS",
+            "addr": 4294989384
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__objc_classrefs",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 22528,
+            "attributes": [
+              "NO_DEAD_STRIP"
+            ],
+            "size": 104,
+            "type": "REGULAR",
+            "addr": 4294989824
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__objc_superrefs",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 22632,
+            "attributes": [
+              "NO_DEAD_STRIP"
+            ],
+            "size": 16,
+            "type": "REGULAR",
+            "addr": 4294989928
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__objc_ivar",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 22648,
+            "attributes": [],
+            "size": 24,
+            "type": "REGULAR",
+            "addr": 4294989944
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__objc_data",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 22672,
+            "attributes": [],
+            "size": 160,
+            "type": "REGULAR",
+            "addr": 4294989968
+          },
+          {
+            "segname": "__DATA",
+            "reloff": 0,
+            "name": "__data",
+            "align": 3,
+            "nreloc": 0,
+            "offset": 22832,
+            "attributes": [],
+            "size": 264,
+            "type": "REGULAR",
+            "addr": 4294990128
+          }
+        ],
+        "name": "__DATA",
+        "maxprot": "rwx",
+        "vmsize": 8192,
+        "cmd": "SEGMENT_64",
+        "nsects": 15,
+        "flags": [],
+        "initprot": "rw-",
+        "offset": 16384,
+        "vmaddr": 4294983680,
+        "segsize": 8192,
+        "size": 1272
+      },
+      {
+        "sects": [],
+        "name": "__LINKEDIT",
+        "maxprot": "rwx",
+        "vmsize": 20480,
+        "cmd": "SEGMENT_64",
+        "nsects": 0,
+        "flags": [],
+        "initprot": "r--",
+        "offset": 24576,
+        "vmaddr": 4294991872,
+        "segsize": 16960,
+        "size": 72
+      },
+      {
+        "export_size": 32,
+        "lazy_bind_size": 256,
+        "cmd": "DYLD_INFO_ONLY",
+        "weak_bind_size": 0,
+        "lazy_bind_off": 25784,
+        "export_off": 26040,
+        "rebase_size": 352,
+        "bind_off": 24928,
+        "rebase_off": 24576,
+        "bind_size": 856,
+        "weak_bind_off": 0,
+        "size": 48
+      },
+      {
+        "stroff": 26764,
+        "nsyms": 35,
+        "cmd": "SYMTAB",
+        "strsize": 872,
+        "symoff": 26104,
+        "size": 24
+      },
+      {
+        "nl": 16777216,
+        "cmd": "DYSYMTAB",
+        "iu": 33554432,
+        "ne": 16777216,
+        "il": 0,
+        "ie": 16777216,
+        "nu": 553648128,
+        "size": 80
+      },
+      {
+        "cmd": "LOAD_DYLINKER",
+        "name": "/usr/lib/dyld",
+        "size": 32
+      },
+      {
+        "cmd": "UUID",
+        "uuid": "f7e817328b4138b3b817beaf763b0a5a",
+        "size": 24
+      },
+      {
+        "sdk": "10.11.0",
+        "cmd": "VERSION_MIN_MACOSX",
+        "version": "10.11.0",
+        "size": 16
+      },
+      {
+        "cmd": "SOURCE_VERSION",
+        "version": "463.9.0.0.0",
+        "size": 16
+      },
+      {
+        "cmd": "MAIN",
+        "offset": 6301,
+        "size": 0
+      },
+      {
+        "dylib": "/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement",
+        "cmd": "LOAD_DYLIB",
+        "size": 112
+      },
+      {
+        "dylib": "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+        "cmd": "LOAD_DYLIB",
+        "size": 96
+      },
+      {
+        "dylib": "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Frameworks/CommerceCore.framework/Versions/A/CommerceCore",
+        "cmd": "LOAD_DYLIB",
+        "size": 152
+      },
+      {
+        "dylib": "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation",
+        "cmd": "LOAD_DYLIB",
+        "size": 112
+      },
+      {
+        "dylib": "/System/Library/PrivateFrameworks/StoreJavaScript.framework/Versions/A/StoreJavaScript",
+        "cmd": "LOAD_DYLIB",
+        "size": 112
+      },
+      {
+        "dylib": "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI",
+        "cmd": "LOAD_DYLIB",
+        "size": 96
+      },
+      {
+        "dylib": "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit",
+        "cmd": "LOAD_DYLIB",
+        "size": 104
+      },
+      {
+        "dylib": "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+        "cmd": "LOAD_DYLIB",
+        "size": 88
+      },
+      {
+        "dylib": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+        "cmd": "LOAD_DYLIB",
+        "size": 96
+      },
+      {
+        "dylib": "/usr/lib/libobjc.A.dylib",
+        "cmd": "LOAD_DYLIB",
+        "size": 56
+      },
+      {
+        "dylib": "/usr/lib/libSystem.B.dylib",
+        "cmd": "LOAD_DYLIB",
+        "size": 56
+      },
+      {
+        "dylib": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+        "cmd": "LOAD_DYLIB",
+        "size": 88
+      },
+      {
+        "dylib": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+        "cmd": "LOAD_DYLIB",
+        "size": 104
+      },
+      {
+        "cmd": "FUNCTION_STARTS",
+        "offset": 26072,
+        "size": 32
+      },
+      {
+        "cmd": "DATA_IN_CODE",
+        "offset": 26104,
+        "size": 0
+      },
+      {
+        "cmd": "CODE_SIGNATURE",
+        "offset": 27648,
+        "size": 13888
+      }
+    ],
+    "analytics": {
+      "entropy": 0.6070310412138289,
+      "nimps": 33,
+      "ndylibs": 13
+    },
+    "imports": [
+      [
+        "_NSApp",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+      ],
+      [
+        "_NSApplicationMain",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKPushNotificationManager",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKUpdateController",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_FRAppDelegate",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_OBJC_CLASS_$_FRDebugMenuController",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_OBJC_CLASS_$_FRDockTileManager",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_OBJC_CLASS_$_FRStoreViewController",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_OBJC_CLASS_$_FRStoreWindowController",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_OBJC_CLASS_$_NSApplication",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+      ],
+      [
+        "_OBJC_CLASS_$_NSBundle",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSDate",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSUserDefaults",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSView",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+      ],
+      [
+        "_OBJC_CLASS_$_SSLogManager",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_OBJC_METACLASS_$_FRAppDelegate",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_OBJC_METACLASS_$_FRStoreWindowController",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_OBJC_METACLASS_$_NSObject",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "__NSConcreteStackBlock",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
+        "___CFConstantStringClassReference",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "__objc_empty_cache",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_markMainQueue",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_objc_autoreleasePoolPop",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_autoreleasePoolPush",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_getProperty",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_msgSend",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_msgSendSuper2",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_msgSend_stret",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_release",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_retain",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_retainAutoreleasedReturnValue",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_storeStrong",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "dyld_stub_binder",
+        "/usr/lib/libSystem.B.dylib"
+      ]
+    ],
+    "filetype": "EXECUTE",
+    "signature": {
+      "count": 4,
+      "requirements": [
+        {
+          "expression": "identity \"com.apple.appstore\" and anchor apple",
+          "type": "DesignatedRequirementType",
+          "offset": 20
+        }
+      ],
+      "codedirectory": {
+        "n_code_slots": 7,
+        "n_special_slots": 5,
+        "page_size": 4096,
+        "hash_type": "SHA-1",
+        "version": 131328,
+        "flags": 0,
+        "code_limit": 27648,
+        "identity": "com.apple.appstore",
+        "hashes": [
+          "fd67d49ca7dbca2b35d3faa4a9b942a861e6bb48",
+          "0000000000000000000000000000000000000000",
+          "9c18ea24a48972f207eb9af3ec0035c60851d8d4",
+          "3aeb01c288eefe23de22019563ce5fe250829895",
+          "fd3bdaf2c4af3e74201af7b6a007c1ecaf363ead",
+          "45a9463f474b43486bc60509fc6d59703958b413",
+          "5d4f1b02b041fadeab05e2e81f62ad5fa7f77c54",
+          "aa66f39f3a3cba98c440f8f2f87c5821986b862c",
+          "08a3d1c5e7382353f54e5e0b63be7a440048256e",
+          "3cec15764a12af43d2f2ecfa4c4fa34e8099b8b1",
+          "35f225a7f76c92f13f2b0f74dab0f8edf58676f8",
+          "02f30b3462c63133488596277c26c60c42e87c0b"
+        ],
+        "hash_offset": 167,
+        "scatter_offset": 0,
+        "hash_size": 20
+      },
+      "certs": [
+        {
+          "serial": 33,
+          "issuer": {
+            "common_name": "Apple Root CA",
+            "country": "US",
+            "org_unit": "Apple Certification Authority",
+            "org": "Apple Inc."
+          },
+          "ca": true,
+          "subject": {
+            "common_name": "Apple Code Signing Certification Authority",
+            "country": "US",
+            "org_unit": "Apple Certification Authority",
+            "org": "Apple Inc."
+          }
+        },
+        {
+          "serial": 2,
+          "issuer": {
+            "common_name": "Apple Root CA",
+            "country": "US",
+            "org_unit": "Apple Certification Authority",
+            "org": "Apple Inc."
+          },
+          "ca": true,
+          "subject": {
+            "common_name": "Apple Root CA",
+            "country": "US",
+            "org_unit": "Apple Certification Authority",
+            "org": "Apple Inc."
+          }
+        },
+        {
+          "serial": 3087905541007939600,
+          "issuer": {
+            "common_name": "Apple Code Signing Certification Authority",
+            "country": "US",
+            "org_unit": "Apple Certification Authority",
+            "org": "Apple Inc."
+          },
+          "ca": false,
+          "subject": {
+            "common_name": "Software Signing",
+            "country": "US",
+            "org_unit": "Apple Software",
+            "org": "Apple Inc."
+          }
+        }
+      ],
+      "offset": 27648,
+      "entitlements": [
+        {
+          "plist": {
+            "com.apple.private.accounts.allaccounts": true,
+            "com.apple.developer.notificationcenter-identifiers": [
+              "com.apple.appstore"
+            ],
+            "com.apple.security.temporary-exception.mach-lookup.global-name": [
+              "com.apple.storeagent-xpc",
+              "com.apple.storeaccountd",
+              "com.apple.storeassetd",
+              "com.apple.storeuid",
+              "com.apple.storedownloadd",
+              "com.apple.maspushagent-xpc",
+              "com.apple.softwareupdated",
+              "com.apple.dock.appstore",
+              "com.apple.familycircle.agent",
+              "com.apple.askpermissiond",
+              "com.apple.ak.auth.xpc",
+              "com.apple.ak.anisette.xpc"
+            ],
+            "com.apple.security.app-sandbox": true,
+            "com.apple.security.temporary-exception.files.absolute-path.read-only": [
+              "/Library/Preferences/com.apple.storeagent.plist",
+              "/Library/Preferences/com.apple.commerce.plist"
+            ],
+            "com.apple.security.temporary-exception.sbpl": [
+              "\n                (allow mach-issue-extension\n                (require-all (extension-class \"com.apple.app-sandbox.mach\")\n                (require-any\n                (global-name \"com.apple.storeagent-xpc\")\n                (global-name \"com.apple.storedownloadd\")\n                (global-name \"com.apple.storeaccountd\")\n                (global-name \"com.apple.storeassetd\")\n                (global-name \"com.apple.storeuid\")\n                (global-name \"com.apple.storehelper\")\n\t\t\t\t(global-name \"com.apple.coreservices.launchservicesd\")\n                (global-name \"com.apple.suhelperd\")\n                (global-name \"com.apple.installd\")\n                (global-name \"com.apple.pbs.fetch_services\")\n                (global-name \"com.apple.suhelperd\")\n\t\t\t\t(global-name \"com.apple.cfnetwork.cfnetworkagent\")\n                (global-name \"com.apple.familycircle.agent\")\n                (global-name \"com.apple.askpermissiond\")\n                (global-name \"com.apple.cfnetwork.AuthBrokerAgent\")\n                (global-name \"com.apple.softwareupdated\"))))\n            ",
+              "\n                (read-write-and-issue-extensions\n                (require-any\n                (home-literal \"/Library/Caches/com.apple.WebKit.WebContent\")\n                (home-literal \"/Library/Logs/appstore.log\")\n                (home-literal \"/Library/Preferences/com.apple.appstore.plist\")\n                (home-literal \"/Library/Preferences/com.apple.commerce.plist\")\n                (home-literal \"/Library/Preferences/com.apple.storeagent.plist\")))\n            ",
+              "\n                (read-only-and-issue-extensions\n                (require-any\n                (literal \"/Library/Preferences/SystemConfiguration/preferences.plist\")\n                (home-literal \"/Library/Preferences/com.apple.SoftwareUpdate.plist\")\n                (home-literal \"/Library/Preferences/com.apple.iTunes.plist\")\n                (literal \"/private/var/run/SoftwareUpdatesAvailable\")\n                (literal \"/Library/Preferences/com.apple.SoftwareUpdate.plist\")\n                (literal \"/Library/Updates\")\n                (literal \"/Applications\")\n                (home-literal \"/Library/Preferences/pbs.plist\")\n                (literal \"/Library/Caches/com.apple.DiagnosticReporting.Networks.plist\")\n\t\t\t\t(literal \"/Library/Preferences/com.apple.storeagent.plist\")\n\t\t\t\t(literal \"/Library/Preferences/com.apple.commerce.plist\")\n\t\t\t\t(regex #\"^/Users/Shared\")\n                (regex #\"^/private/var/folders/[a-z0-9]+/[a-z0-9_]+/[A-Z]/com\\.apple\\.WebProcess\\+com\\.apple\\.appstore/\")))\n            ",
+              "\n\t\t(allow distributed-notification-post)\n            "
+            ],
+            "com.apple.security.device.camera": true,
+            "com.apple.private.domain-extension": true,
+            "com.apple.authkit.client.internal": true,
+            "com.apple.security.temporary-exception.shared-preference.read-only": [
+              "com.apple.storeagent",
+              "com.apple.appstore",
+              "com.apple.commerce"
+            ],
+            "com.apple.security.network.client": true
+          },
+          "size": 4456
+        }
+      ],
+      "size": 8996
+    },
+    "symtab": {
+      "syms": [
+        {
+          "index": 855,
+          "stab": "OPT",
+          "sect": 0,
+          "value": 90260802
+        },
+        {
+          "index": 4,
+          "pext": 0,
+          "type": "SECT",
+          "value": 4294967296,
+          "ext": 1,
+          "sect": 1,
+          "dylib": 0,
+          "ref": 16
+        },
+        {
+          "index": 24,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 12,
+          "ref": 0
+        },
+        {
+          "index": 31,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 12,
+          "ref": 0
+        },
+        {
+          "index": 50,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 90,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 123,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 151,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 187,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 219,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 255,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 293,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 12,
+          "ref": 0
+        },
+        {
+          "index": 321,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 344,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 365,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 394,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 12,
+          "ref": 0
+        },
+        {
+          "index": 415,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 442,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 474,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 516,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 543,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 566,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 600,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 619,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 634,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 659,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 685,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 703,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 717,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 737,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 757,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 771,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 784,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 820,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 838,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        }
+      ],
+      "iexternal": 1,
+      "nsyms": 35,
+      "ilocal": 0,
+      "nundefined": 33,
+      "nexternal": 1,
+      "offset": 26104,
+      "iundefined": 2,
+      "nlocal": 1
+    },
+    "subtype": "X86_ALL, X86_64_ALL, I386_ALL, or 386",
+    "dylibs": [
+      "/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement",
+      "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+      "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Frameworks/CommerceCore.framework/Versions/A/CommerceCore",
+      "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation",
+      "/System/Library/PrivateFrameworks/StoreJavaScript.framework/Versions/A/StoreJavaScript",
+      "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI",
+      "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit",
+      "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+      "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+      "/usr/lib/libobjc.A.dylib",
+      "/usr/lib/libSystem.B.dylib",
+      "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+      "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+    ],
+    "flags": [
+      "NOUNDEFS",
+      "DYLDLINK",
+      "TWOLEVEL",
+      "PIE"
+    ],
+    "offset": 0,
+    "cputype": "X86_64",
+    "minos": "10.11.0",
+    "strtab": {
+      "size": 872,
+      "strings": [
+        "radr://5614542",
+        "__mh_execute_header"
+      ],
+      "offset": 26764
+    },
+    "size": 41536
+  },
+  "name": "App Store",
+  "size": 41536
+}
