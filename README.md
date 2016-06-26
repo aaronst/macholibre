@@ -25,8 +25,19 @@ I recommend using pip to install macholibre.
 pip install git+https://github.com/aaronst/macholibre.git
 ```
 
-#### OS X USERS: IMPORTANT NOTE
-pip will install an old version of the ctypescrypto dependency that crashes on OS X.
+#### OS X USERS: IMPORTANT NOTES
+If you run into any errors while using macholibre on OS X, try the following
+before creating a ticket.
+
+Make sure your version of OpenSSL is up to date with `openssl version`.
+macholibre has been confirmed working with `OpenSSL 1.0.2h  3 May 2016`.
+```
+brew update
+brew install openssl
+brew link --force openssl
+```
+
+pip may install an old version of the ctypescrypto dependency that crashes on OS X.
 In order to fix this you'll need to install the current version from github.
 ```bash
 pip uninstall ctypescrypto
