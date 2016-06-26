@@ -23,8 +23,8 @@ from json import dump
 class Packer(object):
 
     # Constructor
-    def __init__(self, analyzer=None):
-        self.analyzer = analyzer
+    def __init__(self, parser=None):
+        self.parser = parser
 
     # Functions
     def pack_sect(self, sect):
@@ -72,6 +72,7 @@ class Packer(object):
         s['maxprot'] = segment.maxprot
         s['initprot'] = segment.initprot
         s['nsects'] = segment.nsects
+        s['entropy'] = segment.entropy
         s['sects'] = []
         for i in segment.gen_sects():
             s['sects'].append(self.pack_sect(i))
@@ -220,7 +221,6 @@ class Packer(object):
             m['signature'] = self.pack_signature(macho.signature)
         if macho.minos is not None:
             m['minos'] = macho.minos.version
-        m['analytics'] = macho.analytics
 
         return m
 
@@ -242,18 +242,18 @@ class Packer(object):
 
     def pack(self, f=None):
         file = {}
-        file['name'] = self.analyzer.parser.file.name
-        file['size'] = self.analyzer.parser.file.size
-        file['hashes'] = self.analyzer.parser.file.hashes
-        if self.analyzer.parser.file.is_universal():
-            u = self.analyzer.parser.file.content
+        file['name'] = self.parser.file.name
+        file['size'] = self.parser.file.size
+        file['hashes'] = self.parser.file.hashes
+        if self.parser.file.is_universal():
+            u = self.parser.file.content
             file['universal'] = self.pack_universal(u)
         else:
-            m = self.analyzer.parser.file.content
+            m = self.parser.file.content
             file['macho'] = self.pack_macho(m)
 
         file['abnormalities'] = []
-        for i in self.analyzer.parser.abnormalities:
+        for i in self.parser.abnormalities:
             file['abnormalities'].append(self.pack_abnormality(i))
 
         if f is None:

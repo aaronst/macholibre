@@ -25,7 +25,7 @@ class Segment(loadcommand.LoadCommand):
     # Constructor
     def __init__(self, cmd=None, vmaddr=None, vmsize=None, size=None,
                  name=None, offset=None, segsize=None, maxprot=None,
-                 initprot=None, nsects=None):
+                 initprot=None, nsects=None, entropy=None):
         # Fields
         self.name = name
         self.vmaddr = vmaddr
@@ -35,6 +35,7 @@ class Segment(loadcommand.LoadCommand):
         self.maxprot = maxprot
         self.initprot = initprot
         self.nsects = nsects
+        self.entropy = entropy
         self.sects = []
         self.flags = []
         super(Segment, self).__init__(cmd, size)

@@ -22,7 +22,7 @@ import logging
 import traceback
 
 from uuid import UUID
-from utilities import little, get_int, get_ll, readstring, strip
+from utilities import calc_entropy, little, get_int, get_ll, readstring, strip
 from segment import Segment
 from section import Section
 from osversion import OSVersion
@@ -44,6 +44,13 @@ class LoadCommander(object):
 
     # Functions
     def add_abnormality(self, abnormality): self.abnormalities.append(abnormality)
+
+    def get_segment_entropy(self, offset, size):
+        old = self.f.tell()
+        self.f.seek(self.macho.offset + offset)
+        entropy = calc_entropy(self.f.read(size))
+        self.f.seek(old)
+        return entropy
 
     def parse_section_attrs(self, section, attrs):
         for a in dictionary.section_attrs:
@@ -119,10 +126,12 @@ class LoadCommander(object):
         maxprot = dictionary.protections[maxprot & 0b111]
         initprot = dictionary.protections[initprot & 0b111]        
 
+        entropy = self.get_segment_entropy(offset, segsize)
+
         segment = Segment(cmd=lc.cmd, size=lc.size, name=name,
                           vmaddr=vmaddr, vmsize=vmsize, offset=offset,
                           segsize=segsize, maxprot=maxprot, initprot=initprot,
-                          nsects=nsects)
+                          nsects=nsects, entropy=entropy)
 
         if self.macho.is_32_bit():
             sect_size = 68

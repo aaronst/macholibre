@@ -17,12 +17,30 @@ limitations under the License.
 '''
 
 
+import math
 import re
 
+from collections import Counter
 from struct import pack, unpack
 
 
 # Utility Functions
+def calc_entropy(b):
+    byte_counts = Counter()
+    entropy = 0
+    
+    for i in bytearray(b):
+        byte_counts[i] += 1
+
+    total = float(sum(byte_counts.values()))
+
+    for count in byte_counts.values():
+        p = float(count) / total
+        entropy -= p * math.log(p, 256)
+
+    return entropy
+
+    
 def little(b, s):
     """
     :param b: 4-byte string

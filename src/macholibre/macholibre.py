@@ -28,7 +28,6 @@ from parser import Parser
 from packer import Packer
 from handler import Handler
 from json import dump, dumps
-from analyzer import Analyzer
 from exceptions import Exception
 
 
@@ -40,9 +39,7 @@ sys.setdefaultencoding('utf-8')
 def parse(path, f=None):
     p = Parser(path=path)
     p.parse_file()
-    a = Analyzer(parser=p)
-    a.analyze()
-    j = Packer(analyzer=a)
+    j = Packer(parser=p)
     if f is None:
         return j.pack()
     else:
