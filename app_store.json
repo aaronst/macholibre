@@ -16,10 +16,11 @@
         "vmsize": 4294967296,
         "cmd": "SEGMENT_64",
         "nsects": 0,
-        "flags": [],
+        "entropy": 0,
         "initprot": "---",
         "offset": 0,
         "vmaddr": 0,
+        "flags": [],
         "segsize": 0,
         "size": 72
       },
@@ -160,10 +161,11 @@
         "vmsize": 16384,
         "cmd": "SEGMENT_64",
         "nsects": 10,
-        "flags": [],
+        "entropy": 0.6413232209426287,
         "initprot": "r-x",
         "offset": 0,
         "vmaddr": 4294967296,
+        "flags": [],
         "segsize": 16384,
         "size": 872
       },
@@ -363,10 +365,11 @@
         "vmsize": 8192,
         "cmd": "SEGMENT_64",
         "nsects": 15,
-        "flags": [],
+        "entropy": 0.24007148493871386,
         "initprot": "rw-",
         "offset": 16384,
         "vmaddr": 4294983680,
+        "flags": [],
         "segsize": 8192,
         "size": 1272
       },
@@ -377,10 +380,11 @@
         "vmsize": 20480,
         "cmd": "SEGMENT_64",
         "nsects": 0,
-        "flags": [],
+        "entropy": 0.6637598585065083,
         "initprot": "r--",
         "offset": 24576,
         "vmaddr": 4294991872,
+        "flags": [],
         "segsize": 16960,
         "size": 72
       },
@@ -523,11 +527,6 @@
         "size": 13888
       }
     ],
-    "analytics": {
-      "entropy": 0.6070310412138289,
-      "nimps": 33,
-      "ndylibs": 13
-    },
     "imports": [
       [
         "_NSApp",
