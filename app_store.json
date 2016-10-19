@@ -1,12 +1,12 @@
 {
   "abnormalities": [],
   "hashes": {
-    "sha256": "24663ce8bd265fceb24d664c056156fd39651f34ebfd8b110380e51a300d3485",
-    "sha1": "371100c818c041f3cfaa4e3d79b77f57fd7a746c",
-    "md5": "7fed1c45ff97390938c77cf92b1e8e3c"
+    "sha256": "52eb7123db53f64a9ad80763a5c64b1f0e2500abd0e5e5b695fede44bc932400",
+    "sha1": "da0556311cdbe455a38073cfe1409e921fb8e4ff",
+    "md5": "0d5630d848f063fe01f6b658baedf912"
   },
   "macho": {
-    "slcs": 3872,
+    "slcs": 3896,
     "nlcs": 28,
     "lcs": [
       {
@@ -32,14 +32,14 @@
             "name": "__text",
             "align": 0,
             "nreloc": 0,
-            "offset": 6301,
+            "offset": 5128,
             "attributes": [
               "PURE_INSTRUCTIONS",
               "SOME_INSTRUCTIONS"
             ],
-            "size": 2913,
+            "size": 87928,
             "type": "REGULAR",
-            "addr": 4294973597
+            "addr": 4294972424
           },
           {
             "segname": "__TEXT",
@@ -47,14 +47,14 @@
             "name": "__stubs",
             "align": 1,
             "nreloc": 0,
-            "offset": 9214,
+            "offset": 93056,
             "attributes": [
               "PURE_INSTRUCTIONS",
               "SOME_INSTRUCTIONS"
             ],
-            "size": 54,
+            "size": 228,
             "type": "SYMBOL_STUBS",
-            "addr": 4294976510
+            "addr": 4295060352
           },
           {
             "segname": "__TEXT",
@@ -62,38 +62,26 @@
             "name": "__stub_helper",
             "align": 2,
             "nreloc": 0,
-            "offset": 9268,
+            "offset": 93284,
             "attributes": [
               "PURE_INSTRUCTIONS",
               "SOME_INSTRUCTIONS"
             ],
-            "size": 106,
+            "size": 396,
             "type": "REGULAR",
-            "addr": 4294976564
-          },
-          {
-            "segname": "__TEXT",
-            "reloff": 0,
-            "name": "__objc_methname",
-            "align": 0,
-            "nreloc": 0,
-            "offset": 9374,
-            "attributes": [],
-            "size": 4113,
-            "type": "CSTRING_LITERALS",
-            "addr": 4294976670
+            "addr": 4295060580
           },
           {
             "segname": "__TEXT",
             "reloff": 0,
             "name": "__const",
-            "align": 3,
+            "align": 4,
             "nreloc": 0,
-            "offset": 13488,
+            "offset": 93680,
             "attributes": [],
-            "size": 8,
+            "size": 128,
             "type": "REGULAR",
-            "addr": 4294980784
+            "addr": 4295060976
           },
           {
             "segname": "__TEXT",
@@ -101,11 +89,23 @@
             "name": "__cstring",
             "align": 0,
             "nreloc": 0,
-            "offset": 13496,
+            "offset": 93808,
             "attributes": [],
-            "size": 506,
+            "size": 9488,
             "type": "CSTRING_LITERALS",
-            "addr": 4294980792
+            "addr": 4295061104
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__objc_methname",
+            "align": 0,
+            "nreloc": 0,
+            "offset": 103296,
+            "attributes": [],
+            "size": 14335,
+            "type": "CSTRING_LITERALS",
+            "addr": 4295070592
           },
           {
             "segname": "__TEXT",
@@ -113,11 +113,11 @@
             "name": "__objc_classname",
             "align": 0,
             "nreloc": 0,
-            "offset": 14002,
+            "offset": 117631,
             "attributes": [],
-            "size": 88,
+            "size": 307,
             "type": "CSTRING_LITERALS",
-            "addr": 4294981298
+            "addr": 4295084927
           },
           {
             "segname": "__TEXT",
@@ -125,11 +125,23 @@
             "name": "__objc_methtype",
             "align": 0,
             "nreloc": 0,
-            "offset": 14090,
+            "offset": 117938,
             "attributes": [],
-            "size": 2092,
+            "size": 3151,
             "type": "CSTRING_LITERALS",
-            "addr": 4294981386
+            "addr": 4295085234
+          },
+          {
+            "segname": "__TEXT",
+            "reloff": 0,
+            "name": "__gcc_except_tab",
+            "align": 2,
+            "nreloc": 0,
+            "offset": 121092,
+            "attributes": [],
+            "size": 876,
+            "type": "REGULAR",
+            "addr": 4295088388
           },
           {
             "segname": "__TEXT",
@@ -137,36 +149,24 @@
             "name": "__unwind_info",
             "align": 2,
             "nreloc": 0,
-            "offset": 16184,
+            "offset": 121968,
             "attributes": [],
-            "size": 124,
+            "size": 900,
             "type": "REGULAR",
-            "addr": 4294983480
-          },
-          {
-            "segname": "__TEXT",
-            "reloff": 0,
-            "name": "__eh_frame",
-            "align": 3,
-            "nreloc": 0,
-            "offset": 16312,
-            "attributes": [],
-            "size": 72,
-            "type": "REGULAR",
-            "addr": 4294983608
+            "addr": 4295089264
           }
         ],
         "name": "__TEXT",
         "maxprot": "rwx",
-        "vmsize": 16384,
+        "vmsize": 122880,
         "cmd": "SEGMENT_64",
         "nsects": 10,
-        "entropy": 0.6413232209426287,
+        "entropy": 0.7805465861844332,
         "initprot": "r-x",
         "offset": 0,
         "vmaddr": 4294967296,
         "flags": [],
-        "segsize": 16384,
+        "segsize": 122880,
         "size": 872
       },
       {
@@ -177,11 +177,11 @@
             "name": "__nl_symbol_ptr",
             "align": 3,
             "nreloc": 0,
-            "offset": 16384,
+            "offset": 122880,
             "attributes": [],
             "size": 16,
             "type": "NON_LAZY_SYMBOL_POINTERS",
-            "addr": 4294983680
+            "addr": 4295090176
           },
           {
             "segname": "__DATA",
@@ -189,11 +189,11 @@
             "name": "__got",
             "align": 3,
             "nreloc": 0,
-            "offset": 16400,
+            "offset": 122896,
             "attributes": [],
-            "size": 40,
+            "size": 232,
             "type": "NON_LAZY_SYMBOL_POINTERS",
-            "addr": 4294983696
+            "addr": 4295090192
           },
           {
             "segname": "__DATA",
@@ -201,11 +201,11 @@
             "name": "__la_symbol_ptr",
             "align": 3,
             "nreloc": 0,
-            "offset": 16440,
+            "offset": 123128,
             "attributes": [],
-            "size": 72,
+            "size": 304,
             "type": "LAZY_SYMBOL_POINTERS",
-            "addr": 4294983736
+            "addr": 4295090424
           },
           {
             "segname": "__DATA",
@@ -213,11 +213,11 @@
             "name": "__const",
             "align": 4,
             "nreloc": 0,
-            "offset": 16512,
+            "offset": 123440,
             "attributes": [],
-            "size": 48,
+            "size": 2688,
             "type": "REGULAR",
-            "addr": 4294983808
+            "addr": 4295090736
           },
           {
             "segname": "__DATA",
@@ -225,11 +225,11 @@
             "name": "__cfstring",
             "align": 3,
             "nreloc": 0,
-            "offset": 16560,
+            "offset": 126128,
             "attributes": [],
-            "size": 160,
+            "size": 8160,
             "type": "REGULAR",
-            "addr": 4294983856
+            "addr": 4295093424
           },
           {
             "segname": "__DATA",
@@ -237,13 +237,13 @@
             "name": "__objc_classlist",
             "align": 3,
             "nreloc": 0,
-            "offset": 16720,
+            "offset": 134288,
             "attributes": [
               "NO_DEAD_STRIP"
             ],
-            "size": 16,
+            "size": 48,
             "type": "REGULAR",
-            "addr": 4294984016
+            "addr": 4295101584
           },
           {
             "segname": "__DATA",
@@ -251,11 +251,11 @@
             "name": "__objc_protolist",
             "align": 3,
             "nreloc": 0,
-            "offset": 16736,
+            "offset": 134336,
             "attributes": [],
-            "size": 24,
+            "size": 72,
             "type": "REGULAR",
-            "addr": 4294984032
+            "addr": 4295101632
           },
           {
             "segname": "__DATA",
@@ -263,11 +263,11 @@
             "name": "__objc_imageinfo",
             "align": 2,
             "nreloc": 0,
-            "offset": 16760,
+            "offset": 134408,
             "attributes": [],
             "size": 8,
             "type": "REGULAR",
-            "addr": 4294984056
+            "addr": 4295101704
           },
           {
             "segname": "__DATA",
@@ -275,11 +275,11 @@
             "name": "__objc_const",
             "align": 3,
             "nreloc": 0,
-            "offset": 16768,
+            "offset": 134416,
             "attributes": [],
-            "size": 5320,
+            "size": 13832,
             "type": "REGULAR",
-            "addr": 4294984064
+            "addr": 4295101712
           },
           {
             "segname": "__DATA",
@@ -287,13 +287,13 @@
             "name": "__objc_selrefs",
             "align": 3,
             "nreloc": 0,
-            "offset": 22088,
+            "offset": 148248,
             "attributes": [
               "NO_DEAD_STRIP"
             ],
-            "size": 440,
+            "size": 3504,
             "type": "LITERAL_POINTERS",
-            "addr": 4294989384
+            "addr": 4295115544
           },
           {
             "segname": "__DATA",
@@ -301,13 +301,13 @@
             "name": "__objc_classrefs",
             "align": 3,
             "nreloc": 0,
-            "offset": 22528,
+            "offset": 151752,
             "attributes": [
               "NO_DEAD_STRIP"
             ],
-            "size": 104,
+            "size": 424,
             "type": "REGULAR",
-            "addr": 4294989824
+            "addr": 4295119048
           },
           {
             "segname": "__DATA",
@@ -315,13 +315,13 @@
             "name": "__objc_superrefs",
             "align": 3,
             "nreloc": 0,
-            "offset": 22632,
+            "offset": 152176,
             "attributes": [
               "NO_DEAD_STRIP"
             ],
-            "size": 16,
+            "size": 40,
             "type": "REGULAR",
-            "addr": 4294989928
+            "addr": 4295119472
           },
           {
             "segname": "__DATA",
@@ -329,11 +329,11 @@
             "name": "__objc_ivar",
             "align": 3,
             "nreloc": 0,
-            "offset": 22648,
+            "offset": 152216,
             "attributes": [],
-            "size": 24,
+            "size": 312,
             "type": "REGULAR",
-            "addr": 4294989944
+            "addr": 4295119512
           },
           {
             "segname": "__DATA",
@@ -341,11 +341,11 @@
             "name": "__objc_data",
             "align": 3,
             "nreloc": 0,
-            "offset": 22672,
+            "offset": 152528,
             "attributes": [],
-            "size": 160,
+            "size": 480,
             "type": "REGULAR",
-            "addr": 4294989968
+            "addr": 4295119824
           },
           {
             "segname": "__DATA",
@@ -353,61 +353,61 @@
             "name": "__data",
             "align": 3,
             "nreloc": 0,
-            "offset": 22832,
+            "offset": 153008,
             "attributes": [],
-            "size": 264,
+            "size": 864,
             "type": "REGULAR",
-            "addr": 4294990128
+            "addr": 4295120304
           }
         ],
         "name": "__DATA",
         "maxprot": "rwx",
-        "vmsize": 8192,
+        "vmsize": 32768,
         "cmd": "SEGMENT_64",
         "nsects": 15,
-        "entropy": 0.24007148493871386,
+        "entropy": 0.3163842846611247,
         "initprot": "rw-",
-        "offset": 16384,
-        "vmaddr": 4294983680,
+        "offset": 122880,
+        "vmaddr": 4295090176,
         "flags": [],
-        "segsize": 8192,
+        "segsize": 32768,
         "size": 1272
       },
       {
         "sects": [],
         "name": "__LINKEDIT",
         "maxprot": "rwx",
-        "vmsize": 20480,
+        "vmsize": 28672,
         "cmd": "SEGMENT_64",
         "nsects": 0,
-        "entropy": 0.6637598585065083,
+        "entropy": 0.7116103190361639,
         "initprot": "r--",
-        "offset": 24576,
-        "vmaddr": 4294991872,
+        "offset": 155648,
+        "vmaddr": 4295122944,
         "flags": [],
-        "segsize": 16960,
+        "segsize": 26560,
         "size": 72
       },
       {
         "export_size": 32,
-        "lazy_bind_size": 256,
+        "lazy_bind_size": 1112,
         "cmd": "DYLD_INFO_ONLY",
         "weak_bind_size": 0,
-        "lazy_bind_off": 25784,
-        "export_off": 26040,
-        "rebase_size": 352,
-        "bind_off": 24928,
-        "rebase_off": 24576,
-        "bind_size": 856,
+        "lazy_bind_off": 159592,
+        "export_off": 160704,
+        "rebase_size": 816,
+        "bind_off": 156464,
+        "rebase_off": 155648,
+        "bind_size": 3128,
         "weak_bind_off": 0,
         "size": 48
       },
       {
-        "stroff": 26764,
-        "nsyms": 35,
+        "stroff": 163676,
+        "nsyms": 130,
         "cmd": "SYMTAB",
-        "strsize": 872,
-        "symoff": 26104,
+        "strsize": 3304,
+        "symoff": 161168,
         "size": 24
       },
       {
@@ -417,7 +417,7 @@
         "ne": 16777216,
         "il": 0,
         "ie": 16777216,
-        "nu": 553648128,
+        "nu": 2147483648,
         "size": 80
       },
       {
@@ -427,107 +427,214 @@
       },
       {
         "cmd": "UUID",
-        "uuid": "f7e817328b4138b3b817beaf763b0a5a",
+        "uuid": "83da37fb17d33c0fa27ef9b19adbd373",
         "size": 24
       },
       {
-        "sdk": "10.11.0",
+        "sdk": "10.12.0",
         "cmd": "VERSION_MIN_MACOSX",
-        "version": "10.11.0",
+        "version": "10.12.0",
         "size": 16
       },
       {
         "cmd": "SOURCE_VERSION",
-        "version": "463.9.0.0.0",
+        "version": "552.0.0.0.0",
         "size": 16
       },
       {
         "cmd": "MAIN",
-        "offset": 6301,
+        "offset": 26924,
         "size": 0
       },
       {
-        "dylib": "/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement",
+        "compatibility_version": "1.0.0",
+        "timestamp": "1969-12-31 16:00:02",
         "cmd": "LOAD_DYLIB",
-        "size": 112
+        "dylib": "/System/Library/PrivateFrameworks/StorageManagement.framework/Versions/A/StorageManagement",
+        "current_version": "1.0.0",
+        "size": 120
       },
       {
-        "dylib": "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+        "compatibility_version": "1.0.0",
+        "timestamp": "1969-12-31 16:00:02",
         "cmd": "LOAD_DYLIB",
-        "size": 96
-      },
-      {
         "dylib": "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Frameworks/CommerceCore.framework/Versions/A/CommerceCore",
-        "cmd": "LOAD_DYLIB",
+        "current_version": "379.0.0",
         "size": 152
       },
       {
-        "dylib": "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation",
+        "compatibility_version": "1.0.0",
+        "timestamp": "1969-12-31 16:00:02",
         "cmd": "LOAD_DYLIB",
+        "dylib": "/System/Library/PrivateFrameworks/SoftwareUpdate.framework/Versions/A/SoftwareUpdate",
+        "current_version": "747.0.0",
         "size": 112
       },
       {
-        "dylib": "/System/Library/PrivateFrameworks/StoreJavaScript.framework/Versions/A/StoreJavaScript",
+        "compatibility_version": "1.0.0",
+        "timestamp": "1969-12-31 16:00:02",
         "cmd": "LOAD_DYLIB",
-        "size": 112
-      },
-      {
         "dylib": "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI",
-        "cmd": "LOAD_DYLIB",
+        "current_version": "379.0.0",
         "size": 96
       },
       {
-        "dylib": "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit",
+        "compatibility_version": "1.0.0",
+        "timestamp": "1969-12-31 16:00:02",
         "cmd": "LOAD_DYLIB",
+        "dylib": "/System/Library/PrivateFrameworks/StoreJavaScript.framework/Versions/A/StoreJavaScript",
+        "current_version": "379.0.0",
+        "size": 112
+      },
+      {
+        "compatibility_version": "1.0.0",
+        "timestamp": "1969-12-31 16:00:02",
+        "cmd": "LOAD_DYLIB",
+        "dylib": "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation",
+        "current_version": "379.0.0",
+        "size": 112
+      },
+      {
+        "compatibility_version": "1.0.0",
+        "timestamp": "1969-12-31 16:00:02",
+        "cmd": "LOAD_DYLIB",
+        "dylib": "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit",
+        "current_version": "379.0.0",
         "size": 104
       },
       {
-        "dylib": "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+        "compatibility_version": "1.0.0",
+        "timestamp": "1969-12-31 16:00:02",
         "cmd": "LOAD_DYLIB",
+        "dylib": "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+        "current_version": "22.0.0",
         "size": 88
       },
       {
-        "dylib": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+        "compatibility_version": "300.0.0",
+        "timestamp": "1969-12-31 16:00:02",
         "cmd": "LOAD_DYLIB",
+        "dylib": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+        "current_version": "1349.0.0",
         "size": 96
       },
       {
+        "compatibility_version": "1.0.0",
+        "timestamp": "1969-12-31 16:00:02",
+        "cmd": "LOAD_DYLIB",
         "dylib": "/usr/lib/libobjc.A.dylib",
-        "cmd": "LOAD_DYLIB",
+        "current_version": "228.0.0",
         "size": 56
       },
       {
+        "compatibility_version": "1.0.0",
+        "timestamp": "1969-12-31 16:00:02",
+        "cmd": "LOAD_DYLIB",
         "dylib": "/usr/lib/libSystem.B.dylib",
-        "cmd": "LOAD_DYLIB",
+        "current_version": "1238.0.0",
         "size": 56
       },
       {
-        "dylib": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+        "compatibility_version": "45.0.0",
+        "timestamp": "1969-12-31 16:00:02",
         "cmd": "LOAD_DYLIB",
+        "dylib": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+        "current_version": "1500.0.0",
         "size": 88
       },
       {
-        "dylib": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+        "compatibility_version": "150.0.0",
+        "timestamp": "1969-12-31 16:00:02",
         "cmd": "LOAD_DYLIB",
+        "dylib": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+        "current_version": "1348.0.0",
         "size": 104
       },
       {
         "cmd": "FUNCTION_STARTS",
-        "offset": 26072,
-        "size": 32
+        "offset": 160736,
+        "size": 432
       },
       {
         "cmd": "DATA_IN_CODE",
-        "offset": 26104,
+        "offset": 161168,
         "size": 0
       },
       {
         "cmd": "CODE_SIGNATURE",
-        "offset": 27648,
-        "size": 13888
+        "offset": 166992,
+        "size": 15216
       }
     ],
     "imports": [
+      [
+        "_CFGetTypeID",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_CFNumberGetTypeID",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_CFNumberGetValue",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_CFPreferencesAppSynchronize",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_CFPreferencesCopyAppValue",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_CFPreferencesGetAppBooleanValue",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_CFRelease",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_CFStringGetTypeID",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_CKCriticalUpdateTimeStamp",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Frameworks/CommerceCore.framework/Versions/A/CommerceCore"
+      ],
+      [
+        "_CKRestrictStoreToSoftwareUpdatesOnly",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_FRLocalizedString",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_FRToolbarItemBadgeGlyphsKey",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_FRToolbarItemBadgeRectKey",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_FRToolbarItemGlyphKey",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_FRToolbarItemIdentifierKey",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_FRToolbarItemTitleKey",
+        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+      ],
+      [
+        "_ISItemIdentifierKey",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
       [
         "_NSApp",
         "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
@@ -537,7 +644,87 @@
         "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
       ],
       [
+        "_NSContainsRect",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_NSEqualRects",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_NSFileSize",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_NSLog",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_NSShowSystemInfoPanel",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+      ],
+      [
+        "_NSTemporaryDirectory",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_NSURLTypeIdentifierKey",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_NSUnderlyingErrorKey",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_NSZeroRect",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_CKAccountStore",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKAppStoreLauncher",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKBag",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKDialogController",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKDockMessaging",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_CKDownloadQueue",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKFirmwareWarningSheet",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKLicenseAgreementSheet",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKPurchaseController",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
         "_OBJC_CLASS_$_CKPushNotificationManager",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKSoftwareMap",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_OBJC_CLASS_$_CKStoreClient",
         "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
       ],
       [
@@ -545,55 +732,171 @@
         "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
       ],
       [
-        "_OBJC_CLASS_$_FRAppDelegate",
+        "_OBJC_CLASS_$_FRJSObject",
+        "/System/Library/PrivateFrameworks/StoreJavaScript.framework/Versions/A/StoreJavaScript"
+      ],
+      [
+        "_OBJC_CLASS_$_FRStoreReachability",
         "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
       ],
       [
-        "_OBJC_CLASS_$_FRDebugMenuController",
+        "_OBJC_CLASS_$_FRStoreWebViewController",
         "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
       ],
       [
-        "_OBJC_CLASS_$_FRDockTileManager",
+        "_OBJC_CLASS_$_FRViewNavigationController",
         "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
       ],
       [
-        "_OBJC_CLASS_$_FRStoreViewController",
-        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+        "_OBJC_CLASS_$_ISDialog",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
       ],
       [
-        "_OBJC_CLASS_$_FRStoreWindowController",
-        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+        "_OBJC_CLASS_$_ISDialogOperation",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
       ],
       [
-        "_OBJC_CLASS_$_NSApplication",
-        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+        "_OBJC_CLASS_$_ISManagedRestrictions",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_ISServiceProxy",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_ISURLOperation",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_ISURLRequest",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSAppleEventManager",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSArray",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSAttributedString",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
       ],
       [
         "_OBJC_CLASS_$_NSBundle",
         "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
       ],
       [
+        "_OBJC_CLASS_$_NSCharacterSet",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSData",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
         "_OBJC_CLASS_$_NSDate",
         "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
       ],
       [
-        "_OBJC_CLASS_$_NSUserDefaults",
+        "_OBJC_CLASS_$_NSDateFormatter",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSDictionary",
         "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
       ],
       [
-        "_OBJC_CLASS_$_NSView",
+        "_OBJC_CLASS_$_NSDistributedNotificationCenter",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSFileManager",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSImage",
         "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+      ],
+      [
+        "_OBJC_CLASS_$_NSKeyedUnarchiver",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSLock",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSMutableArray",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSMutableDictionary",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSNull",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSNumber",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSObject",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_OBJC_CLASS_$_NSString",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSURL",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSValue",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation"
+      ],
+      [
+        "_OBJC_CLASS_$_NSWindow",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+      ],
+      [
+        "_OBJC_CLASS_$_NSWindowController",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+      ],
+      [
+        "_OBJC_CLASS_$_NSWorkspace",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+      ],
+      [
+        "_OBJC_CLASS_$_SSDownloadMetadata",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
       ],
       [
         "_OBJC_CLASS_$_SSLogManager",
         "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
       ],
       [
-        "_OBJC_METACLASS_$_FRAppDelegate",
-        "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
+        "_OBJC_CLASS_$_SSPurchase",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
       ],
       [
-        "_OBJC_METACLASS_$_FRStoreWindowController",
+        "_OBJC_CLASS_$_STMFreeSpaceRequest",
+        "/System/Library/PrivateFrameworks/StorageManagement.framework/Versions/A/StorageManagement"
+      ],
+      [
+        "_OBJC_CLASS_$_SUAppStoreUpdateController",
+        "/System/Library/PrivateFrameworks/SoftwareUpdate.framework/Versions/A/SoftwareUpdate"
+      ],
+      [
+        "_OBJC_METACLASS_$_FRJSObject",
+        "/System/Library/PrivateFrameworks/StoreJavaScript.framework/Versions/A/StoreJavaScript"
+      ],
+      [
+        "_OBJC_METACLASS_$_FRStoreWebViewController",
         "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI"
       ],
       [
@@ -601,7 +904,47 @@
         "/usr/lib/libobjc.A.dylib"
       ],
       [
+        "_OBJC_METACLASS_$_NSWindowController",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"
+      ],
+      [
+        "_SSDownloadKindForItemKind",
+        "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit"
+      ],
+      [
+        "_SSDownloadKindOther",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_SSGetItemIdentifierFromValue",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_SSPurchaseDSIDLessOptionFailback",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_ServerDomainStringForDomain",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "__Block_object_assign",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
+        "__Block_object_dispose",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
+        "__NSConcreteGlobalBlock",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
         "__NSConcreteStackBlock",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
+        "__Unwind_Resume",
         "/usr/lib/libSystem.B.dylib"
       ],
       [
@@ -609,8 +952,72 @@
         "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
       ],
       [
+        "___NSArray0__",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "___NSDictionary0__",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+      ],
+      [
+        "___objc_personality_v0",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "___stack_chk_fail",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
+        "___stack_chk_guard",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
+        "__dispatch_main_q",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
         "__objc_empty_cache",
         "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_dispatch_async",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
+        "_dispatch_get_global_queue",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
+        "_dispatch_semaphore_signal",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
+        "_dispatch_sync",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      [
+        "_kAppStoreDefaultsID",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_kCommerceDefaultsID",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_kDefaultsAppStoreBadgeCountKey",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_kDefaultsDoNotCheckDiskSpaceKey",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_kDefaultsDownloadPaddingKey",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
+      ],
+      [
+        "_kProductTypeApp",
+        "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation"
       ],
       [
         "_markMainQueue",
@@ -625,7 +1032,11 @@
         "/usr/lib/libobjc.A.dylib"
       ],
       [
-        "_objc_getProperty",
+        "_objc_autoreleaseReturnValue",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_enumerationMutation",
         "/usr/lib/libobjc.A.dylib"
       ],
       [
@@ -649,11 +1060,19 @@
         "/usr/lib/libobjc.A.dylib"
       ],
       [
+        "_objc_retainAutorelease",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
         "_objc_retainAutoreleasedReturnValue",
         "/usr/lib/libobjc.A.dylib"
       ],
       [
         "_objc_storeStrong",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      [
+        "_objc_unsafeClaimAutoreleasedReturnValue",
         "/usr/lib/libobjc.A.dylib"
       ],
       [
@@ -672,31 +1091,65 @@
         }
       ],
       "codedirectory": {
-        "n_code_slots": 7,
+        "n_code_slots": 41,
         "n_special_slots": 5,
         "page_size": 4096,
-        "hash_type": "SHA-1",
+        "hash_type": "SHA-256",
         "version": 131328,
         "flags": 0,
-        "code_limit": 27648,
+        "code_limit": 166992,
         "identity": "com.apple.appstore",
         "hashes": [
-          "fd67d49ca7dbca2b35d3faa4a9b942a861e6bb48",
-          "0000000000000000000000000000000000000000",
-          "9c18ea24a48972f207eb9af3ec0035c60851d8d4",
-          "3aeb01c288eefe23de22019563ce5fe250829895",
-          "fd3bdaf2c4af3e74201af7b6a007c1ecaf363ead",
-          "45a9463f474b43486bc60509fc6d59703958b413",
-          "5d4f1b02b041fadeab05e2e81f62ad5fa7f77c54",
-          "aa66f39f3a3cba98c440f8f2f87c5821986b862c",
-          "08a3d1c5e7382353f54e5e0b63be7a440048256e",
-          "3cec15764a12af43d2f2ecfa4c4fa34e8099b8b1",
-          "35f225a7f76c92f13f2b0f74dab0f8edf58676f8",
-          "02f30b3462c63133488596277c26c60c42e87c0b"
+          "66f6c6bc5409c34f288b09ee1417dfb13cf9b47c1cc1fdcdf1ac7f02810718b8",
+          "0000000000000000000000000000000000000000000000000000000000000000",
+          "2cff32b0402f747e6e33de30403dfa70e8f7e499d65014da353360bc6dcb1194",
+          "5c1f36302c37d2aa1f71d14408a249fbfd2f81177c7c275e1f21f90d2b55e7d2",
+          "159ae49c966abd5ec68b024a3727baf8522d34702f0cd0fb7d64da3349743f72",
+          "45c5b595564c82d95f13134a01ab271b76d250621fe812f68bee920fff9b96af",
+          "18af23d92a876e563571b86e53a7321e169ded6ce78c80e773d886706b4dd5bb",
+          "d28003fc03db23df548f6f245fc58895009199bbd9bdb14faf7327f2c59b2217",
+          "bedd958f5140314cca248e9e5b4d534ad691b8bb6b97e32e522e206382d1b3b0",
+          "8edfbb43978785a3a66be9babea5fea5159d1bbb4fdb9261edf99dfbfc8ca0b2",
+          "300fd1f3c32614da3ab8c79431f60a7f5cf0b128494ea03ecec98eb984c1e948",
+          "5bc072f0b7f7db93a7751434f761b34b3f20dc2ba39def51852a45b6bf3baa07",
+          "1e61d087fbfbd7a68fd5c099235265789eac8a2e12d8a22b971e3fded6f4fae0",
+          "b139343e75e113a3d966bdb9bf00a3d853846598aeb8cbab1a627c24e8bf90f9",
+          "b20c1a5cbbb60fd6e1c9f613f4ee9f4a8e0c82dbb39780be44d88f0950e146a0",
+          "b0544e8425a6e5042d7cb452c57d417e8511b259b397da6da5182186fcdde7c6",
+          "c922b6349a7b934c57c94e89093b0c03ee6980ef165a507548b761f5dba65a30",
+          "f28e15918bc9cc64eae3c17c053d06693c9755a396e5bc5ed689210e6c857ffa",
+          "aebe29a75513e61478f2ac9e7be3195609ce80bda246abc36ab3b2b46c839f75",
+          "697effd1b49623f98c62f134d63f48a94510b9745d8698c4cfb5c0d909b42e2f",
+          "5f69437952032a62a7b33be410581889761daabbbaf4400b13ce4d6c76e2f18e",
+          "50eb52b2670deb9d6ae75fed31b21cf7ebb5b2b2fa19391d0fb4640422e4d544",
+          "ad921b94122b406ea183a9842f59e9aa3a261ad713ba1bd07bba1e83532d2a76",
+          "8382f11dc044940027d2d0d4a67fc39c73f93ec99b9f1f73b3cad67cf97642e6",
+          "477d7d450f2bc9fa8c3073afb7fb543df7f91042f11456d4b5be4340ebb893d3",
+          "aa0d61c01834660b7779266b13d941430e98c05d008de15aeb642b5be5221c4d",
+          "abcffada92a9aa0820b881482175a6fe9883617fd9704f03b675b4381beacc3c",
+          "455b18d9cf1e660c5ce2b7a9d49974f00e0d01f87badf5e060f079c20666e7e9",
+          "0e5ca87e71a16ec29377ef016b7aa2455708a6d8a541017c153722f99a03e8ce",
+          "793219980aa006ea6bb731f7e1b36110638ae55a42d1ea33c716782b6ed0f21d",
+          "2a6ed54b7e6826a926020f3ca7d53dc847d5e1b96423bbf95706c82be152c84d",
+          "efe9c30db953a2794f5a0eb81e90b09f85ba2d5cd4ad3da099f6b427bf6fd706",
+          "aead5471ffffda69e9cd2cf00ea4dd8e42c55719883869f4578ea75d10b9ba76",
+          "845944b865996ef8c11a855032d71d93cc61aa394821cfaf91dfb8a97d63c79c",
+          "7b3b79363af1938018ea33cc5dbcb9efd991c63e39d68c0d60621b4d2232d0d5",
+          "f33c46c1cd1b0b20f3f112634024f0ab14a032d609bf75aa4307419c1bcd0fa1",
+          "c4fd188db7dddcb2d34af152260a80ebc6df719dd6a39071cacb798f999a7e9e",
+          "562fa125f41a5949ab8ca3a1bff5d2eac58e0e4d546a4bbeb34edaf5c27dbfd6",
+          "0fa765e6b2e80a4ff9593aaab929b44eb03e43fcfdcf5b258871d083d22f8330",
+          "8798cfffafcb02d5bb1b3d0a61e33f87bec097e134f59c33c6512368d7d80724",
+          "40b7fe65b33352b6f002a6ce7c341607ba9451edf03ec3eae076ffb89e79a77c",
+          "bd05f19dfcc9e93067c6f993e7656334314d91beadd14ee5f6d7167f52344517",
+          "7d242ff75699c61b7f0e4636275c12bbdaf9c7ab43a6e6c343dfe1c8f061c5ca",
+          "ed877e3b29d8910f2876582b5819c508fd3ad3305aef461d1b2acdf5051f1b49",
+          "4d840cba3000fed535f889397d84d847a371bab8256b6275e560c85fb2db1f91",
+          "b78c083db6688a635bbe1f32f0f688627bcfe1b1888eaa9744fdb87f3874794e"
         ],
-        "hash_offset": 167,
+        "hash_offset": 227,
         "scatter_offset": 0,
-        "hash_size": 20
+        "hash_size": 32
       },
       "certs": [
         {
@@ -748,7 +1201,7 @@
           }
         }
       ],
-      "offset": 27648,
+      "offset": 166992,
       "entitlements": [
         {
           "plist": {
@@ -768,7 +1221,9 @@
               "com.apple.familycircle.agent",
               "com.apple.askpermissiond",
               "com.apple.ak.auth.xpc",
-              "com.apple.ak.anisette.xpc"
+              "com.apple.ak.anisette.xpc",
+              "com.apple.cache_delete",
+              "com.apple.STMUIHelper"
             ],
             "com.apple.security.app-sandbox": true,
             "com.apple.security.temporary-exception.files.absolute-path.read-only": [
@@ -791,15 +1246,15 @@
             ],
             "com.apple.security.network.client": true
           },
-          "size": 4456
+          "size": 4539
         }
       ],
-      "size": 8996
+      "size": 10311
     },
     "symtab": {
       "syms": [
         {
-          "index": 855,
+          "index": 3286,
           "stab": "OPT",
           "sect": 0,
           "value": 90260802
@@ -821,11 +1276,181 @@
           "value": 0,
           "ext": 1,
           "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 37,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 56,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 74,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 103,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 130,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 163,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 174,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 193,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 2,
+          "ref": 0
+        },
+        {
+          "index": 220,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 258,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 277,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 306,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 333,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 356,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 384,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 407,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 428,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
           "dylib": 12,
           "ref": 0
         },
         {
-          "index": 31,
+          "index": 435,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -835,87 +1460,7 @@
           "ref": 0
         },
         {
-          "index": 50,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 7,
-          "ref": 0
-        },
-        {
-          "index": 90,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 7,
-          "ref": 0
-        },
-        {
-          "index": 123,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 6,
-          "ref": 0
-        },
-        {
-          "index": 151,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 6,
-          "ref": 0
-        },
-        {
-          "index": 187,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 6,
-          "ref": 0
-        },
-        {
-          "index": 219,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 6,
-          "ref": 0
-        },
-        {
-          "index": 255,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 6,
-          "ref": 0
-        },
-        {
-          "index": 293,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 12,
-          "ref": 0
-        },
-        {
-          "index": 321,
+          "index": 454,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -925,27 +1470,37 @@
           "ref": 0
         },
         {
-          "index": 344,
+          "index": 470,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
           "ext": 1,
           "sect": 0,
-          "dylib": 13,
+          "dylib": 9,
           "ref": 0
         },
         {
-          "index": 365,
+          "index": 484,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
           "ext": 1,
           "sect": 0,
-          "dylib": 13,
+          "dylib": 9,
           "ref": 0
         },
         {
-          "index": 394,
+          "index": 496,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 503,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -955,57 +1510,17 @@
           "ref": 0
         },
         {
-          "index": 415,
+          "index": 526,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
           "ext": 1,
           "sect": 0,
-          "dylib": 4,
+          "dylib": 9,
           "ref": 0
         },
         {
-          "index": 442,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 6,
-          "ref": 0
-        },
-        {
-          "index": 474,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 6,
-          "ref": 0
-        },
-        {
-          "index": 516,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 10,
-          "ref": 0
-        },
-        {
-          "index": 543,
-          "pext": 0,
-          "type": "UNDF",
-          "value": 0,
-          "ext": 1,
-          "sect": 0,
-          "dylib": 11,
-          "ref": 0
-        },
-        {
-          "index": 566,
+          "index": 548,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1015,17 +1530,167 @@
           "ref": 0
         },
         {
-          "index": 600,
+          "index": 572,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
           "ext": 1,
           "sect": 0,
-          "dylib": 10,
+          "dylib": 9,
           "ref": 0
         },
         {
-          "index": 619,
+          "index": 594,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 606,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 635,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 668,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 688,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 721,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 751,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 781,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 818,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 856,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 891,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 931,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 959,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 987,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 1020,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 5,
+          "ref": 0
+        },
+        {
+          "index": 1045,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1035,7 +1700,267 @@
           "ref": 0
         },
         {
-          "index": 634,
+          "index": 1079,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 1118,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 1159,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 1182,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 1214,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 1250,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 1279,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 1308,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 1335,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1369,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 1391,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1424,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1447,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1476,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 1497,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 1518,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1548,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 1575,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1621,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1649,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 12,
+          "ref": 0
+        },
+        {
+          "index": 1671,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1703,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1724,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 1753,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 1787,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 1808,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1831,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1045,7 +1970,137 @@
           "ref": 0
         },
         {
-          "index": 659,
+          "index": 1854,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1877,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 1897,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 9,
+          "ref": 0
+        },
+        {
+          "index": 1919,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 12,
+          "ref": 0
+        },
+        {
+          "index": 1942,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 12,
+          "ref": 0
+        },
+        {
+          "index": 1975,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 12,
+          "ref": 0
+        },
+        {
+          "index": 2001,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2034,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2061,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2086,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 1,
+          "ref": 0
+        },
+        {
+          "index": 2120,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 3,
+          "ref": 0
+        },
+        {
+          "index": 2161,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 5,
+          "ref": 0
+        },
+        {
+          "index": 2190,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 4,
+          "ref": 0
+        },
+        {
+          "index": 2233,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1055,7 +2110,147 @@
           "ref": 0
         },
         {
-          "index": 685,
+          "index": 2260,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 12,
+          "ref": 0
+        },
+        {
+          "index": 2297,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 7,
+          "ref": 0
+        },
+        {
+          "index": 2324,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2345,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2375,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2409,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2438,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2460,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2483,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2507,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2530,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2546,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 2580,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 2594,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 13,
+          "ref": 0
+        },
+        {
+          "index": 2613,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1065,7 +2260,37 @@
           "ref": 0
         },
         {
-          "index": 703,
+          "index": 2636,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2654,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2673,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2691,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1075,7 +2300,117 @@
           "ref": 0
         },
         {
-          "index": 717,
+          "index": 2710,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2726,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2753,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2780,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 11,
+          "ref": 0
+        },
+        {
+          "index": 2795,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2816,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2837,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2869,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2902,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2931,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2948,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 6,
+          "ref": 0
+        },
+        {
+          "index": 2963,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1085,7 +2420,7 @@
           "ref": 0
         },
         {
-          "index": 737,
+          "index": 2988,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1095,7 +2430,7 @@
           "ref": 0
         },
         {
-          "index": 757,
+          "index": 3014,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1105,7 +2440,7 @@
           "ref": 0
         },
         {
-          "index": 771,
+          "index": 3043,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1115,7 +2450,7 @@
           "ref": 0
         },
         {
-          "index": 784,
+          "index": 3069,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1125,7 +2460,7 @@
           "ref": 0
         },
         {
-          "index": 820,
+          "index": 3083,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1135,7 +2470,77 @@
           "ref": 0
         },
         {
-          "index": 838,
+          "index": 3103,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 3123,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 3137,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 3150,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 3174,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 3210,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 3228,
+          "pext": 0,
+          "type": "UNDF",
+          "value": 0,
+          "ext": 1,
+          "sect": 0,
+          "dylib": 10,
+          "ref": 0
+        },
+        {
+          "index": 3269,
           "pext": 0,
           "type": "UNDF",
           "value": 0,
@@ -1146,22 +2551,22 @@
         }
       ],
       "iexternal": 1,
-      "nsyms": 35,
+      "nsyms": 130,
       "ilocal": 0,
-      "nundefined": 33,
+      "nundefined": 128,
       "nexternal": 1,
-      "offset": 26104,
+      "offset": 161168,
       "iundefined": 2,
       "nlocal": 1
     },
     "subtype": "X86_ALL, X86_64_ALL, I386_ALL, or 386",
     "dylibs": [
-      "/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement",
-      "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+      "/System/Library/PrivateFrameworks/StorageManagement.framework/Versions/A/StorageManagement",
       "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Frameworks/CommerceCore.framework/Versions/A/CommerceCore",
-      "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation",
-      "/System/Library/PrivateFrameworks/StoreJavaScript.framework/Versions/A/StoreJavaScript",
+      "/System/Library/PrivateFrameworks/SoftwareUpdate.framework/Versions/A/SoftwareUpdate",
       "/System/Library/PrivateFrameworks/StoreUI.framework/Versions/A/StoreUI",
+      "/System/Library/PrivateFrameworks/StoreJavaScript.framework/Versions/A/StoreJavaScript",
+      "/System/Library/PrivateFrameworks/StoreFoundation.framework/Versions/A/StoreFoundation",
       "/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/CommerceKit",
       "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
       "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
@@ -1178,17 +2583,17 @@
     ],
     "offset": 0,
     "cputype": "X86_64",
-    "minos": "10.11.0",
+    "minos": "10.12.0",
     "strtab": {
-      "size": 872,
+      "size": 3304,
       "strings": [
         "radr://5614542",
         "__mh_execute_header"
       ],
-      "offset": 26764
+      "offset": 163676
     },
-    "size": 41536
+    "size": 182208
   },
   "name": "App Store",
-  "size": 41536
+  "size": 182208
 }
