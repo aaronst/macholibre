@@ -25,7 +25,8 @@ from uuid import UUID
 from utilities import calc_entropy, little, get_int, get_ll, readstring, strip
 from segment import Segment
 from section import Section
-from osversion import OSVersion
+from version import Version
+from datetime import datetime
 from symboltable import SymbolTable
 from stringtable import StringTable
 from loadcommand import LoadCommand
@@ -258,15 +259,26 @@ class LoadCommander(object):
 
     def parse_load_dylib(self, lc):
         offset = get_int(self.f)
+        timestamp = get_int(self.f)
+        current_version = get_int(self.f)
+        compatibility_version = get_int(self.f)
 
         if self.macho.is_little():
             offset = little(offset, 'I')
+            timestamp = little(timestamp, 'I')
+            current_version = little(current_version, 'I')
+            compatibility_version = little(compatibility_version, 'I')
 
-        # skip to dylib
-        self.f.read(offset - 12)
+        timestamp = datetime.fromtimestamp(timestamp)
+        current_version = Version(version=current_version)
+        compatibility_version = Version(version=compatibility_version)
+
         dylib = strip(self.f.read(lc.size - 24))
         self.macho.add_dylib(dylib)
 
+        lc.add_data('timestamp', str(timestamp))
+        lc.add_data('current_version', current_version.version)
+        lc.add_data('compatibility_version', compatibility_version.version)
         lc.add_data('dylib', dylib)
 
         self.macho.add_lc(lc)
@@ -280,9 +292,15 @@ class LoadCommander(object):
 
     def parse_prebound_dylib(self, lc):
         dylib = readstring(self.f)
-        self.f.read(lc.size - (9 + len(dylib)))
+        nmodules = get_int(self.f)
+        linked_modules = readstring(self.f)
+        
+        if self.macho.is_little():
+            nmodules = little(nmodules, 'I')
 
         lc.add_data('dylib', dylib)
+        lc.add_data('nmodules', nmodules)
+        lc.add_data('linked_modules', linked_modules)
 
         self.macho.add_lc(lc)
 
@@ -426,18 +444,11 @@ class LoadCommander(object):
             version = little(version, 'I')
             sdk = little(sdk, 'I')
 
-        vx = version >> 16
-        vy = (version >> 8) & 0xff
-        vz = version & 0xff
-        version = OSVersion(vx=vx, vy=vy, vz=vz)
-
-        sx = str(sdk >> 16)
-        sy = str((sdk >> 8) & 0xff)
-        sz = str(sdk & 0xff)
-        sdk = sx + '.' + sy + '.' + sz
+        version = Version(version=version)
+        sdk = Version(version=sdk)
 
         lc.add_data('version', version.version)
-        lc.add_data('sdk', sdk)
+        lc.add_data('sdk', sdk.version)
 
         self.macho.minos = version
         self.macho.add_lc(lc)
