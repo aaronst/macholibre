@@ -50,7 +50,7 @@ def output_file(path):
     return codecs.open(path, 'w', encoding='utf-8')
 
 # Beginning of Script
-if __name__ == '__main__':
+def main():
     parser = ArgumentParser(description='MachoLibre: Mach-O & Universal Binary Parser\
         \n  aaron@icebrg.io',
         formatter_class=RawDescriptionHelpFormatter,
