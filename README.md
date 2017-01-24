@@ -47,17 +47,17 @@ pip install git+https://github.com/vbwagner/ctypescrypto.git
 ### Usage
 #### As a Module
 ```python
-from macholibre import macholibre
+from macholibre import parse
 
 # mach-o file path
 path = '/home/aaron/my_macho'
 
 # return json
-json_data = macholibre.parse(path)
+json_data = parse(path)
 
 # write json to file
 out_file = open('/home/aaron/macholibre_output.json', 'w')
-macholibre.parse(path, f=out_file)
+parse(path, f=out_file)
 ```
 
 #### As a Script
@@ -76,9 +76,9 @@ optional arguments:
                         output JSON file
 
 examples:
-  python macholibre.py macho
-  python macholibre.py -o output.json macho
-  python macholibre.py -o output.json "machos/*"
+  macholibre macho
+  macholibre -o output.json macho
+  macholibre -o output.json "machos/*"
 ```
 
 ## Output Format
