@@ -54,9 +54,9 @@ if __name__ == '__main__':
     parser = ArgumentParser(description='MachoLibre: Mach-O & Universal Binary Parser\
         \n  aaron@icebrg.io',
         formatter_class=RawDescriptionHelpFormatter,
-        epilog='examples:\n  python macholibre.py macho\
-            \n  python macholibre.py -o output.json macho\
-            \n  python macholibre.py -o output.json "machos/*"')
+        epilog='examples:\n  macholibre macho\
+            \n  macholibre -o output.json macho\
+            \n  macholibre -o output.json "machos/*"')
     parser.add_argument('input', type=glob,
         help='input mach-o file (or glob in quotes) to parse')
     parser.add_argument('-o', '--output', type=output_file, help='output JSON file')
