@@ -23,7 +23,6 @@ import codecs
 import logging
 import traceback
 
-from glob import glob
 from parser import Parser
 from packer import Packer
 from handler import Handler
@@ -57,8 +56,7 @@ def main():
         epilog='examples:\n  macholibre macho\
             \n  macholibre -o output.json macho\
             \n  macholibre -o output.json "machos/*"')
-    parser.add_argument('input', type=glob,
-        help='input mach-o file (or glob in quotes) to parse')
+    parser.add_argument('input', nargs='+', help='input mach-o file(s) to parse')
     parser.add_argument('-o', '--output', type=output_file, help='output JSON file')
 
     args = parser.parse_args()
