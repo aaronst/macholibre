@@ -62,13 +62,13 @@ parse(path, f=out_file)
 
 #### As a Script
 ```
-usage: macholibre.py [-h] [-o OUTPUT] input
+usage: macholibre [-h] [-o OUTPUT] input [input ...]
 
 MachoLibre: Mach-O & Universal Binary Parser
   aaron@icebrg.io
 
 positional arguments:
-  input                 input mach-o file (or glob in quotes) to parse
+  input                 input mach-o file(s) to parse
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -78,7 +78,7 @@ optional arguments:
 examples:
   macholibre macho
   macholibre -o output.json macho
-  macholibre -o output.json "machos/*"
+  macholibre -o output.json machos/*
 ```
 
 ## Output Format

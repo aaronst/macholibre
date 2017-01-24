@@ -55,7 +55,7 @@ def main():
         formatter_class=RawDescriptionHelpFormatter,
         epilog='examples:\n  macholibre macho\
             \n  macholibre -o output.json macho\
-            \n  macholibre -o output.json "machos/*"')
+            \n  macholibre -o output.json machos/*')
     parser.add_argument('input', nargs='+', help='input mach-o file(s) to parse')
     parser.add_argument('-o', '--output', type=output_file, help='output JSON file')
 
