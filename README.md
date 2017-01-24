@@ -61,29 +61,24 @@ macholibre.parse(path, f=out_file)
 ```
 
 #### As a Script
-```python
-python macholibre.py (-r <directory|glob> | <file>) [options]
 ```
+usage: macholibre.py [-h] [-o OUTPUT] input
 
-##### Options
-* -h: Help
-* -r: Parse directory of glob
-* -o: Specify output file
+MachoLibre: Mach-O & Universal Binary Parser
+  aaron@icebrg.io
 
-##### Note
-For single files, make sure you put the filename first, before any options.  
-Also, globs need to be in quotes and paths need to be absolute.
+positional arguments:
+  input                 input mach-o file (or glob in quotes) to parse
 
-##### Examples
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUT, --output OUTPUT
+                        output JSON file
 
-###### Single File
-```python
-python macholibre.py otool -o otool.json
-```
-
-###### Glob
-```python
-python macholibre.py -r "machos/*" -o machos.json
+examples:
+  python macholibre.py macho
+  python macholibre.py -o output.json macho
+  python macholibre.py -o output.json "machos/*"
 ```
 
 ## Output Format

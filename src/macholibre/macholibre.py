@@ -29,6 +29,7 @@ from packer import Packer
 from handler import Handler
 from json import dump, dumps
 from exceptions import Exception
+from argparse import ArgumentParser, FileType, RawDescriptionHelpFormatter
 
 
 # Encoding
@@ -45,45 +46,52 @@ def parse(path, f=None):
     else:
         j.pack(f=f)
 
+def output_file(path):
+    return codecs.open(path, 'w', encoding='utf-8')
+
 # Beginning of Script
 if __name__ == '__main__':
-    h = Handler()
-    h.digest(sys.argv)
+    parser = ArgumentParser(description='MachoLibre: Mach-O & Universal Binary Parser\
+        \n  aaron@icebrg.io',
+        formatter_class=RawDescriptionHelpFormatter,
+        epilog='examples:\n  python macholibre.py macho\
+            \n  python macholibre.py -o output.json macho\
+            \n  python macholibre.py -o output.json "machos/*"')
+    parser.add_argument('input', type=glob,
+        help='input mach-o file (or glob in quotes) to parse')
+    parser.add_argument('-o', '--output', type=output_file, help='output JSON file')
 
-    # If an output file was specified via the command line...
-    if data.o is not None:
-        f = codecs.open(data.o, 'w', encoding='utf-8')
-    else:
-	f = None
+    args = parser.parse_args()
 
-    # If recursion was not specified via the command line...
-    if data.r is None:
+    if len(args.input) == 1:
         try:
-            parse(sys.argv[1], f=f)
-	# Need to make this better than generic error.
-        except Exception as e:
-            print ('Bad file: ' + sys.argv[1])
+            if (args.output) is not None:
+                parse(args.input[0], f=args.output)
+            else:
+                print parse(args.input[0])
+        except:
+            print('Could not parse file: %s' % args.input[0])
             logging.error(traceback.format_exc())
-    # If recursion was specified (for a directory/glob)
     else:
-        f.write('[')
+        # handle json array manually so we don't hold all the results in memory
+        if args.output is not None:
+            args.output.write('[')
         count = 1
-        for i in glob(data.r):
+        for i in args.input:
+            print ('Processing file #%d: %s' % (count, i))
             try:
-                print ('Processing file #' + str(count) + ': ' + i)
-                parse(i, f=f)
-                if count < len(glob(data.r)):
-                    f.write(',')
-	    # Again, need to make error handling better.
+                if args.output is not None:
+                    parse(i, f=args.output)
+                    if count < len(args.input):
+                        args.output.write(',')
+                else:
+                    print parse(i)
+                    if count < len(args.input):
+                        print ('\n')
             except Exception as e:
-                print ('Bad file: ' + i)
+                print ('Could not parse file: %s' % i)
                 logging.error(traceback.format_exc())
-
-            if count == len(glob(data.r)):
-                f.write(']')
             count += 1
-
-    # Close output file if necessary
-    if data.o is not None:
-        f.close()
+        if args.output is not None:
+            args.output.write(']')
 
