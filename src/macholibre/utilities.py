@@ -28,7 +28,7 @@ from struct import pack, unpack
 def calc_entropy(b):
     byte_counts = Counter()
     entropy = 0
-    
+
     for i in bytearray(b):
         byte_counts[i] += 1
 
@@ -40,7 +40,7 @@ def calc_entropy(b):
 
     return entropy
 
-    
+
 def little(b, s):
     """
     :param b: 4-byte string
@@ -53,7 +53,7 @@ def little(b, s):
 def readstring(f):
     string = ''
     c = f.read(1)
-    while c != '\x00':
+    while c not in ('\x00', ''):
         string += c
         c = f.read(1)
 
