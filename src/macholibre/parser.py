@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
+
 
 '''
 Copyright 2016 Aaron Stephens <aaron@icebrg.io>, ICEBRG
@@ -19,23 +20,24 @@ limitations under the License.
 
 import hashlib
 import plistlib
-import dictionary
+import macholibre.dictionary as dictionary
 
-from file import File
-from macho import MachO
+from asn1crypto.cms import ContentInfo
+from macholibre.file import File
+from macholibre.macho import MachO
 from math import exp, log
-from symbol import Symbol
-from signature import Signature
-from universal import Universal
-from ctypescrypto import cms, oid
-from abnormality import Abnormality
-from certificate import Certificate
-from entitlement import Entitlement
-from requirement import Requirement
-from codedirectory import CodeDirectory
-from loadcommander import LoadCommander
-from functionimport import FunctionImport
-from utilities import get_file_name, get_int, get_ll, little, readstring
+from macholibre.symbol import Symbol
+from macholibre.signature import Signature
+from macholibre.universal import Universal
+from macholibre.abnormality import Abnormality
+from macholibre.certificate import Certificate
+from macholibre.entitlement import Entitlement
+from macholibre.requirement import Requirement
+from macholibre.codedirectory import CodeDirectory
+from macholibre.loadcommander import LoadCommander
+from macholibre.functionimport import FunctionImport
+from macholibre.utilities import get_file_name, get_int, get_ll, little
+from macholibre.utilities import readstring
 
 
 class Parser(object):
@@ -105,7 +107,7 @@ class Parser(object):
             for i in range(macho.symtab.nsyms):
                 if ((self.f.tell() + symbol_size > macho.offset +
                      macho.size) or (self.f.tell() + symbol_size >
-                                          self.file.size)):
+                                     self.file.size)):
                     data = {
                         'offset': self.f.tell(),
                         'mach-o_size': macho.size,
@@ -207,8 +209,7 @@ class Parser(object):
             for i in macho.symtab.gen_syms():
                 if i.is_imp():
                     self.f.seek(true_offset + i.index)
-                    if ((self.f.tell() > (true_offset +
-                                           macho.strtab.size)) or
+                    if ((self.f.tell() > (true_offset + macho.strtab.size)) or
                             (self.f.tell() > self.file.size)):
                         data = {
                             'offset': self.f.tell(),
@@ -241,7 +242,7 @@ class Parser(object):
                 else:
                     self.f.seek(true_offset + i.index)
                     if ((self.f.tell() > (true_offset +
-                                           macho.strtab.size)) or
+                                          macho.strtab.size)) or
                             (self.f.tell() > self.file.size)):
                         data = {
                             'offset': self.f.tell(),
@@ -259,8 +260,7 @@ class Parser(object):
             for i in macho.symtab.gen_syms():
                 if i.is_imp():
                     self.f.seek(true_offset + i.index)
-                    if self.f.tell() > (true_offset +
-                                         macho.strtab.size):
+                    if self.f.tell() > (true_offset + macho.strtab.size):
                         data = {
                             'offset': self.f.tell(),
                             'strtab_offset': true_offset,
@@ -295,31 +295,52 @@ class Parser(object):
             self.add_abnormality(a)
             self.f.seek(prev)
             return
+
         size = get_int(self.f) - 8
+
         if size > 0:
-            signed_data = cms.CMS(self.f.read(size), format='DER')
-            for cert in signed_data.certs:
-                serial = cert.serial
-                subject = {
-                    'country': self.get_cert_name_data(cert.subject,
-                                                    oid.Oid('C')),
-                    'org': self.get_cert_name_data(cert.subject, oid.Oid('O')),
-                    'org_unit': self.get_cert_name_data(cert.subject,
-                                                     oid.Oid('OU')),
-                    'common_name': self.get_cert_name_data(cert.subject,
-                                                        oid.Oid('CN'))
-                }
-                issuer = {
-                    'country': self.get_cert_name_data(cert.issuer, oid.Oid('C')),
-                    'org': self.get_cert_name_data(cert.issuer, oid.Oid('O')),
-                    'org_unit': self.get_cert_name_data(cert.issuer,
-                                                     oid.Oid('OU')),
-                    'common_name': self.get_cert_name_data(cert.issuer,
-                                                        oid.Oid('CN'))
-                }
-                ca = cert.check_ca()
+            signed_data = ContentInfo.load(self.f.read(size))['content']
+
+            for cert in signed_data['certificates']:
+                cert = cert.chosen
+
+                serial = cert.serial_number
+
+                subject = {}
+
+                for rdn in cert.subject.chosen:
+                    name = rdn[0]['type'].human_friendly
+                    value = unicode(rdn[0]['value'].chosen)
+
+                    if name == 'Country':
+                        subject['country'] = value
+                    elif name == 'Organization':
+                        subject['org'] = value
+                    elif name == 'Organizational Unit':
+                        subject['org_unit'] = value
+                    elif name == 'Common Name':
+                        subject['common_name'] = value
+
+                issuer = {}
+
+                for rdn in cert.issuer.chosen:
+                    name = rdn[0]['type'].human_friendly
+                    value = unicode(rdn[0]['value'].chosen)
+
+                    if name == 'Country':
+                        issuer['country'] = value
+                    elif name == 'Organization':
+                        issuer['org'] = value
+                    elif name == 'Organizational Unit':
+                        issuer['org_unit'] = value
+                    elif name == 'Common Name':
+                        issuer['common_name'] = value
+
+                is_ca = cert.ca
+
                 cert = Certificate(serial=serial, subject=subject,
-                                   issuer=issuer, ca=ca)
+                                   issuer=issuer, ca=is_ca)
+
                 signature.add_cert(cert)
         else:
             data = {
@@ -794,7 +815,7 @@ class Parser(object):
                 self.add_abnormality(a)
                 continue
             u.add_macho(MachO(archive=True, offset=offset, arch=identity[0],
-                             endi=identity[1], size=size))
+                              endi=identity[1], size=size))
 
         for i in u.gen_machos():
             self.parse_macho(i)
@@ -811,5 +832,5 @@ class Parser(object):
             self.parse_universal()
         else:
             self.parse_macho(MachO(archive=False, offset=0, arch=identity[0],
-                                      endi=identity[1], size=self.get_file_size()))
-
+                                   endi=identity[1],
+                                   size=self.get_file_size()))

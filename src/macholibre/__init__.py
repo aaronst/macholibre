@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
+
 
 '''
 Copyright 2016 Aaron Stephens <aaron@icebrg.io>, ICEBRG
@@ -17,26 +18,27 @@ limitations under the License.
 '''
 
 
-import sys
-import data
 import codecs
 import logging
+import sys
 import traceback
 
-from parser import Parser
-from packer import Packer
-from handler import Handler
-from json import dump, dumps
-from exceptions import Exception
 from argparse import ArgumentParser, FileType, RawDescriptionHelpFormatter
+from json import dump, dumps
+from macholibre import data
+from macholibre.handler import Handler
+from macholibre.parser import Parser
+from macholibre.packer import Packer
 
 
 # Encoding
-reload(sys)  
+reload(sys)
 sys.setdefaultencoding('utf-8')
 
-# Functions
+
 def parse(path, f=None):
+    """Parse Mach-O file given in `path`"""
+
     p = Parser(path=path)
     p.parse_file()
     j = Packer(parser=p)
@@ -45,19 +47,28 @@ def parse(path, f=None):
     else:
         j.pack(f=f)
 
+
 def output_file(path):
+    """Create and return file for writing output to."""
+
     return codecs.open(path, 'w', encoding='utf-8')
 
-# Beginning of Script
+
 def main():
-    parser = ArgumentParser(description='MachoLibre: Mach-O & Universal Binary Parser\
-        \n  aaron@icebrg.io',
-        formatter_class=RawDescriptionHelpFormatter,
-        epilog='examples:\n  macholibre macho\
-            \n  macholibre -o output.json macho\
-            \n  macholibre -o output.json machos/*')
-    parser.add_argument('input', nargs='+', help='input mach-o file(s) to parse')
-    parser.add_argument('-o', '--output', type=output_file, help='output JSON file')
+    """Main function for script."""
+
+    parser = ArgumentParser(description='MachoLibre: Mach-O & Universal Binary'
+                                        ' Parser\n  aaron@icebrg.io',
+                            formatter_class=RawDescriptionHelpFormatter,
+                            epilog='examples:\n  macholibre macho\n  macholibr'
+                                   'e -o output.json macho \n  macholibre -o o'
+                                   'utput.json machos/*')
+
+    parser.add_argument('input', nargs='+',
+                        help='input mach-o file(s) to parse')
+
+    parser.add_argument('-o', '--output', type=output_file,
+                        help='output JSON file')
 
     args = parser.parse_args()
 
@@ -68,7 +79,7 @@ def main():
             else:
                 print parse(args.input[0])
         except:
-            print('Could not parse file: %s' % args.input[0])
+            print 'Could not parse file: {}'.format(args.input[0])
             logging.error(traceback.format_exc())
     else:
         # handle json array manually so we don't hold all the results in memory
@@ -76,7 +87,7 @@ def main():
             args.output.write('[')
         count = 1
         for i in args.input:
-            print ('Processing file #%d: %s' % (count, i))
+            print 'Processing file #{}: {}'.format(count, i)
             try:
                 if args.output is not None:
                     parse(i, f=args.output)
@@ -85,11 +96,10 @@ def main():
                 else:
                     print parse(i)
                     if count < len(args.input):
-                        print ('\n')
+                        print '\n'
             except Exception as e:
-                print ('Could not parse file: %s' % i)
+                print 'Could not parse file: {}'.format(i)
                 logging.error(traceback.format_exc())
             count += 1
         if args.output is not None:
             args.output.write(']')
-

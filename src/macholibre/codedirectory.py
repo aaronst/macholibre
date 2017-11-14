@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 
 '''
 Copyright 2016 Aaron Stephens <aaron@icebrg.io>, ICEBRG
