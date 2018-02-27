@@ -224,7 +224,7 @@ class Parser(object):
                     if i.dylib == 0:
                         dylib = 'SELF_LIBRARY'
                     elif i.dylib <= len(macho.dylibs):
-                        dylib = macho.dylibs[i.dylib - 1]
+                        dylib = macho.dylibs[i.dylib]
                     elif i.dylib == 254:
                         dylib = 'DYNAMIC_LOOKUP'
                     elif i.dylib == 255:
