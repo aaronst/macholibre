@@ -8,3 +8,5 @@ src/macholibre/create_model.py
 src/macholibre/fit_model.py
 src/macholibre/stats.py
 src/macholibre/disasm.py
+src/macholibre/__pycache__/
+test/

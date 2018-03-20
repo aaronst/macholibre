@@ -1,8 +1,8 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 
-'''
-Copyright 2016 Aaron Stephens <aaron@icebrg.io>, ICEBRG
+"""
+Copyright 2016 Aaron Stephens <aaronjst93@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,43 +15,36 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
-
-import codecs
-import logging
-import sys
-import traceback
 
 from argparse import ArgumentParser, FileType, RawDescriptionHelpFormatter
-from json import dump, dumps
-from macholibre import data
-from macholibre.handler import Handler
+from json import dump
+
 from macholibre.parser import Parser
-from macholibre.packer import Packer
 
 
-# Encoding
-reload(sys)
-sys.setdefaultencoding('utf-8')
+def output_file(out):
+    """Convert file path to writeable file object."""
+
+    try:
+        return open(out, 'w')
+    except IOError as exc:
+        print('Error opening output file at path: {}.\n\n{}'.format(out, exc))
+        exit(1)
 
 
-def parse(path, f=None):
-    """Parse Mach-O file given in `path`"""
+def parse(macho, out=None):
+    """Parse given mach-o file. Wrap ``parse()`` function from ``Parser``
+    object in order to handle mulitple input files for script use.
+    """
 
-    p = Parser(path=path)
-    p.parse_file()
-    j = Packer(parser=p)
-    if f is None:
-        return j.pack()
+    parser = Parser(macho)
+
+    if out is None:
+        return parser.parse()
     else:
-        j.pack(f=f)
-
-
-def output_file(path):
-    """Create and return file for writing output to."""
-
-    return codecs.open(path, 'w', encoding='utf-8')
+        parser.parse(out=out)
 
 
 def main():
@@ -67,39 +60,28 @@ def main():
     parser.add_argument('input', nargs='+',
                         help='input mach-o file(s) to parse')
 
-    parser.add_argument('-o', '--output', type=output_file,
+    parser.add_argument('-o', '--output', default=None, type=output_file,
                         help='output JSON file')
 
     args = parser.parse_args()
 
     if len(args.input) == 1:
-        try:
-            if (args.output) is not None:
-                parse(args.input[0], f=args.output)
-            else:
-                print parse(args.input[0])
-        except:
-            print 'Could not parse file: {}'.format(args.input[0])
-            logging.error(traceback.format_exc())
+        print(parse(args.input[0], out=args.output))
     else:
-        # handle json array manually so we don't hold all the results in memory
-        if args.output is not None:
+        if args.output is None:
+            output = []
+
+            for macho in args.input:
+                output.append(Parser(macho).parse())
+
+            print(output)
+        else:
             args.output.write('[')
-        count = 1
-        for i in args.input:
-            print 'Processing file #{}: {}'.format(count, i)
-            try:
-                if args.output is not None:
-                    parse(i, f=args.output)
-                    if count < len(args.input):
-                        args.output.write(',')
-                else:
-                    print parse(i)
-                    if count < len(args.input):
-                        print '\n'
-            except Exception as e:
-                print 'Could not parse file: {}'.format(i)
-                logging.error(traceback.format_exc())
-            count += 1
-        if args.output is not None:
+
+            for i in range(len(args.input)):
+                dump(Parser(args.input[i]).parse(), args.output)
+
+                if i < len(args.input) - 1:
+                    args.output.write(',')
+
             args.output.write(']')

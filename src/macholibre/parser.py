@@ -1,8 +1,5 @@
-#!/usr/bin/env python2
-
-
-'''
-Copyright 2016 Aaron Stephens <aaron@icebrg.io>, ICEBRG
+"""
+Copyright 2016 Aaron Stephens <aaronjst93@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,822 +12,1684 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 
 import hashlib
-import plistlib
-import macholibre.dictionary as dictionary
+
+from collections import Counter
+from datetime import datetime
+from json import dump
+from math import exp, log
+from os import SEEK_END
+from re import split
+from struct import unpack
+from uuid import UUID
 
 from asn1crypto.cms import ContentInfo
-from macholibre.file import File
-from macholibre.macho import MachO
-from math import exp, log
-from macholibre.symbol import Symbol
-from macholibre.signature import Signature
-from macholibre.universal import Universal
-from macholibre.abnormality import Abnormality
-from macholibre.certificate import Certificate
-from macholibre.entitlement import Entitlement
-from macholibre.requirement import Requirement
-from macholibre.codedirectory import CodeDirectory
-from macholibre.loadcommander import LoadCommander
-from macholibre.functionimport import FunctionImport
-from macholibre.utilities import get_file_name, get_int, get_ll, little
-from macholibre.utilities import readstring
+from plistlib import loads
+
+import macholibre.dictionary as dictionary
 
 
-class Parser(object):
+class Parser():
+    """Main object containing all the necessary functions to parse
+    a mach-o binary.
+    """
 
-    # Constructor
-    def __init__(self, path=None):
-        # Fields
-        self.abnormalities = []
-        self.path = path
-        self.file = File(name=get_file_name(self.path))
-        self.f = open(path, 'rb')
+    def __init__(self, path):
+        """Initialize instance variables and flags."""
 
-    # Functions
+        self.__file = open(path, 'rb')
+        self.__is_64_bit = True         # default place-holder
+        self.__is_little_endian = True  # ^^
+        self.__macho = {}
+        self.__output = {
+            'name': split(r'\\|/', path)[-1]
+        }
+
     def add_abnormality(self, abnormality):
-        self.abnormalities.append(abnormality)
+        """Add abnormality to output."""
 
-    def identify_file(self, offset):
-        prev = self.f.tell()
-        self.f.seek(offset)
-        magic = get_int(self.f)
-        self.f.seek(prev)
-        if magic not in dictionary.machos:
-            return magic
-        return dictionary.machos[magic]
+        if 'abnormalities' not in self.__output:
+            self.__output['abnormalities'] = []
 
-    def get_file_size(self):
-        prev = self.f.tell()
-        self.f.seek(0)
-        size = len(self.f.read())
-        self.f.seek(prev)
-        return size
+        self.__output['abnormalities'].append(abnormality)
 
-    def get_file_hashes(self):
-        self.f.seek(0)
-        b = self.f.read()
-        md5 = hashlib.md5(b).hexdigest()
-        sha1 = hashlib.sha1(b).hexdigest()
-        sha256 = hashlib.sha256(b).hexdigest()
-        return {'md5': md5, 'sha1': sha1, 'sha256': sha256}
+    def calc_entropy(self, b):
+        """Calculate byte entropy for given bytes."""
 
-    def get_cert_name_data(self, name, o):
-        try:
-            return name[o]
-        except KeyError:
-            return 'n/a'
+        byte_counts = Counter()
 
-    def list_macho_flags(self, flags):
-        l = []
-        j = 0
-        while j < 28:
-            if (0x1 & (flags >> j)) == 0x1:
-                l.append(dictionary.flags[2 ** j])
-            j = j + 1
+        entropy = 0
 
-        return l
+        for i in b:
+            byte_counts[i] += 1
 
-    def parse_syms(self, macho):
-        prev = self.f.tell()
-        true_offset = macho.offset + macho.symtab.offset
-        if macho.is_64_bit():
-            symbol_size = 60
+        total = float(sum(byte_counts.values()))
+
+        for count in byte_counts.values():
+            p = float(count) / total
+            entropy -= p * log(p, 256)
+
+        return entropy
+
+    def get_string(self):
+        """Read a null-terminated string from macho."""
+
+        string = bytearray()
+
+        c = self.__file.read(1)
+
+        while c not in (b'\x00', ''):
+            string += c
+            c = self.__file.read(1)
+
+        return string.decode('utf-8', errors='replace')
+
+    def get_int(self, ignore_endian=False):
+        """Read a 4-byte integer from macho, account for endian-ness."""
+
+        integer = self.__file.read(4)
+
+        if self.__is_little_endian and not ignore_endian:
+            return int.from_bytes(integer, byteorder='little')
+
+        return int.from_bytes(integer, byteorder='big')
+
+    def get_ll(self):
+        """Read an 8-byte long long from macho, account for endian-ness."""
+
+        longlong = self.__file.read(8)
+
+        if self.__is_little_endian:
+            return int.from_bytes(longlong, byteorder='little')
+
+        return int.from_bytes(longlong, byteorder='big')
+
+    def make_version(self, version):
+        """Construct a version number from given bytes."""
+
+        vx = version >> 16
+        vy = (version >> 8) & 0xff
+        vz = version & 0xff
+
+        return '{}.{}.{}'.format(vx, vy, vz)
+
+    def identify_file(self):
+        """Identify if the given file is a single Mach-O or a
+        Universal binary."""
+
+        position = self.__file.tell()
+
+        magic = self.get_int(ignore_endian=True)
+
+        self.__file.seek(position)
+
+        if magic in dictionary.machos:
+            return dictionary.machos[magic]
         else:
-            symbol_size = 56
-        if (true_offset < macho.offset + macho.size and
-                true_offset < self.file.size):
-            self.f.seek(true_offset)
-            for i in range(macho.symtab.nsyms):
-                if ((self.f.tell() + symbol_size > macho.offset +
-                     macho.size) or (self.f.tell() + symbol_size >
-                                     self.file.size)):
-                    data = {
-                        'offset': self.f.tell(),
-                        'mach-o_size': macho.size,
-                        'mach-o_offset': macho.offset,
-                        'file_size': self.file.size
-                    }
-                    a = Abnormality(title='REMAINING SYMBOLS OUT OF BOUNDS',
-                                    data=data)
-                    self.add_abnormality(a)
-                    self.f.seek(prev)
-                    return
+            raise ValueError('Provided file has unrecognized magic: {}'.format(
+                magic))
+
+    def parse_macho_flags(self, flags):
+        """Parse ``flags`` into list of readable flags."""
+
+        output = []
+
+        i = 0
+
+        while i < 28:
+            if (0x1 & (flags >> i)) == 0x1:
+                if 2 ** i in dictionary.flags:
+                    output.append(dictionary.flags[2 ** i])
                 else:
-                    index = get_int(self.f)
-                    sym_type = int(self.f.read(1).encode('hex'), 16)
-                    sect = int(self.f.read(1).encode('hex'), 16)
-                    desc = int(self.f.read(2).encode('hex'), 16)
-                    value = None
-                    if macho.is_64_bit():
-                        if macho.is_little():
-                            value = little(get_ll(self.f), 'Q')
-                        else:
-                            value = get_ll(self.f)
-                    else:
-                        if macho.is_little():
-                            value = little(get_int(self.f), 'I')
-                        else:
-                            value = get_int(self.f)
+                    self.add_abnormality('Unknown mach-o flag "{}".'.format(
+                        2 ** i))
 
-                if macho.is_little():
-                    index = little(index, 'I')
+            i += 1
 
-                if sym_type >= 32:
-                    if sym_type in dictionary.stabs:
-                        stab = dictionary.stabs[sym_type]
-                    else:
-                        offset = self.f.tell() - symbol_size
-                        data = {
-                            'offset': offset,
-                            'index': index,
-                            'sym_type': sym_type,
-                            'sect': sect,
-                            'desc': desc,
-                            'value': value
-                        }
-                        a = Abnormality(title='UNKNOWN STAB', data=data)
-                        self.add_abnormality(a)
-                        continue
-                    sym = Symbol(index=index, stab=stab, sect=sect,
-                                 value=value)
-                    macho.symtab.add_sym(sym)
-                else:
-                    pext = sym_type & 0x10
-                    if sym_type & 0x0e in dictionary.n_types:
-                        n_type = dictionary.n_types[sym_type & 0x0e]
-                    else:
-                        offset = self.f.tell() - symbol_size
-                        data = {
-                            'offset': offset,
-                            'index': index,
-                            'pext': pext,
-                            'n_type': sym_type & 0x0e,
-                            'sect': sect,
-                            'desc': desc,
-                            'value': value
-                        }
-                        a = Abnormality(title='UNKNOWN N_TYPE', data=data)
-                        self.add_abnormality(a)
-                    ext = sym_type & 0x01
+        return output
 
-                    if macho.is_little():
-                        dylib = desc & 0x0f
-                        ref = (desc >> 8) & 0xff
-                    else:
-                        dylib = (desc >> 8) & 0xff
-                        ref = desc & 0x0f
+    def get_segment_entropy(self, m_offset, offset, size):
+        """Determine byte-entropy for this segment."""
 
-                    sym = Symbol(index=index, pext=pext, sym_type=n_type,
-                                 ext=ext, sect=sect, dylib=dylib, ref=ref,
-                                 value=value)
-                    macho.symtab.add_sym(sym)
+        old = self.__file.tell()
 
+        self.__file.seek(m_offset + offset)
+
+        entropy = self.calc_entropy(self.__file.read(size))
+
+        self.__file.seek(old)
+
+        return entropy
+
+    def parse_section_attrs(self, attrs):
+        """Parse section attributes."""
+
+        output = []
+
+        for a in dictionary.section_attrs:
+            if attrs & a == a:
+                output.append(dictionary.section_attrs[a])
+
+        return output
+
+    def parse_section_flags(self, output, flags):
+        """Parse section flags into section type and attributes."""
+
+        output['type'] = dictionary.section_types[flags & 0xff]
+
+        attrs = flags & 0xffffff00
+
+        output['attrs'] = self.parse_section_attrs(attrs)
+
+    def parse_section(self):
+        """Parse section."""
+
+        name = self.__file.read(16).decode().rstrip('\u0000')
+        segname = self.__file.read(16).decode().rstrip('\u0000')
+        addr = self.get_ll() if self.__is_64_bit else self.get_int()
+        size = self.get_ll() if self.__is_64_bit else self.get_int()
+        offset = self.get_int()
+        align = self.get_int()
+        reloff = self.get_int()
+        nreloc = self.get_int()
+        flags = self.get_int()
+
+        self.__file.read(12) if self.__is_64_bit else self.__file.read(8)
+
+        output = {
+            'name': name,
+            'segname': segname,
+            'addr': addr,
+            'offset': offset,
+            'align': align,
+            'reloff': reloff,
+            'nreloc': nreloc,
+            'size': size
+        }
+
+        self.parse_section_flags(output, flags)
+
+        return output
+
+    def parse_segment_flags(self, flags):
+        """Parse segment flags into readable list."""
+
+        output = []
+
+        i = 1
+
+        while i < 9:
+            if flags & i == i:
+                output.append(dictionary.segment_flags[i])
+            i <<= 1
+
+        return output
+
+    def parse_segment(self, m_offset, m_size, cmd, cmd_size):
+        """Parse segment command."""
+
+        name = self.__file.read(16).decode().rstrip('\u0000')
+        vmaddr = self.get_ll() if self.__is_64_bit else self.get_int()
+        vmsize = self.get_ll() if self.__is_64_bit else self.get_int()
+        offset = self.get_ll() if self.__is_64_bit else self.get_int()
+        segsize = self.get_ll() if self.__is_64_bit else self.get_int()
+        maxprot = self.get_int()
+        initprot = self.get_int()
+        nsects = self.get_int()
+        flags = self.get_int()
+
+        maxprot = dictionary.protections[maxprot & 0b111]
+        initprot = dictionary.protections[initprot & 0b111]
+
+        entropy = self.get_segment_entropy(m_offset, offset, segsize)
+
+        output = {
+            'cmd': cmd,
+            'size': cmd_size,
+            'name': name,
+            'vmaddr': vmaddr,
+            'vmsize': vmsize,
+            'offset': offset,
+            'segsize': segsize,
+            'maxprot': maxprot,
+            'initprot': initprot,
+            'nsects': nsects,
+            'entropy': entropy,
+            'sects': []
+        }
+
+        sect_size = 80 if self.__is_64_bit else 68
+
+        for _ in range(nsects):
+            if self.__file.tell() + sect_size > m_offset + m_size:
+                self.add_abnormality('Section at offset "{}" with size "{}" '
+                                     'greater than mach-o size.'.format(
+                                         self.__file.tell(), sect_size))
+
+                break
+
+            output['sects'].append(self.parse_section())
+
+        output['flags'] = self.parse_segment_flags(flags)
+
+        return output
+
+    def parse_symtab(self, cmd, cmd_size):
+        """Parse symbol table load command."""
+
+        symoff = self.get_int()
+        nsyms = self.get_int()
+        stroff = self.get_int()
+        strsize = self.get_int()
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'symoff': symoff,
+            'nsyms': nsyms,
+            'stroff': stroff,
+            'strsize': strsize
+        }
+
+        return output
+
+    def parse_symseg(self, cmd, cmd_size):
+        """Parse link-edit gdb symbol table info (obsolete)."""
+
+        offset = self.get_int()
+        size = self.get_int()
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'offset': offset,
+            'size': size
+        }
+
+        return output
+
+    def parse_thread(self, cmd, cmd_size):
+        """Parse thread load command."""
+
+        state = self.get_int()
+        count = self.get_int()
+
+        self.__file.read(cmd_size - 16)  # skip thread_state objects.
+        # TODO: parse them, definitions in <machine/thread_status.h>
+
+        if state in dictionary.thread_states:
+            state = dictionary.thread_states[state]
         else:
-            data = {
-                'offset': true_offset,
-                'mach-o_size': macho.size,
-                'mach-o_offset': macho.offset,
-                'file_size': self.file.size
+            self.add_abnormality('Invalid THREAD STATE FLAVOR "{}" at offset '
+                                 '"{}".'.format(state, self.__file.tell() - 8))
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'state': state,
+            'count': count
+        }
+
+        return output
+
+    def parse_fvmlib(self, cmd, cmd_size):
+        """Parse fvmlib load command."""
+
+        offset = self.__file.tell() - 8
+
+        self.__file.read(4)  # skip name offset
+
+        minor_version = self.get_int()
+        header_addr = self.get_int()
+        name = self.get_string()
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'name': name,
+            'minor_version': self.make_version(minor_version),
+            'header_addr': header_addr
+        }
+
+        self.__file.read(cmd_size - (self.__file.tell() - offset))
+
+        return output
+
+    def parse_ident(self, cmd, cmd_size):
+        """Parse object identification info (obsolete)."""
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'strings': []
+        }
+
+        end = self.__file.tell() - 8 + cmd_size
+
+        while self.__file.tell() < end:
+            string = self.get_string()
+
+            if string != '':
+                output['strings'].append(string)
+
+        return output
+
+    def parse_fvmfile(self, cmd, cmd_size):
+        """Parse fixed VM file inclusion (internal use)."""
+
+        name = self.get_string()
+        header_addr = self.get_int()
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'name': name,
+            'header_addr': header_addr
+        }
+
+        return output
+
+    def parse_prepage(self, cmd, cmd_size):
+        """Parse prepage command (internal use). Load command structure not
+        found.
+        """
+
+        self.__file.read(cmd_size - 8)
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size
+        }
+
+        return output
+
+    def parse_dysymtab(self, cmd, cmd_size):
+        """Parse dynamic link-edit symbol table info."""
+
+        ilocalsym = self.get_int()       # index to local symbols
+        nlocalsym = self.get_int()       # number of local symbols
+        iextdefsym = self.get_int()      # index to externally defined sybmols
+        nextdefsym = self.get_int()      # number of externally defined symbols
+        iundefsym = self.get_int()       # index to undefined symbols
+        nundefsym = self.get_int()       # number of externally defined symbols
+        tocoff = self.get_int()          # file offset to table of contents
+        ntoc = self.get_int()            # number of module table entries
+        modtaboff = self.get_int()       # file offset to module table
+        nmodtab = self.get_int()         # number of module table entries
+        extrefsymoff = self.get_int()    # offset to referenced symbol table
+        nextrefsyms = self.get_int()     # number of referenced symbol table entries
+        indirectsymoff = self.get_int()  # file offset to the indirect symbol table
+        nindirectsyms = self.get_int()   # number of indirect symbol table entries
+        extreloff = self.get_int()       # offset to external relocation entries
+        nextrel = self.get_int()         # number of external relocation entries
+        locreloff = self.get_int()       # offset to local relocation entries
+        nlocrel = self.get_int()         # number of local relocation entries
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'ilocalsym': ilocalsym,
+            'nlocalsym': nlocalsym,
+            'iextdefsym': iextdefsym,
+            'nextdefsym': nextdefsym,
+            'iundefsym': iundefsym,
+            'nundefsym': nundefsym,
+            'tocoff': tocoff,
+            'ntoc': ntoc,
+            'modtaboff': modtaboff,
+            'nmodtab': nmodtab,
+            'extrefsymoff': extrefsymoff,
+            'nextrefsyms': nextrefsyms,
+            'indirectsymoff': indirectsymoff,
+            'nindirectsyms': nindirectsyms,
+            'extreloff': extreloff,
+            'nextrel': nextrel,
+            'locreloff': locreloff,
+            'nlocrel': nlocrel
+        }
+
+        return output
+
+    def parse_load_dylib(self, cmd, cmd_size):
+        """Parse dylib load command."""
+
+        offset = self.__file.tell() - 8
+
+        self.__file.read(4)  # skip name offset
+
+        timestamp = self.get_int()
+        current_version = self.get_int()
+        compatibility_version = self.get_int()
+        name = self.get_string()
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'name': name,
+            'timestamp': datetime.fromtimestamp(timestamp).strftime(
+                '%Y-%m-%d %H:%M:%S'),
+            'current_version': self.make_version(current_version),
+            'compatability_version': self.make_version(compatibility_version)
+        }
+
+        # skip padding
+        self.__file.read(cmd_size - (self.__file.tell() - offset))
+
+        return output
+
+    def parse_load_dylinker(self, cmd, cmd_size):
+        """Parse dylinker load command."""
+
+        offset = self.__file.tell() - 8
+
+        self.__file.read(4)  # skip name offset
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'name': self.get_string()
+        }
+
+        # skip padding
+        self.__file.read(cmd_size - (self.__file.tell() - offset))
+
+        return output
+
+    def parse_prebound_dylib(self, cmd, cmd_size):
+        """Parse prebound dylib load command.  An executable that is prebound to
+        its dynamic libraries will have one of these for each library that the
+        static linker used in prebinding.
+        """
+
+        name = self.get_string()
+        nmodules = self.get_int()
+        linked_modules = self.get_string()
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'name': name,
+            'nmodules': nmodules,
+            'linked_modules': linked_modules
+        }
+
+        return output
+
+    def parse_routines(self, cmd, cmd_size):
+        """Parse routines load command. The routines command contains the
+        address of the dynamic shared library initialization routine and an
+        index into the module table for the module that defines the routine.
+        """
+
+        init_address = self.get_ll() if self.__is_64_bit else self.get_int()
+        init_module = self.get_ll() if self.__is_64_bit else self.get_int()
+
+        self.__file.read(48) if self.__is_64_bit else self.__file.read(24)
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'init_address': init_address,
+            'init_module': init_module
+        }
+
+        return output
+
+    def parse_sub_stuff(self, cmd, cmd_size):
+        """Parse sub_* load command."""
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'name': self.get_string()
+        }
+
+        return output
+
+    def parse_twolevel_hints(self, cmd, cmd_size):
+        """Parse two-level hints load command."""
+
+        offset = self.get_int()
+        nhints = self.get_int()
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'offset': offset,
+            'nhints': nhints
+        }
+
+        return output
+
+    def parse_prebind_cksum(self, cmd, cmd_size):
+        """Parse prebind checksum load command."""
+
+        cksum = self.get_int()
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'cksum': cksum
+        }
+
+        return output
+
+    def parse_uuid(self, cmd, cmd_size):
+        """Parse UUID load command."""
+
+        uuid = self.__file.read(16)
+
+        if self.__is_little_endian:
+            uuid = unpack('<16s', uuid)[0]
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'uuid': UUID(bytes=uuid).hex
+        }
+
+        return output
+
+    def parse_linkedit_data(self, cmd, cmd_size):
+        """Parse link-edit data load command."""
+
+        dataoff = self.get_int()   # file offset of data in __LINKEDIT segment
+        datasize = self.get_int()  # file size of data in __LINKEDIT segment
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'dataoff': dataoff,
+            'datasize': datasize
+        }
+
+        return output
+
+    def parse_encryption_info(self, cmd, cmd_size):
+        """Parse encryption info load command. Contains the file offset and size
+        of an encrypted segment.
+        """
+
+        cryptoff = self.get_int()
+        cryptsize = self.get_int()
+        cryptid = self.get_int()
+
+        if cmd.endswith('64'):
+            self.__file.read(4)  # skip padding
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'cryptoff': cryptoff,
+            'cryptsize': cryptsize,
+            'cryptid': cryptid
+        }
+
+        return output
+
+    def parse_dyld_info(self, cmd, cmd_size):
+        """Parse dyld info load command. contains the file offsets and sizes of
+        the new compressed form of the information dyld needs to load the
+        image. This information is used by dyld on Mac OS X 10.6 and later. All
+        information pointed to by this command is encoded using byte streams,
+        so no endian swapping is needed to interpret it.
+        """
+
+        rebase_off = self.get_int()      # file offset to rebase info
+        rebase_size = self.get_int()     # size of rebase info
+        bind_off = self.get_int()        # file offset to binding info
+        bind_size = self.get_int()       # size of binding info
+        weak_bind_off = self.get_int()   # file offset to weak binding info
+        weak_bind_size = self.get_int()  # size of weak binding info
+        lazy_bind_off = self.get_int()   # file offset to lazy binding info
+        lazy_bind_size = self.get_int()  # size of lazy binding info
+        export_off = self.get_int()      # file offset to export info
+        export_size = self.get_int()     # size of offset info
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'rebase_off': rebase_off,
+            'rebase_size': rebase_size,
+            'bind_off': bind_off,
+            'bind_size': bind_size,
+            'weak_bind_off': weak_bind_off,
+            'weak_bind_size': weak_bind_size,
+            'lazy_bind_off': lazy_bind_off,
+            'lazy_bind_size': lazy_bind_size,
+            'export_off': export_off,
+            'export_size': export_size
+        }
+
+        return output
+
+    def parse_version_min_os(self, cmd, cmd_size):
+        """Parse minimum OS version load command."""
+
+        version = self.get_int()
+        sdk = self.get_int()
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'version': self.make_version(version),
+            'sdk': self.make_version(sdk)
+        }
+
+        return output
+
+    def parse_source_version(self, cmd, cmd_size):
+        """Parse source version load command."""
+
+        version = self.get_ll()  # A.B.C.D.E packed as a24.b10.c10.d10.e10
+
+        mask = 0b1111111111  # 10 bit mask for B, C, D, and E
+
+        a = version >> 40
+        b = (version >> 30) & mask
+        c = (version >> 20) & mask
+        d = (version >> 10) & mask
+        e = version & mask
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'version': '{}.{}.{}.{}.{}'.format(a, b, c, d, e)
+        }
+
+        return output
+
+    def parse_linker_option(self, cmd, cmd_size):
+        """Parse linker options load command."""
+
+        start = self.__file.tell() - 8
+
+        count = self.get_int()
+
+        linker_options = []
+
+        for _ in range(count):
+            linker_options.append(self.get_string())
+
+        self.__file.read(cmd_size - (self.__file.tell() - start))
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'count': count,
+            'linker_options': linker_options
+        }
+
+        return output
+
+    def parse_rpath(self, cmd, cmd_size):
+        """Parse rpath load command."""
+
+        offset = self.__file.tell() - 8
+
+        self.__file.read(4)  # skip path offset
+
+        path = self.get_string()
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'path': path
+        }
+
+        self.__file.read(cmd_size - (self.__file.tell() - offset))
+
+        return output
+
+    def parse_main(self, cmd, cmd_size):
+        """Parse main load command."""
+
+        entryoff = self.get_ll()   # file (__TEXT) offset of main()
+        stacksize = self.get_ll()  # if not zero, initialize stack size
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'entryoff': entryoff,
+            'stacksize': stacksize
+        }
+
+        return output
+
+    def parse_lcs(self, offset, size, nlcs, slcs):
+        """Determine which load commands are present and parse each one
+        accordingly. Return as a list.
+
+        Load command structures found in '/usr/include/mach-o/loader.h'.
+        """
+
+        self.__macho['lcs'] = []
+
+        for _ in range(nlcs):
+            cmd = self.get_int()       # Load command type
+            cmd_size = self.get_int()  # Size of load command
+
+            if self.__is_64_bit and cmd_size % 8 != 0:
+                raise ValueError('Load command size "{}" for 64-bit mach-o at '
+                                 'offset "{}" is not divisible by 8.'.format(
+                                    cmd_size, self.__file.tell() - 4))
+            elif cmd_size % 4 != 0:
+                raise ValueError('Load command size "{}" for 32-bit mach-o at '
+                                 'offset "{}" is not divisible by 4.'.format(
+                                    cmd_size, self.__file.tell() - 4))
+
+            if cmd in dictionary.loadcommands:
+                cmd = dictionary.loadcommands[cmd]
+            else:
+                self.add_abnormality('Unknown load command "{}" at offset '
+                                     '"{}".'.format(
+                                         cmd, self.__file.tell() - 8))
+
+                self.__file.read(cmd_size - 8)  # skip load command
+
+            if cmd == 'SEGMENT' or cmd == 'SEGMENT_64':
+                self.__macho['lcs'].append(
+                    self.parse_segment(offset, size, cmd, cmd_size))
+            elif cmd == 'SYMTAB':
+                self.__macho['lcs'].append(self.parse_symtab(cmd, cmd_size))
+            elif cmd == 'SYMSEG':
+                self.__macho['lcs'].append(self.parse_symseg(cmd, cmd_size))
+            elif cmd in ('THREAD', 'UNIXTHREAD'):
+                self.__macho['lcs'].append(self.parse_thread(cmd, cmd_size))
+            elif cmd in ('LOADFVMLIB', 'IDFVMLIB'):
+                self.__macho['lcs'].append(self.parse_fvmlib(cmd, cmd_size))
+            elif cmd == 'IDENT':
+                self.__macho['lcs'].append(self.parse_ident(cmd, cmd_size))
+            elif cmd == 'FVMFILE':
+                self.__macho['lcs'].append(self.parse_fvmfile(cmd, cmd_size))
+            elif cmd == 'PREPAGE':
+                self.__macho['lcs'].append(self.parse_prepage(cmd, cmd_size))
+            elif cmd == 'DYSYMTAB':
+                self.__macho['lcs'].append(self.parse_dysymtab(cmd, cmd_size))
+            elif cmd in ('LOAD_DYLIB', 'ID_DYLIB', 'LAZY_LOAD_DYLIB',
+                         'LOAD_WEAK_DYLIB', 'REEXPORT_DYLIB',
+                         'LOAD_UPWARD_DYLIB'):
+                self.__macho['lcs'].append(
+                    self.parse_load_dylib(cmd, cmd_size))
+            elif cmd in ('LOAD_DYLINKER', 'ID_DYLINKER', 'DYLD_ENVIRONMENT'):
+                self.__macho['lcs'].append(
+                    self.parse_load_dylinker(cmd, cmd_size))
+            elif cmd == 'PREBOUND_DYLIB':
+                self.__macho['lcs'].append(
+                    self.parse_prebound_dylib(cmd, cmd_size))
+            elif cmd in ('ROUTINES', 'ROUTINES_64'):
+                self.__macho['lcs'].append(self.parse_routines(cmd, cmd_size))
+            elif cmd in ('SUB_FRAMEWORK', 'SUB_UMBRELLA', 'SUB_CLIENT',
+                         'SUB_LIBRARY'):
+                self.__macho['lcs'].append(self.parse_sub_stuff(cmd, cmd_size))
+            elif cmd == 'TWOLEVEL_HINTS':
+                self.__macho['lcs'].append(
+                    self.parse_twolevel_hints(cmd, cmd_size))
+            elif cmd == 'PREBIND_CKSUM':
+                self.__macho['lcs'].append(
+                    self.parse_prebind_cksum(cmd, cmd_size))
+            elif cmd == 'UUID':
+                self.__macho['lcs'].append(self.parse_uuid(cmd, cmd_size))
+            elif cmd in ('CODE_SIGNATURE', 'SEGMENT_SPLIT_INFO',
+                         'FUNCTION_STARTS', 'DATA_IN_CODE',
+                         'DYLIB_CODE_SIGN_DRS', 'LINKER_OPTIMIZATION_HINT'):
+                self.__macho['lcs'].append(
+                    self.parse_linkedit_data(cmd, cmd_size))
+            elif cmd in ('ENCRYPTION_INFO', 'ENCRYPTION_INFO_64'):
+                self.__macho['lcs'].append(
+                    self.parse_encryption_info(cmd, cmd_size))
+            elif cmd in ('DYLD_INFO', 'DYLD_INFO_ONLY'):
+                self.__macho['lcs'].append(self.parse_dyld_info(cmd, cmd_size))
+            elif cmd in ('VERSION_MIN_MACOSX', 'VERSION_MIN_IPHONEOS',
+                         'VERSION_MIN_WATCHOS', 'VERSION_MIN_TVOS'):
+                self.__macho['lcs'].append(
+                    self.parse_version_min_os(cmd, cmd_size))
+            elif cmd == 'SOURCE_VERSION':
+                self.__macho['lcs'].append(
+                    self.parse_source_version(cmd, cmd_size))
+            elif cmd == 'LINKER_OPTION':
+                self.__macho['lcs'].append(
+                    self.parse_linker_option(cmd, cmd_size))
+            elif cmd == 'RPATH':
+                self.__macho['lcs'].append(self.parse_rpath(cmd, cmd_size))
+            elif cmd == 'MAIN':
+                self.__macho['lcs'].append(self.parse_main(cmd, cmd_size))
+
+    def parse_syms(self, offset, size, lc_symtab):
+        """Parse symbol and string tables.
+
+        Symbol table format found in:
+        /usr/include/mach-o/nlist.h
+        /usr/include/mach-o/stab.h
+        """
+
+        # Check if symbol table offset is within mach-o
+        if lc_symtab['symoff'] > size:
+            self.add_abnormality('Symbol table at offset "{}" out of '
+                                 'bounds.'.format(
+                                     offset + lc_symtab['symoff']))
+
+            return
+
+        true_offset = offset + lc_symtab['symoff']  # beginning of symbol table
+
+        symbol_size = 16 if self.__is_64_bit else 12
+
+        self.__file.seek(true_offset)
+
+        entropy = self.calc_entropy(self.__file.read(
+            lc_symtab['nsyms'] * symbol_size))
+
+        if entropy >= 0.8:
+            self.add_abnormality('Symbol table with entropy of "{}" is '
+                                 'probably packed. Not attempting to '
+                                 'parse.'.format(entropy))
+
+            return
+
+        if lc_symtab['symoff'] + lc_symtab['nsyms'] * symbol_size > size:
+            self.add_abnormality('Symbol table at offset "{}" partially out '
+                                 'of bounds. Attempting to parse as many '
+                                 'symbols as possible.'.format(true_offset))
+
+        self.__file.seek(true_offset)  # jump to beginning of symbol table
+
+        self.__macho['symtab'] = []
+
+        for _ in range(lc_symtab['nsyms']):
+            if self.__file.tell() + symbol_size > offset + size:
+                break
+
+            n_strx = self.get_int()
+            n_type = int(self.__file.read(1).hex(), 16)
+            n_sect = int(self.__file.read(1).hex(), 16)
+            n_desc = int(self.__file.read(2).hex(), 16)
+
+            n_value = self.get_ll() if self.__is_64_bit else self.get_int()
+
+            symbol = {
+                'n_strx': n_strx,
+                'n_sect': n_sect,
+                'n_desc': n_desc,
+                'n_value': n_value
             }
-            a = Abnormality(title='SYMBOL TABLE OUT OF BOUNDS', data=data)
-            self.add_abnormality(a)
 
-        self.f.seek(prev)
-
-    def parse_imports_and_strings(self, macho):
-        prev = self.f.tell()
-        true_offset = macho.offset + macho.strtab.offset
-
-        if macho.has_flag('TWOLEVEL'):
-            for i in macho.symtab.gen_syms():
-                if i.is_imp():
-                    self.f.seek(true_offset + i.index)
-                    if ((self.f.tell() > (true_offset + macho.strtab.size)) or
-                            (self.f.tell() > self.file.size)):
-                        data = {
-                            'offset': self.f.tell(),
-                            'strtab_offset': true_offset,
-                            'strtab_size': macho.strtab.size,
-                            'file_size': self.file.size
-                        }
-                        a = Abnormality(title='BAD STRING INDEX', data=data)
-                        self.add_abnormality(a)
-                        continue
-                    func = readstring(self.f)
-                    if i.dylib == 0:
-                        dylib = 'SELF_LIBRARY'
-                    elif i.dylib <= len(macho.dylibs):
-                        dylib = macho.dylibs[i.dylib - 1]
-                    elif i.dylib == 254:
-                        dylib = 'DYNAMIC_LOOKUP'
-                    elif i.dylib == 255:
-                        dylib = 'EXECUTABLE'
-                    else:
-                        data = {
-                            'dylib': i.dylib,
-                            'dylib_len': len(macho.dylibs)
-                        }
-                        a = Abnormality(title='DYLIB OUT OF RANGE', data=data)
-                        self.add_abnormality(a)
-                        dylib = str(i.dylib) + ' (OUT OF RANGE)'
-                    imp = FunctionImport(func=func, dylib=dylib)
-                    macho.add_import(imp)
+            if n_type >= 32:
+                if n_type in dictionary.stabs:
+                    symbol['stab'] = dictionary.stabs[n_type]
                 else:
-                    self.f.seek(true_offset + i.index)
-                    if ((self.f.tell() > (true_offset +
-                                          macho.strtab.size)) or
-                            (self.f.tell() > self.file.size)):
-                        data = {
-                            'offset': self.f.tell(),
-                            'strtab_offset': true_offset,
-                            'strtab_size': macho.strtab.size,
-                            'file_size': self.file.size
-                        }
-                        a = Abnormality(title='BAD STRING INDEX', data=data)
-                        self.add_abnormality(a)
-                        continue
-                    string = readstring(self.f)
-                    if string != '':
-                        macho.strtab.add_string(string)
-        else:
-            for i in macho.symtab.gen_syms():
-                if i.is_imp():
-                    self.f.seek(true_offset + i.index)
-                    if self.f.tell() > (true_offset + macho.strtab.size):
-                        data = {
-                            'offset': self.f.tell(),
-                            'strtab_offset': true_offset,
-                            'strtab_size': macho.strtab.size
-                        }
-                        a = Abnormality(title='BAD STRING INDEX', data=data)
-                        self.add_abnormality(a)
-                        continue
-                    func = readstring(self.f)
-                    imp = FunctionImport(func=func)
-                    macho.add_import(imp)
+                    self.add_abnormality(
+                        'Unknown stab type "{}" at offset "{}".'.format(
+                            n_type, self.__file.tell() - symbol_size + 4))
+            else:
+                n_pext = n_type & 0x10  # private external symbol flag
+                n_ext = n_type & 0x01   # external symbol flag
+                n_type = n_type & 0x0e  # symbol type
+
+                if n_type in dictionary.n_types:
+                    n_type = dictionary.n_types[n_type]
                 else:
-                    self.f.seek(true_offset + i.index)
-                    string = readstring(self.f)
-                    if string != '':
-                        macho.strtab.add_string(string)
+                    self.add_abnormality(
+                        'Unknown N_TYPE "{}" at offset "{}".'.format(
+                            n_type, self.__file.tell() - symbol_size + 4))
 
-        self.f.seek(prev)
+                if self.__is_little_endian:
+                    dylib = n_desc & 0x0f
+                    ref = (n_desc >> 8) & 0xff
+                else:
+                    dylib = (n_desc >> 8) & 0xff
+                    ref = n_desc & 0x0f
 
-    def parse_certs(self, signature, offset):
-        prev = self.f.tell()
-        true_offset = signature.offset + offset
-        self.f.seek(true_offset)
-        magic = get_int(self.f)
+                symbol['pext'] = n_pext
+                symbol['n_type'] = n_type
+                symbol['ext'] = n_ext
+                symbol['dylib'] = dylib
+                symbol['ref'] = ref
+
+            self.__macho['symtab'].append(symbol)
+
+    def parse_strings(self, offset, size, lc_symtab):
+        """Parse string table."""
+
+        # Check is string table offset is within mach-o
+        if lc_symtab['stroff'] > size:
+            self.add_abnormality(
+                'String table at offset "{}" greater than mach-o size.'.format(
+                    offset + lc_symtab['stroff']))
+
+            return
+
+        true_offset = offset + lc_symtab['stroff']
+
+        self.__file.seek(true_offset)
+
+        entropy = self.calc_entropy(self.__file.read(lc_symtab['strsize']))
+
+        if entropy >= 0.8:
+            self.add_abnormality('String table with entropy of "{}" is '
+                                 'probably packed. Not attempting to '
+                                 'parse.'.format(entropy))
+
+            return
+
+        if true_offset + lc_symtab['strsize'] > offset + size:
+            self.add_abnormality('String Table at offset "{}" partially out '
+                                 'of bounds. Attempting to parse as many '
+                                 'strings as possible.'.format(true_offset))
+
+        self.__macho['strtab'] = []
+
+        self.__file.seek(true_offset)
+
+        while self.__file.tell() < true_offset + lc_symtab['strsize']:
+            try:
+                string = self.get_string()
+
+                if string != '':
+                    self.__macho['strtab'].append(string)
+            except:
+                break
+
+    def parse_imports(self, offset, size, lc_symtab, lc_dysymtab=None,
+                      lc_dylibs=None):
+        """Parse undefined external symbols (imports) out of the symbol and
+        string tables.
+        """
+
+        self.__macho['imports'] = []
+
+        true_offset = offset + lc_symtab['stroff']
+
+        undef_syms = None
+
+        if lc_dysymtab is not None:  # Use symtab layout info from DYSYMTAB
+            i_undef = lc_dysymtab['nlocalsym'] + lc_dysymtab['nextdefsym'] - 1
+            j_undef = i_undef + lc_dysymtab['nundefsym']
+
+            undef_syms = self.__macho['symtab'][i_undef:j_undef]
+        else:  # Find undefined symbols manually by checking n_type
+            undef_syms = filter(lambda sym: sym['n_type'] in ('UNDF', 'PBUD'),
+                                self.__macho['symtab'])
+
+        for sym in undef_syms:
+            self.__file.seek(true_offset + sym['n_strx'])
+
+            value = self.get_string()
+
+            if lc_dylibs is not None:  # If created with two-level namespace
+                dylib = sym['dylib']
+
+                if dylib == 0:
+                    dylib = 'SELF_LIBRARY'
+                elif dylib == 254:
+                    dylib = 'DYNAMIC_LOOKUP'
+                elif dylib == 255:
+                    dylib = 'EXECUTABLE'
+                else:
+                    dylib = lc_dylibs[dylib - 1]['name']
+
+                self.__macho['imports'].append((value, dylib))
+            else:
+                self.__macho['imports'].append(value)
+
+    def parse_certs(self, sig_offset, index_offset):
+        """Parse X509 certificates out of code signature."""
+
+        prev = self.__file.tell()
+
+        true_offset = sig_offset + index_offset
+
+        self.__file.seek(true_offset)
+
+        magic = self.get_int(ignore_endian=True)
+
         if magic != dictionary.signatures['BLOBWRAPPER']:
-            data = {
-                'offset': true_offset,
-                'magic': hex(magic),
-                'expected': hex(dictionary.signatures['BLOBWRAPPER'])
+            self.add_abnormality('Bad magic "{}" for certificate blob wrapper '
+                                 'at offset "{}".'.format(magic, true_offset))
+
+            return []
+
+        # subtract 8 to ignore magic and size fields
+        size = self.get_int(ignore_endian=True) - 8
+
+        if size <= 0:
+            self.add_abnormality('Non-positive CMS size "{}" at offset '
+                                 '"{}".'.format(size, self.__file.tell() - 4))
+
+            return []
+
+        signed_data = ContentInfo.load(self.__file.read(size))['content']
+
+        self.__macho['code_signature']['certs'] = []
+
+        for cert in signed_data['certificates']:
+            cert = cert.chosen
+
+            subject = {}
+
+            for rdn in cert.subject.chosen:
+                name = rdn[0]['type'].human_friendly
+                value = rdn[0]['value']
+
+                if name == 'Country':
+                    subject['country'] = str(value.chosen)
+                elif name == 'Organization':
+                    subject['org'] = str(value.chosen)
+                elif name == 'Organizational Unit':
+                    subject['org_unit'] = str(value.chosen)
+                elif name == 'Common Name':
+                    subject['common_name'] = str(value.chosen)
+                else:
+                    subject[name] = str(value.parsed)
+
+            issuer = {}
+
+            for rdn in cert.issuer.chosen:
+                name = rdn[0]['type'].human_friendly
+                value = rdn[0]['value']
+
+                if name == 'Country':
+                    issuer['country'] = str(value.chosen)
+                elif name == 'Organization':
+                    issuer['org'] = str(value.chosen)
+                elif name == 'Organizational Unit':
+                    issuer['org_unit'] = str(value.chosen)
+                elif name == 'Common Name':
+                    issuer['common_name'] = str(value.chosen)
+                else:
+                    issuer[name] = str(value.parsed)
+
+            certificate = {
+                'subject': subject,
+                'issuer': issuer,
+                'serial': cert.serial_number,
+                'is_ca': cert.ca
             }
-            a = Abnormality(title='BAD MAGIC - BLOBWRAPPER', data=data)
-            self.add_abnormality(a)
-            self.f.seek(prev)
-            return
 
-        size = get_int(self.f) - 8
+            self.__macho['code_signature']['certs'].append(certificate)
 
-        if size > 0:
-            signed_data = ContentInfo.load(self.f.read(size))['content']
+        self.__file.seek(prev)
 
-            for cert in signed_data['certificates']:
-                cert = cert.chosen
+    def parse_codedirectory(self, sig_offset, index_offset):
+        """Parse code directory from code signature."""
 
-                serial = cert.serial_number
+        prev = self.__file.tell()
 
-                subject = {}
+        true_offset = sig_offset + index_offset
 
-                for rdn in cert.subject.chosen:
-                    name = rdn[0]['type'].human_friendly
-                    value = unicode(rdn[0]['value'].chosen)
+        self.__file.seek(true_offset)
 
-                    if name == 'Country':
-                        subject['country'] = value
-                    elif name == 'Organization':
-                        subject['org'] = value
-                    elif name == 'Organizational Unit':
-                        subject['org_unit'] = value
-                    elif name == 'Common Name':
-                        subject['common_name'] = value
+        magic = self.get_int(ignore_endian=True)
 
-                issuer = {}
-
-                for rdn in cert.issuer.chosen:
-                    name = rdn[0]['type'].human_friendly
-                    value = unicode(rdn[0]['value'].chosen)
-
-                    if name == 'Country':
-                        issuer['country'] = value
-                    elif name == 'Organization':
-                        issuer['org'] = value
-                    elif name == 'Organizational Unit':
-                        issuer['org_unit'] = value
-                    elif name == 'Common Name':
-                        issuer['common_name'] = value
-
-                is_ca = cert.ca
-
-                cert = Certificate(serial=serial, subject=subject,
-                                   issuer=issuer, ca=is_ca)
-
-                signature.add_cert(cert)
-        else:
-            data = {
-                'offset': true_offset,
-                'size': size
-            }
-            a = Abnormality(title='NON-POSITIVE CMS SIZE', data=data)
-            self.add_abnormality(a)
-
-        self.f.seek(prev)
-
-    def parse_codedirectory(self, signature, offset):
-        prev = self.f.tell()
-        true_offset = signature.offset + offset
-        self.f.seek(true_offset)
-        magic = get_int(self.f)
         if magic != dictionary.signatures['CODEDIRECTORY']:
-            data = {
-                'offset': true_offset,
-                'magic': hex(magic),
-                'expected': hex(dictionary.signatures['CODEDIRECTORY'])
-            }
-            a = Abnormality(title='BAD MAGIC - CODEDIRECTORY', data=data)
-            self.add_abnormality(a)
-            self.f.seek(prev)
+            self.add_abnormality('Bad magic "{}" for code directory at offset '
+                                 '"{}".'.format(magic, self.__file.tell() - 4))
+
             return
-        # Skip size
-        self.f.read(4)
-        version = get_int(self.f)
-        # Not sure how to parse flags yet...
-        flags = get_int(self.f)
-        hash_offset = get_int(self.f)
-        ident_offset = get_int(self.f)
-        n_special_slots = get_int(self.f)
-        n_code_slots = get_int(self.f)
-        code_limit = get_int(self.f)
-        hash_size = int(self.f.read(1).encode('hex'), 16)
-        hash_type = dictionary.hashes[int(self.f.read(1).encode('hex'), 16)]
+
+        size = self.get_int(ignore_endian=True)
+        version = self.get_int(ignore_endian=True)
+        # TODO: not sure how to parse flags yet...
+        flags = self.get_int(ignore_endian=True)
+        hash_offset = self.get_int(ignore_endian=True)
+        ident_offset = self.get_int(ignore_endian=True)
+        n_special_slots = self.get_int(ignore_endian=True)
+        n_code_slots = self.get_int(ignore_endian=True)
+        code_limit = self.get_int(ignore_endian=True)
+        hash_size = int(self.__file.read(1).hex(), 16)
+        hash_type = dictionary.hashes[int(self.__file.read(1).hex(), 16)]
+
         if version >= 0x20200:
-            platform = int(self.f.read(1).encode('hex'), 16)
+            platform = int(self.__file.read(1).hex(), 16)
         else:
-            # Skip spare1
-            self.f.read(1)
-        page_size = int(round(exp(int(self.f.read(1).encode('hex'),
-                                      16) * log(2))))
-        # Skip spare2
-        self.f.read(4)
+            self.__file.read(1)  # skip spare1
+
+        page_size = int(round(exp(
+            int(self.__file.read(1).hex(), 16) * log(2))))
+
+        self.__file.read(4)  # skip spare2
+
         if version >= 0x20100:
-            scatter_offset = get_int(self.f)
+            scatter_offset = self.get_int(ignore_endian=True)
         if version >= 0x20200:
-            team_id_offset = get_int(self.f)
-            self.f.seek(true_offset + team_id_offset)
-            team_id = readstring(self.f)
-        self.f.seek(true_offset + ident_offset)
-        identity = readstring(self.f)
-        codedirectory = CodeDirectory(version=version, flags=flags,
-                                      hash_offset=hash_offset,
-                                      n_special_slots=n_special_slots,
-                                      n_code_slots=n_code_slots,
-                                      code_limit=code_limit,
-                                      hash_size=hash_size, hash_type=hash_type,
-                                      page_size=page_size, identity=identity)
+            team_id_offset = self.get_int(ignore_endian=True)
+            self.__file.seek(true_offset + team_id_offset)
+            team_id = self.get_string()
+
+        self.__file.seek(true_offset + ident_offset)
+
+        identity = self.get_string()
+
+        self.__macho['code_signature']['codedirectory'] = {
+            'size': size,
+            'version': version,
+            'flags': flags,
+            'hash_offset': hash_offset,
+            'n_special_slots': n_special_slots,
+            'n_code_slots': n_code_slots,
+            'code_limit': code_limit,
+            'hash_size': hash_size,
+            'hash_type': hash_type,
+            'page_size': page_size,
+            'identity': identity,
+            'hashes': []
+        }
+
         if version >= 0x20100:
-            codedirectory.scatter_offset = scatter_offset
+            self.__macho['code_signature']['codedirectory']['scatter_offset'] = scatter_offset
         if version >= 0x20200:
-            codedirectory.platform = platform
-            codedirectory.team_id_offset = team_id_offset
-            codedirectory.team_id = team_id
-        self.f.seek(true_offset + hash_offset - n_special_slots * hash_size)
+            self.__macho['code_signature']['codedirectory']['platform'] = platform
+            self.__macho['code_signature']['codedirectory']['team_id_offset'] = team_id_offset
+            self.__macho['code_signature']['codedirectory']['team_id'] = team_id
+
+        self.__file.seek(
+            true_offset + hash_offset - n_special_slots * hash_size)
+
         count = n_special_slots + n_code_slots
-        while count > 0:
-            hash = self.f.read(hash_size).encode('hex')
-            codedirectory.add_hash(hash)
-            count -= 1
 
-        signature.codedirectory = codedirectory
-        self.f.seek(prev)
+        for _ in range(count):
+            self.__macho['code_signature']['codedirectory']['hashes'].append(
+                self.__file.read(hash_size).hex())
 
-    # Mimicking OID parser implementation from:
-    # http://opensource.apple.com/source/Security/Security-57337.20.44/OSX/libsecurity_cdsa_utilities/lib/cssmdata.cpp
+        self.__file.seek(prev)
+
     def get_oid(self, db, p):
+        """OID parser implementation from:
+
+        http://opensource.apple.com/source/Security/Security-57337.20.44/OSX/libsec
+        urity_cdsa_utilities/lib/cssmdata.cpp
+        """
+
         q = 0
+
         while True:
             q = q * 128 + (db[p] & ~0x80)
+
             if p < len(db) and db[p] & 0x80:
                 p += 1
             else:
                 p += 1
                 break
+
         return q, p
 
     def to_oid(self, length):
+        """Convert bytes to correct OID."""
+
         if length == 0:
             return ''
-        data_bytes = [int(self.f.read(1).encode('hex'),
-                          16) for i in range(length)]
+
+        data_bytes = [
+            int(self.__file.read(1).hex(), 16) for i in range(length)
+        ]
+
         p = 0
+
         # first byte is composite (q1, q2)
         oid1, p = self.get_oid(data_bytes, p)
+
         q1 = min(oid1 / 40, 2)
+
         data = str(q1) + '.' + str(oid1 - q1 * 40)
 
         while p < len(data_bytes):
             d, p = self.get_oid(data_bytes, p)
             data += '.' + str(d)
 
-        self.f.read(-length & 3)
+        self.__file.read(-length & 3)
+
         return data
 
-    def parse_entitlement(self, signature, offset):
-        prev = self.f.tell()
-        true_offset = signature.offset + offset
-        self.f.seek(true_offset)
-        magic = get_int(self.f)
+    def parse_entitlement(self, sig_offset, index_offset):
+        """Parse entitlement from code signature."""
+
+        prev = self.__file.tell()
+
+        true_offset = sig_offset + index_offset
+
+        self.__file.seek(true_offset)
+
+        magic = self.get_int(ignore_endian=True)
+
         if magic != dictionary.signatures['ENTITLEMENT']:
-            data = {
-                'offset': true_offset,
-                'magic': hex(magic),
-                'expected': hex(dictionary.signatures['ENTITLEMENT'])
-            }
-            a = Abnormality(title='BAD MAGIC - ENTITLEMENT', data=data)
-            self.add_abnormality(a)
-            self.f.seek(prev)
+            self.add_abnormality('Bad magic "{}" for entitlement at offset '
+                                 '"{}".'.format(magic, self.__file.tell() - 4))
+
             return
-        size = get_int(self.f) - 8
-        plist = plistlib.readPlistFromString(self.f.read(size))
-        entitlement = Entitlement(size=size, plist=plist)
-        signature.add_entitlement(entitlement)
-        self.f.seek(prev)
+
+        # size of plist minus magic and size values
+        size = self.get_int(ignore_endian=True) - 8
+
+        try:
+            plist = loads(self.__file.read(size))
+        except Exception as exc:
+            plist = {}
+            self.add_abnormality('Unable to parse plist at offset "{}". '
+                                 '{}.'.format(self.__file.tell() - size, exc))
+
+        if 'entitlements' not in self.__macho['code_signature']:
+            self.__macho['code_signature']['entitlements'] = []
+
+        self.__macho['code_signature']['entitlements'].append({
+            'size': size,
+            'plist': plist
+        })
+
+        self.__file.seek(prev)
 
     def parse_data(self):
-        length = get_int(self.f)
-        data = self.f.read(length)
-        # Skip padding
-        self.f.read(-length & 3)
+        """Parse data for requirement expression."""
+
+        length = self.get_int(ignore_endian=True)
+
+        data = self.__file.read(length)
+
+        self.__file.read(-length & 3)  # skip padding
+
         return data
 
     def parse_match(self):
-        match_type = get_int(self.f)
+        """Parse match for requirement expression."""
+
+        match_type = self.get_int(ignore_endian=True)
+
         if match_type in dictionary.matches:
             match_type = dictionary.matches[match_type]
+
         if match_type == 'matchExists':
             return ' /* exists */'
         elif match_type == 'matchEqual':
-            return ' = "' + str(self.parse_data()) + '"'
+            return ' = "{}"'.format(self.parse_data().decode())
         elif match_type == 'matchContains':
-            return ' ~ "' + str(self.parse_data()) + '"'
+            return ' ~ "{}"'.format(self.parse_data().decode())
         elif match_type == 'matchBeginsWith':
-            return ' = "' + str(self.parse_data()) + '*"'
+            return ' = "{}*"'.format(self.parse_data().decode())
         elif match_type == 'matchEndsWith':
-            return ' = "*' + str(self.parse_data()) + '"'
+            return ' = "*{}"'.format(self.parse_data().decode())
         elif match_type == 'matchLessThan':
-            return ' < ' + str(int(self.parse_data().encode('hex'), 16))
+            return ' < {}'.format(int(self.parse_data(), 16))
         elif match_type == 'matchGreaterThan':
-            return ' > ' + str(int(self.parse_data().encode('hex'), 16))
+            return ' > {}'.format(int(self.parse_data(), 16))
         elif match_type == 'matchLessEqual':
-            return ' <= ' + str(int(self.parse_data().encode('hex'), 16))
+            return ' <= {}'.format(int(self.parse_data(), 16))
         elif match_type == 'matchGreaterEqual':
-            return ' >= ' + str(int(self.parse_data().encode('hex'), 16))
+            return ' >= {}'.format(int(self.parse_data(), 16))
         else:
-            return ' UNKNOWN MATCH TYPE (' + str(match_type) + ')'
+            return ' UNKNOWN MATCH TYPE "{}"'.format(match_type)
 
-    def parse_expression(self, in_or):
-        # Zero out flags in high byte
-        operator = dictionary.operators[get_int(self.f) & 0xfff]
+    def parse_expression(self, in_or=False):
+        """Parse requirement expression. Recurse if necessary"""
+
+        # Zero out flags in high byte (TODO: Look into flags field)
+        operator = self.get_int(ignore_endian=True)
+        operator = dictionary.operators[operator & 0xfff]
+
         expression = ''
+
         if operator == 'False':
             expression += 'never'
         elif operator == 'True':
             expression += 'always'
         elif operator == 'Ident':
-            expression += 'identity "' + str(self.parse_data()) + '"'
+            expression += 'identity "{}"'.format(self.parse_data().decode())
         elif operator == 'AppleAnchor':
             expression += 'anchor apple'
         elif operator == 'AppleGenericAnchor':
             expression += 'anchor apple generic'
         elif operator == 'AnchorHash':
-            cert_slot = get_int(self.f)
+            cert_slot = self.get_int(ignore_endian=True)
+
             if cert_slot in dictionary.cert_slots:
                 cert_slot = dictionary.cert_slots[cert_slot]
-            else:
-                cert_slot = str(cert_slot)
-            expression += ('certificate ' + cert_slot + ' = ' +
-                           str(self.parse_data().encode('hex')))
+
+            expression += 'certificate {} = {}'.format(
+                cert_slot, self.parse_data().decode())
         elif operator == 'InfoKeyValue':
-            expression += ('info[' + str(self.parse_data()) + '] = "' +
-                           str(self.parse_data()) + '"')
+            expression += 'info[{}] = "{}"'.format(
+                self.parse_data().decode(), self.parse_data().decode())
         elif operator == 'And':
             if in_or:
-                expression += ('(' + self.parse_expression(False) + ' and ' +
-                               self.parse_expression(False) + ')')
+                expression += '({} and {})'.format(
+                    self.parse_expression(), self.parse_expression())
             else:
-                expression += (self.parse_expression(False) + ' and ' +
-                               self.parse_expression(False))
+                expression += '{} and {}'.format(
+                    self.parse_expression(), self.parse_expression())
         elif operator == 'Or':
             if in_or:
-                expression += ('(' + self.parse_expression(True) + ' or ' +
-                               self.parse_expression(True) + ')')
+                expression += '({} or {})'.format(
+                    self.parse_expression(in_or=True),
+                    self.parse_expression(in_or=True))
             else:
-                expression += (self.parse_expression(True) + ' or ' +
-                               self.parse_expression(True))
+                expression += '{} or {}'.format(
+                    self.parse_expression(in_or=True),
+                    self.parse_expression(in_or=True))
         elif operator == 'Not':
-            expression += '! ' + self.parse_expression(False)
+            expression += '! {}'.format(self.parse_expression())
         elif operator == 'CDHash':
-            expression += 'cdhash ' + str(self.parse_data().encode('hex'))
+            expression += 'cdhash {}'.format(self.parse_data().decode())
         elif operator == 'InfoKeyField':
-            expression += ('info[' + str(self.parse_data()) + ']' +
-                           self.parse_match())
+            expression += 'info[{}]{}'.format(
+                self.parse_data().decode(), self.parse_match())
         elif operator == 'EntitlementField':
-            expression += ('entitlement[' + str(self.parse_data()) +
-                           ']' + self.parse_match())
+            expression += 'entitlement[{}]{}'.format(
+                self.parse_data().decode(), self.parse_match())
         elif operator == 'CertField':
-            cert_slot = get_int(self.f)
+            cert_slot = self.get_int(ignore_endian=True)
+
             if cert_slot in dictionary.cert_slots:
                 cert_slot = dictionary.cert_slots[cert_slot]
-            else:
-                cert_slot = str(cert_slot)
-            expression += ('certificate ' + cert_slot + '[' +
-                           str(self.parse_data()) + ']' + self.parse_match())
+
+            expression += 'certificate {}[{}]{}'.format(
+                cert_slot, self.parse_data().decode(), self.parse_match())
         elif operator == 'CertGeneric':
-            cert_slot = get_int(self.f)
+            cert_slot = self.get_int(ignore_endian=True)
+
             if cert_slot in dictionary.cert_slots:
                 cert_slot = dictionary.cert_slots[cert_slot]
-            else:
-                cert_slot = str(cert_slot)
-            length = get_int(self.f)
-            expression += ('certificate ' + cert_slot + '[field.' +
-                           self.to_oid(length) + ']' + self.parse_match())
+
+            length = self.get_int(ignore_endian=True)
+
+            expression += 'certificate {}[field.{}]{}'.format(
+                cert_slot, self.to_oid(length), self.parse_match())
         elif operator == 'CertPolicy':
-            cert_slot = get_int(self.f)
+            cert_slot = self.get_int(ignore_endian=True)
+
             if cert_slot in dictionary.cert_slots:
                 cert_slot = dictionary.cert_slots[cert_slot]
-            else:
-                cert_slot = str(cert_slot)
-            expression += ('certificate ' + cert_slot + '[policy.' +
-                           str(self.parse_data()) + ']' + self.parse_match())
+
+            expression += 'certificate {}[policy.{}]{}'.format(
+                cert_slot, self.parse_data().decode(), self.parse_match())
         elif operator == 'TrustedCert':
-            cert_slot = get_int(self.f)
+            cert_slot = self.get_int(ignore_endian=True)
+
             if cert_slot in dictionary.cert_slots:
                 cert_slot = dictionary.cert_slots[cert_slot]
-            else:
-                cert_slot = str(cert_slot)
-            expression += 'certificate ' + cert_slot + ' trusted'
+
+            expression += 'certificate {} trusted'.format(cert_slot)
         elif operator == 'TrustedCerts':
             expression += 'anchor trusted'
         elif operator == 'NamedAnchor':
-            expression += 'anchor apple ' + str(self.parse_data())
+            expression += 'anchor apple {}'.format(self.parse_data().decode())
         elif operator == 'NamedCode':
-            expression += '(' + str(self.parse_data()) + ')'
+            expression += '({})'.format(self.parse_data().decode())
         elif operator == 'Platform':
-            expression += 'platform = ' + str(get_int(self.f))
+            platform = self.get_int(ignore_endian=True)
+            expression += 'platform = {}'.format(platform)
 
-        if isinstance(expression, unicode):
-            return expression
-        else:
-            return unicode(expression, errors='replace')
+        return expression
 
-    def parse_requirement(self, requirement, offset):
-        prev = self.f.tell()
-        true_offset = offset + requirement.offset
-        self.f.seek(true_offset)
-        magic = get_int(self.f)
+    def parse_requirement(self, reqs_offset, req_type, req_offset):
+        """Parse single requirement from code signature."""
+
+        prev = self.__file.tell()
+
+        true_offset = reqs_offset + req_offset
+
+        self.__file.seek(true_offset)
+
+        magic = self.get_int(ignore_endian=True)
+
         if magic != dictionary.signatures['REQUIREMENT']:
-            data = {
-                'offset': true_offset,
-                'magic': hex(magic),
-                'expected': hex(dictionary.signatures['REQUIREMENT'])
-            }
-            a = Abnormality(title='BAD MAGIC - REQUIREMENT', data=data)
-            self.add_abnormality(a)
-            self.f.seek(prev)
+            self.add_abnormality('Bad magic "{}" for requirement at offset '
+                                 '"{}".'.format(magic, self.__file.tell() - 4))
+
             return
-        # Skip size and kind
-        self.f.read(8)
-        requirement.expression = self.parse_expression(False)
 
-        self.f.seek(prev)
+        self.__file.read(8)  # skip size and kind fields
+        # (TODO: look into ``kind`` field)
 
-    def parse_requirements(self, signature, offset):
-        prev = self.f.tell()
-        true_offset = signature.offset + offset
-        self.f.seek(true_offset)
-        magic = get_int(self.f)
+        self.__macho['code_signature']['requirements'].append({
+            'req_type': req_type,
+            'req_offset': req_offset,
+            'expression': self.parse_expression()
+        })
+
+        self.__file.seek(prev)
+
+    def parse_requirements(self, sig_offset, index_offset):
+        """Parse requirements from code signature."""
+
+        prev = self.__file.tell()
+
+        true_offset = sig_offset + index_offset
+
+        self.__file.seek(true_offset)
+
+        magic = self.get_int(ignore_endian=True)
+
         if magic != dictionary.signatures['REQUIREMENTS']:
-            data = {
-                'offset': true_offset,
-                'magic': hex(magic),
-                'expected': hex(dictionary.signatures['REQUIREMENTS'])
-            }
-            a = Abnormality(title='BAD MAGIC - REQUIREMENTS', data=data)
-            self.add_abnormality(a)
-            self.f.seek(prev)
-            return
-        # Skip size
-        self.f.read(4)
-        count = get_int(self.f)
-        while count > 0:
-            req_type = dictionary.requirements[get_int(self.f)]
-            offset = get_int(self.f)
-            requirement = Requirement(req_type=req_type, offset=offset)
-            self.parse_requirement(requirement, true_offset)
-            signature.add_requirement(requirement)
-            count -= 1
+            self.add_abnormality('Bad magic "{}" for requirements at offset '
+                                 '"{}".'.format(magic, self.__file.tell() - 4))
 
-        self.f.seek(prev)
+            return
 
-    def parse_sig(self, macho):
-        if not macho.has_lc('CODE_SIGNATURE'):
+        self.__file.read(4)  # skip size field
+
+        count = self.get_int(ignore_endian=True)
+
+        self.__macho['code_signature']['requirements'] = []
+
+        for _ in range(count):
+            req_type = self.get_int(ignore_endian=True)
+            req_type = dictionary.requirements[req_type]
+
+            req_offset = self.get_int(ignore_endian=True)
+
+            self.parse_requirement(true_offset, req_type, req_offset)
+
+        self.__file.seek(prev)
+
+    def parse_sig(self, offset, size, lc_codesig):
+        """Parse code signature in its entirety."""
+
+        if lc_codesig['dataoff'] + lc_codesig['datasize'] > size:
+            self.add_abnormality('CODE_SIGNATURE at offset "{}" with size '
+                                 '"{}" greater than mach-o size.'.format(
+                                     offset + lc_codesig['dataoff'],
+                                     lc_codesig['datasize']))
+
             return
-        prev = self.f.tell()
-        true_offset = (macho.offset +
-                       macho.get_lc('CODE_SIGNATURE').data['offset'])
-        if true_offset >= self.file.size:
-            data = {
-                'offset': true_offset,
-                'file_size': self.file.size
-            }
-            a = Abnormality(title='CODE_SIGNATURE OUT OF BOUNDS', data=data)
-            self.add_abnormality(a)
-            return
-        self.f.seek(true_offset)
-        magic = get_int(self.f)
+
+        true_offset = offset + lc_codesig['dataoff']
+
+        self.__file.seek(true_offset)
+
+        magic = self.get_int(ignore_endian=True)
+
         if magic != dictionary.signatures['EMBEDDED_SIGNATURE']:
-            data = {
-                'offset': true_offset,
-                'magic': hex(magic),
-                'expected': hex(dictionary.signatures['EMBEDDED_SIGNATURE'])
-            }
-            a = Abnormality(title='BAD MAGIC - EMBEDDED_SIGNATURE', data=data)
-            self.add_abnormality(a)
-            self.f.seek(prev)
+            self.add_abnormality('Bad magic "{}" for embedded signature at '
+                                 'offset "{}".'.format(magic, true_offset))
+
             return
-        size = get_int(self.f)
-        count = get_int(self.f)
-        signature = Signature(offset=true_offset, size=size, count=count)
-        while count > 0:
-            index_type = get_int(self.f)
-            try:
+
+        self.__macho['code_signature'] = {}
+
+        size = self.get_int(ignore_endian=True)
+        count = self.get_int(ignore_endian=True)
+
+        for _ in range(count):
+            index_type = self.get_int(ignore_endian=True)
+
+            if index_type in dictionary.indeces:
                 index_type = dictionary.indeces[index_type]
-            except:
-                data = {
-                    'offset': self.f.tell() - 4,
-                    'index_type': index_type
-                }
-                a = Abnormality(title='INVALID CODE_SIGNATURE INDEX_TYPE',
-                                data=data)
-                self.add_abnormality(a)
-            offset = get_int(self.f)
+            else:
+                self.add_abnormality('Unknown code signature index type "{}" '
+                                     'at offset "{}".'.format(
+                                         index_type, self.__file.tell() - 4))
+
+                self.__file.read(4)  # skip offset
+                continue
+
+            index_offset = self.get_int(ignore_endian=True)
+
             if index_type == 'SignatureSlot':
-                self.parse_certs(signature, offset)
+                self.parse_certs(true_offset, index_offset)
             elif index_type == 'CodeDirectorySlot':
-                self.parse_codedirectory(signature, offset)
+                self.parse_codedirectory(true_offset, index_offset)
             elif index_type == 'EntitlementSlot':
-                self.parse_entitlement(signature, offset)
+                self.parse_entitlement(true_offset, index_offset)
             elif index_type == 'RequirementsSlot':
-                self.parse_requirements(signature, offset)
-            count -= 1
+                self.parse_requirements(true_offset, index_offset)
 
-        macho.signature = signature
-        self.f.seek(prev)
+    def parse_macho(self, offset, size):
+        """Parse mach-o binary, possibly contained within a
+        universal binary.
+        """
 
-    def parse_macho(self, macho):
-        self.f.seek(macho.offset)
-        # skip magic
-        self.f.read(4)
-        cputype = get_int(self.f)
-        subtype = get_int(self.f)
-        filetype = get_int(self.f)
-        nlcs = get_int(self.f)
-        slcs = get_int(self.f)
-        flags = get_int(self.f)
+        if size is None:
+            self.__file.seek(0, SEEK_END)  # find the end of the file
+            size = self.__file.tell()
 
-        if macho.is_64_bit():
-            # skip padding
-            self.f.read(4)
+        # jump to the location of this mach-o within the file
+        self.__file.seek(offset)
 
-        if macho.is_little():
-            cputype = little(cputype, 'I')
-            subtype = little(subtype, 'I')
-            filetype = little(filetype, 'I')
-            nlcs = little(nlcs, 'I')
-            slcs = little(slcs, 'I')
-            flags = little(flags, 'I')
+        self.__file.read(4)  # skip magic
 
-        try:
-            cpu = dictionary.cputypes[cputype][-2]
-        except:
-            cpu = cputype
-            data = {
-                'offset': macho.offset + 4,
-                'cputype': cputype
-            }
-            a = Abnormality(title='UNKNOWN CPUTYPE', data=data)
-            self.add_abnormality(a)
-        try:
-            subtype = dictionary.cputypes[cputype][subtype]
-        except:
-            data = {
-                'offset': macho.offset + 8,
-                'cputype': cputype,
-                'subtype': subtype
-            }
-            a = Abnormality(title='UNKNOWN SUBTYPE', data=data)
-            self.add_abnormality(a)
-        try:
+        cputype = self.get_int()   # CPU type
+        subtype = self.get_int()   # CPU sub-type
+        filetype = self.get_int()  # Mach-o file type
+        nlcs = self.get_int()      # Number of load commands
+        slcs = self.get_int()      # Size of load commands
+        flags = self.get_int()     # Mach-o flags
+
+        if self.__is_64_bit:
+            self.__file.read(4)  # skip padding
+
+        if cputype in dictionary.cputypes:
+            if subtype in dictionary.cputypes[cputype]:
+                subtype = dictionary.cputypes[cputype][subtype]
+            else:
+                self.add_abnormality('Unknown SUBTYPE "{}" for CPUTYPE "{}" '
+                                     'at offset "{}".'.format(
+                                         subtype, cputype, offset + 8))
+
+            cputype = dictionary.cputypes[cputype][-2]
+        else:
+            raise ValueError('Unknown or unsupported CPUTYPE "{}" at offset '
+                             '"{}".'.format(cputype, offset + 4))
+
+        if filetype in dictionary.filetypes:
             filetype = dictionary.filetypes[filetype]
-        except:
-            data = {
-                'offset': macho.offset + 12,
-                'filetype': filetype
-            }
-            a = Abnormality(title='UNKNOWN FILETYPE', data=data)
-            self.add_abnormality(a)
-        flags = self.list_macho_flags(flags)
+        else:
+            self.add_abnormality('Unknown FILETYPE "{}" at offset '
+                                 '"{}".'.format(filetype, offset + 12))
 
-        macho.cputype = cpu
-        macho.subtype = subtype
-        macho.filetype = filetype
-        macho.nlcs = nlcs
-        macho.slcs = slcs
-        macho.flags = flags
+        flags = self.parse_macho_flags(flags)
 
-        lc = LoadCommander(f=self.f, macho=macho, file_size=self.file.size)
-        lc.parse_lcs()
-        self.abnormalities += lc.abnormalities
+        self.__macho['cputype'] = cputype
+        self.__macho['subtype'] = subtype
+        self.__macho['filetype'] = filetype
+        self.__macho['nlcs'] = nlcs
+        self.__macho['slcs'] = slcs
+        self.__macho['flags'] = flags
 
-        # Need to investigate whether the presence of a
-        # symbol/string table is expected and whether the
-        # abscence is indicative of shenanigans.
-        if macho.has_lc('SYMTAB'):
-            self.parse_syms(macho)
-            self.parse_imports_and_strings(macho)
+        # Parse load commands
+        self.parse_lcs(offset, size, nlcs, slcs)
 
-        if macho.has_lc('CODE_SIGNATURE'):
-            self.parse_sig(macho)
+        lcs = list(map(lambda x: x['cmd'], self.__macho['lcs']))
 
-        if not macho.is_archive():
-            self.file.content = macho
+        # Check for symbol and strings tables and parse if present
+        if 'SYMTAB' in lcs:
+            lc_symtab = self.__macho['lcs'][lcs.index('SYMTAB')]
+
+            self.parse_syms(offset, size, lc_symtab)
+            self.parse_strings(offset, size, lc_symtab)
+
+        # If symbol and strings tables were parsed, parse imports
+        if 'symtab' in self.__macho and 'strtab' in self.__macho:
+            lc_dysymtab = None
+            lc_dylibs = None
+
+            # Check for presence of DYSYMTAB load command and, if present, use
+            # it to parse undefined external symbols (imports). Otherwise, find
+            # imports manually.
+            if 'DYSYMTAB' in lcs:
+                lc_dysymtab = self.__macho['lcs'][lcs.index('DYSYMTAB')]
+
+            # Check if the static linker used the two-level namespace feature.
+            # If so, pass in the list of dynamic libraries (dylibs) given in
+            # the 'DYLIB' load commands.
+            if 'TWOLEVEL' in self.__macho['flags']:
+                lc_dylibs = list(filter(lambda x: x['cmd'].endswith('DYLIB'),
+                                        self.__macho['lcs']))
+
+            self.parse_imports(offset, size, lc_symtab,
+                               lc_dysymtab=lc_dysymtab, lc_dylibs=lc_dylibs)
+
+        # Check for a code signature and parse if present
+        if 'CODE_SIGNATURE' in lcs:
+            lc_codesig = self.__macho['lcs'][lcs.index('CODE_SIGNATURE')]
+
+            self.parse_sig(offset, size, lc_codesig)
 
     def parse_universal(self):
-        self.f.seek(0)
-        # skip magic
-        self.f.read(4)
-        nmachos = get_int(self.f)
-        u = Universal(nmachos=nmachos)
-        u_size = self.file.size
-        for i in range(u.nmachos):
-            # skip cputype, subtype
-            self.f.read(8)
-            offset = get_int(self.f)
-            size = get_int(self.f)
-            # Abnormality OUT_OF_BOUNDS check
-            if offset + size > u_size:
-                data = {
-                    'offset': offset,
-                    'size': size,
-                    'file_size': u_size
-                }
-                a = Abnormality(title='MACH-O OUT OF BOUNDS', data=data)
-                self.add_abnormality(a)
-                continue
-            # skip align
-            self.f.read(4)
-            identity = self.identify_file(offset)
-            # Abnormality BAD_MAGIC check
-            if identity not in dictionary.machos.values():
-                data = {
-                    'offset': offset,
-                    'magic': identity,
-                }
-                a = Abnormality(title='BAD MAGIC - MACH-O')
-                self.add_abnormality(a)
-                continue
-            u.add_macho(MachO(archive=True, offset=offset, arch=identity[0],
-                              endi=identity[1], size=size))
+        """Parses universal binary."""
 
-        for i in u.gen_machos():
-            self.parse_macho(i)
+        self.__output['universal'] = {
+            'machos': []
+        }
 
-        self.file.content = u
+        self.__file.seek(4)  # skip magic
+
+        # number of mach-o's contained in this binary
+        n_machos = self.get_int(ignore_endian=True)
+
+        for _ in range(n_machos):
+            self.__file.read(8)  # skip cputype and subtype fields
+
+            offset = self.get_int(ignore_endian=True)
+            size = self.get_int(ignore_endian=True)
+
+            identity = self.identify_file()
+            self.__is_64_bit = identity[0]
+            self.__is_little_endian = identity[1]
+
+            self.parse_macho(offset, size)
+
+            self.__output['universal']['machos'].append(self.__macho)
+
+            self.__macho.clear()
 
     def parse_file(self):
-        size = self.get_file_size()
-        hashes = self.get_file_hashes()
-        self.file.size = size
-        self.file.hashes = hashes
-        identity = self.identify_file(0)
+        """Determines characteristics about the entire file and begins
+        to parse.
+        """
+
+        contents = self.__file.read()
+
+        self.__output['size'] = len(contents)
+
+        self.__output['hashes'] = {
+            'md5': hashlib.md5(contents).hexdigest(),
+            'sha1': hashlib.sha1(contents).hexdigest(),
+            'sha256': hashlib.sha256(contents).hexdigest()
+        }
+
+        self.__file.seek(0)  # return to beginning of file
+
+        identity = self.identify_file()
+
         if identity == 'universal':
             self.parse_universal()
         else:
-            self.parse_macho(MachO(archive=False, offset=0, arch=identity[0],
-                                   endi=identity[1],
-                                   size=self.get_file_size()))
+            self.__is_64_bit = identity[0]
+            self.__is_little_endian = identity[1]
+
+            self.parse_macho(0, self.__output['size'])
+
+            self.__output['macho'] = self.__macho
+
+    def parse(self, out=None):
+        """Parse Mach-O file at given path, and either return a JSON blob or write
+        output to provided file.
+        """
+
+        self.parse_file()
+
+        if out is None:
+            return self.__output
+
+        dump(self.__output, out)
