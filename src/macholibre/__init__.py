@@ -66,7 +66,10 @@ def main():
     args = parser.parse_args()
 
     if len(args.input) == 1:
-        print(parse(args.input[0], out=args.output))
+        if args.output is None:
+            print(parse(args.input[0]))
+        else:
+            parse(args.input[0], out=args.output)
     else:
         if args.output is None:
             output = []

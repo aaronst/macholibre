@@ -12,16 +12,14 @@ I think I did pretty well on that front.  The only module I import is for
 parsing CMS signatures.  I've configured the setup.py to automatically install
 it with the module, but you can also install it seperately with pip or manually
 from github.
-* [Python 2.7](https://www.python.org/download/releases/2.7/)
-  - [asn1crypto](https://github.com/wbond/asn1crypto)
-    + May require `openssl` to be installed, I'm not sure.
+* [asn1crypto](https://github.com/wbond/asn1crypto)
 
 ## How To
 
 ### Installation
 I recommend using pip to install macholibre.
 ```bash
-pip install git+https://github.com/aaronst/macholibre.git
+pip3 install git+https://github.com/aaronst/macholibre.git
 ```
 
 ### Usage
@@ -32,12 +30,12 @@ from macholibre import parse
 # mach-o file path
 path = '/home/aaron/my_macho'
 
-# return json
-json_data = parse(path)
+# return dict
+data = parse(path)
 
 # write json to file
 out_file = open('/home/aaron/macholibre_output.json', 'w')
-parse(path, f=out_file)
+parse(path, out=out_file)
 ```
 
 #### As a Script
