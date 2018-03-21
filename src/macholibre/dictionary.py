@@ -50,7 +50,6 @@ n_types = {
 }
 
 machos = {
-    3405691582: 'universal',
     4277009102: (False, False),  # 32 bit, big endian
     4277009103: (True, False),   # 64 bit, big endian
     3472551422: (False, True),   # 32 bit, little endian

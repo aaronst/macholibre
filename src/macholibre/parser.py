@@ -120,11 +120,7 @@ class Parser():
         """Identify if the given file is a single Mach-O or a
         Universal binary."""
 
-        position = self.__file.tell()
-
         magic = self.get_int(ignore_endian=True)
-
-        self.__file.seek(position)
 
         if magic in dictionary.machos:
             return dictionary.machos[magic]
@@ -1546,7 +1542,9 @@ class Parser():
         # jump to the location of this mach-o within the file
         self.__file.seek(offset)
 
-        self.__file.read(4)  # skip magic
+        identity = self.identify_file()
+        self.__is_64_bit = identity[0]
+        self.__is_little_endian = identity[1]
 
         cputype = self.get_int()   # CPU type
         subtype = self.get_int()   # CPU sub-type
@@ -1632,8 +1630,6 @@ class Parser():
             'machos': []
         }
 
-        self.__file.seek(4)  # skip magic
-
         # number of mach-o's contained in this binary
         n_machos = self.get_int(ignore_endian=True)
 
@@ -1643,14 +1639,13 @@ class Parser():
             offset = self.get_int(ignore_endian=True)
             size = self.get_int(ignore_endian=True)
 
-            identity = self.identify_file()
-            self.__is_64_bit = identity[0]
-            self.__is_little_endian = identity[1]
+            self.__file.read(4)  # skip align field
 
+            prev = self.__file.tell()
             self.parse_macho(offset, size)
+            self.__file.seek(prev)
 
-            self.__output['universal']['machos'].append(self.__macho)
-
+            self.__output['universal']['machos'].append(self.__macho.copy())
             self.__macho.clear()
 
     def parse_file(self):
@@ -1670,14 +1665,9 @@ class Parser():
 
         self.__file.seek(0)  # return to beginning of file
 
-        identity = self.identify_file()
-
-        if identity == 'universal':
+        if self.__file.read(4) == b'\xca\xfe\xba\xbe':
             self.parse_universal()
         else:
-            self.__is_64_bit = identity[0]
-            self.__is_little_endian = identity[1]
-
             self.parse_macho(0, self.__output['size'])
 
             self.__output['macho'] = self.__macho
