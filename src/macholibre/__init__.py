@@ -19,7 +19,7 @@ limitations under the License.
 
 
 from argparse import ArgumentParser, FileType, RawDescriptionHelpFormatter
-from json import dump
+from json import dump, dumps
 
 from macholibre.parser import Parser
 
@@ -67,7 +67,7 @@ def main():
 
     if len(args.input) == 1:
         if args.output is None:
-            print(parse(args.input[0]))
+            print(dumps(parse(args.input[0])))
         else:
             parse(args.input[0], out=args.output)
     else:
@@ -77,7 +77,7 @@ def main():
             for macho in args.input:
                 output.append(Parser(macho).parse())
 
-            print(output)
+            print(dumps(output))
         else:
             args.output.write('[')
 

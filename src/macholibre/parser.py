@@ -1195,8 +1195,8 @@ class Parser():
     def get_oid(self, db, p):
         """OID parser implementation from:
 
-        http://opensource.apple.com/source/Security/Security-57337.20.44/OSX/libsec
-        urity_cdsa_utilities/lib/cssmdata.cpp
+        http://opensource.apple.com/source/Security/Security-57337.20.44/
+        OSX/libsecurity_cdsa_utilities/lib/cssmdata.cpp
         """
 
         q = 0
@@ -1673,8 +1673,8 @@ class Parser():
             self.__output['macho'] = self.__macho
 
     def parse(self, out=None):
-        """Parse Mach-O file at given path, and either return a JSON blob or write
-        output to provided file.
+        """Parse Mach-O file at given path, and either return a dict
+        or write output to provided file.
         """
 
         self.parse_file()
