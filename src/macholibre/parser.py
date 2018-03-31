@@ -183,8 +183,8 @@ class Parser():
     def parse_section(self):
         """Parse section."""
 
-        name = self.__file.read(16).decode().rstrip('\u0000')
-        segname = self.__file.read(16).decode().rstrip('\u0000')
+        name = self.__file.read(16).decode().rstrip('\0')
+        segname = self.__file.read(16).decode().rstrip('\0')
         addr = self.get_ll() if self.__is_64_bit else self.get_int()
         size = self.get_ll() if self.__is_64_bit else self.get_int()
         offset = self.get_int()
@@ -227,7 +227,7 @@ class Parser():
     def parse_segment(self, m_offset, m_size, cmd, cmd_size):
         """Parse segment command."""
 
-        name = self.__file.read(16).decode().rstrip('\u0000')
+        name = self.__file.read(16).decode().rstrip('\0')
         vmaddr = self.get_ll() if self.__is_64_bit else self.get_int()
         vmsize = self.get_ll() if self.__is_64_bit else self.get_int()
         offset = self.get_ll() if self.__is_64_bit else self.get_int()
@@ -1071,15 +1071,15 @@ class Parser():
                 value = rdn[0]['value']
 
                 if name == 'Country':
-                    subject['country'] = str(value.chosen)
+                    subject['country'] = unicode(value.chosen)
                 elif name == 'Organization':
-                    subject['org'] = str(value.chosen)
+                    subject['org'] = unicode(value.chosen)
                 elif name == 'Organizational Unit':
-                    subject['org_unit'] = str(value.chosen)
+                    subject['org_unit'] = unicode(value.chosen)
                 elif name == 'Common Name':
-                    subject['common_name'] = str(value.chosen)
+                    subject['common_name'] = unicode(value.chosen)
                 else:
-                    subject[name] = str(value.parsed)
+                    subject[name] = unicode(value.parsed)
 
             issuer = {}
 
@@ -1088,15 +1088,15 @@ class Parser():
                 value = rdn[0]['value']
 
                 if name == 'Country':
-                    issuer['country'] = str(value.chosen)
+                    issuer['country'] = unicode(value.chosen)
                 elif name == 'Organization':
-                    issuer['org'] = str(value.chosen)
+                    issuer['org'] = unicode(value.chosen)
                 elif name == 'Organizational Unit':
-                    issuer['org_unit'] = str(value.chosen)
+                    issuer['org_unit'] = unicode(value.chosen)
                 elif name == 'Common Name':
-                    issuer['common_name'] = str(value.chosen)
+                    issuer['common_name'] = unicode(value.chosen)
                 else:
-                    issuer[name] = str(value.parsed)
+                    issuer[name] = unicode(value.parsed)
 
             certificate = {
                 'subject': subject,
@@ -1220,7 +1220,7 @@ class Parser():
             return ''
 
         data_bytes = [
-            int(self.__file.read(1).encode('hex'), 16) for i in range(length)
+            int(self.__file.read(1).encode('hex'), 16) for _ in range(length)
         ]
 
         p = 0
