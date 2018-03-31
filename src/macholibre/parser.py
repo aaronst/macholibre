@@ -27,7 +27,7 @@ from struct import unpack
 from uuid import UUID
 
 from asn1crypto.cms import ContentInfo
-from plistlib import loads
+from plistlib import readPlistFromString
 
 import macholibre.dictionary as dictionary
 
@@ -93,9 +93,9 @@ class Parser():
         integer = self.__file.read(4)
 
         if self.__is_little_endian and not ignore_endian:
-            return int.from_bytes(integer, byteorder='little')
+            return unpack('<I', integer)[0]
 
-        return int.from_bytes(integer, byteorder='big')
+        return unpack('>I', integer)[0]
 
     def get_ll(self):
         """Read an 8-byte long long from macho, account for endian-ness."""
@@ -103,9 +103,9 @@ class Parser():
         longlong = self.__file.read(8)
 
         if self.__is_little_endian:
-            return int.from_bytes(longlong, byteorder='little')
+            return unpack('<Q', longlong)[0]
 
-        return int.from_bytes(longlong, byteorder='big')
+        return unpack('>Q', longlong)[0]
 
     def make_version(self, version):
         """Construct a version number from given bytes."""
@@ -900,9 +900,9 @@ class Parser():
                 break
 
             n_strx = self.get_int()
-            n_type = int(self.__file.read(1).hex(), 16)
-            n_sect = int(self.__file.read(1).hex(), 16)
-            n_desc = int(self.__file.read(2).hex(), 16)
+            n_type = int(self.__file.read(1).encode('hex'), 16)
+            n_sect = int(self.__file.read(1).encode('hex'), 16)
+            n_desc = int(self.__file.read(2).encode('hex'), 16)
 
             n_value = self.get_ll() if self.__is_64_bit else self.get_int()
 
@@ -1135,16 +1135,17 @@ class Parser():
         n_special_slots = self.get_int(ignore_endian=True)
         n_code_slots = self.get_int(ignore_endian=True)
         code_limit = self.get_int(ignore_endian=True)
-        hash_size = int(self.__file.read(1).hex(), 16)
-        hash_type = dictionary.hashes[int(self.__file.read(1).hex(), 16)]
+        hash_size = int(self.__file.read(1).encode('hex'), 16)
+        hash_type = dictionary.hashes[
+            int(self.__file.read(1).encode('hex'), 16)]
 
         if version >= 0x20200:
-            platform = int(self.__file.read(1).hex(), 16)
+            platform = int(self.__file.read(1).encode('hex'), 16)
         else:
             self.__file.read(1)  # skip spare1
 
         page_size = int(round(exp(
-            int(self.__file.read(1).hex(), 16) * log(2))))
+            int(self.__file.read(1).encode('hex'), 16) * log(2))))
 
         self.__file.read(4)  # skip spare2
 
@@ -1188,7 +1189,7 @@ class Parser():
 
         for _ in range(count):
             self.__macho['code_signature']['codedirectory']['hashes'].append(
-                self.__file.read(hash_size).hex())
+                self.__file.read(hash_size).encode('hex'))
 
         self.__file.seek(prev)
 
@@ -1219,7 +1220,7 @@ class Parser():
             return ''
 
         data_bytes = [
-            int(self.__file.read(1).hex(), 16) for i in range(length)
+            int(self.__file.read(1).encode('hex'), 16) for i in range(length)
         ]
 
         p = 0
@@ -1260,7 +1261,7 @@ class Parser():
         size = self.get_int(ignore_endian=True) - 8
 
         try:
-            plist = loads(self.__file.read(size))
+            plist = readPlistFromString(self.__file.read(size))
         except Exception as exc:
             plist = {}
             self.add_abnormality('Unable to parse plist at offset "{}". '
