@@ -7,9 +7,11 @@ imports, and tons more.  Then it packs all of that information into JSON for
 ease of analysis and integration.
 
 ## Dependencies
+This project requires Python 3.4+ to run, due to API changes in `plistlib`.
+
 I tried to make this tool with as little external dependencies as possible, and
 I think I did pretty well on that front.  The only module I import is for
-parsing CMS signatures.  I've configured the setup.py to automatically install
+parsing CMS signatures.  I've configured `setup.py` to automatically install
 it with the module, but you can also install it seperately with pip or manually
 from github.
 * [asn1crypto](https://github.com/wbond/asn1crypto)
@@ -43,7 +45,7 @@ parse(path, out=out_file)
 usage: macholibre [-h] [-o OUTPUT] input [input ...]
 
 MachoLibre: Mach-O & Universal Binary Parser
-  aaron@icebrg.io
+  aaronjst93@gmail.com
 
 positional arguments:
   input                 input mach-o file(s) to parse

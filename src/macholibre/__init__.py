@@ -51,7 +51,7 @@ def main():
     """Main function for script."""
 
     parser = ArgumentParser(description='MachoLibre: Mach-O & Universal Binary'
-                                        ' Parser\n  aaron@icebrg.io',
+                                        ' Parser\n  aaronjst93@gmail.com',
                             formatter_class=RawDescriptionHelpFormatter,
                             epilog='examples:\n  macholibre macho\n  macholibr'
                                    'e -o output.json macho \n  macholibre -o o'
