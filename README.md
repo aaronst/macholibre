@@ -7,7 +7,7 @@ imports, and tons more.  Then it packs all of that information into JSON for
 ease of analysis and integration.
 
 ## Dependencies
-This project requires Python 3.4+ to run, due to API changes in `plistlib`.
+Python 2.7
 
 I tried to make this tool with as little external dependencies as possible, and
 I think I did pretty well on that front.  The only module I import is for
@@ -21,7 +21,7 @@ from github.
 ### Installation
 I recommend using pip to install macholibre.
 ```bash
-pip3 install git+https://github.com/aaronst/macholibre.git
+pip install git+https://github.com/aaronst/macholibre.git
 ```
 
 ### Usage
