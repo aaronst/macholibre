@@ -27,6 +27,7 @@ from struct import unpack
 from uuid import UUID
 
 from asn1crypto.cms import ContentInfo
+from asn1crypto.x509 import DirectoryString
 from plistlib import loads
 
 import macholibre.dictionary as dictionary
@@ -40,6 +41,7 @@ class Parser():
     def __init__(self, path):
         """Initialize instance variables and flags."""
 
+        self.__extract_certs = False
         self.__file = open(path, 'rb')
         self.__is_64_bit = True         # default place-holder
         self.__is_little_endian = True  # ^^
@@ -1024,6 +1026,8 @@ class Parser():
                     dylib = 'DYNAMIC_LOOKUP'
                 elif dylib == 255:
                     dylib = 'EXECUTABLE'
+                elif dylib > len(lc_dylibs):
+                    dylib = f'{dylib} (OUT_OF_RANGE)'
                 else:
                     dylib = lc_dylibs[dylib - 1]['name']
 
@@ -1064,6 +1068,10 @@ class Parser():
         for cert in signed_data['certificates']:
             cert = cert.chosen
 
+            if self.__extract_certs:
+                c_bytes = cert.dump()
+                open(hashlib.md5(c_bytes).hexdigest(), 'wb').write(c_bytes)
+
             subject = {}
 
             for rdn in cert.subject.chosen:
@@ -1079,7 +1087,10 @@ class Parser():
                 elif name == 'Common Name':
                     subject['common_name'] = str(value.chosen)
                 else:
-                    subject[name] = str(value.parsed)
+                    if isinstance(value, DirectoryString):
+                        subject[name] = str(value.chosen)
+                    else:
+                        subject[name] = str(value.parsed)
 
             issuer = {}
 
@@ -1096,7 +1107,10 @@ class Parser():
                 elif name == 'Common Name':
                     issuer['common_name'] = str(value.chosen)
                 else:
-                    issuer[name] = str(value.parsed)
+                    if isinstance(value, DirectoryString):
+                        issuer[name] = str(value.chosen)
+                    else:
+                        issuer[name] = str(value.parsed)
 
             certificate = {
                 'subject': subject,
@@ -1669,13 +1683,14 @@ class Parser():
             self.parse_universal()
         else:
             self.parse_macho(0, self.__output['size'])
-
             self.__output['macho'] = self.__macho
 
-    def parse(self, out=None):
+    def parse(self, certs: bool=False, out=None):
         """Parse Mach-O file at given path, and either return a dict
         or write output to provided file.
         """
+
+        self.__extract_certs = certs
 
         self.parse_file()
 

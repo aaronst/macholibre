@@ -34,7 +34,7 @@ def output_file(out):
         exit(1)
 
 
-def parse(macho, out=None):
+def parse(macho, certs: bool=False, out=None):
     """Parse given mach-o file. Wrap ``parse()`` function from ``Parser``
     object in order to handle mulitple input files for script use.
     """
@@ -42,9 +42,9 @@ def parse(macho, out=None):
     parser = Parser(macho)
 
     if out is None:
-        return parser.parse()
+        return parser.parse(certs=certs)
     else:
-        parser.parse(out=out)
+        parser.parse(certs=certs, out=out)
 
 
 def main():
@@ -60,6 +60,8 @@ def main():
     parser.add_argument('input', nargs='+',
                         help='input mach-o file(s) to parse')
 
+    parser.add_argument('-c', '--certificates', action='store_true',
+                        help='extract certificates')
     parser.add_argument('-o', '--output', default=None, type=output_file,
                         help='output JSON file')
 
@@ -67,22 +69,23 @@ def main():
 
     if len(args.input) == 1:
         if args.output is None:
-            print(dumps(parse(args.input[0])))
+            print(dumps(parse(args.input[0], certs=args.certificates)))
         else:
-            parse(args.input[0], out=args.output)
+            parse(args.input[0], out=args.output, certs=args.certificates)
     else:
         if args.output is None:
             output = []
 
             for macho in args.input:
-                output.append(Parser(macho).parse())
+                output.append(Parser(macho).parse(certs=args.certificates))
 
             print(dumps(output))
         else:
             args.output.write('[')
 
             for i in range(len(args.input)):
-                dump(Parser(args.input[i]).parse(), args.output)
+                dump(Parser(args.input[i]).parse(certs=args.certificates),
+                     args.output)
 
                 if i < len(args.input) - 1:
                     args.output.write(',')
