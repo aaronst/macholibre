@@ -757,6 +757,26 @@ class Parser():
 
         return output
 
+    def parse_build_version(self, cmd, cmd_size):
+        """Parse build version load command."""
+
+        output = {
+            'cmd': cmd,
+            'cmd_size': cmd_size,
+            'platform': dictionary.platforms[self.get_int()],
+            'minos': self.get_int(),
+            'sdk': self.get_int(),
+            'tools': []
+        }
+
+        for _ in range(self.get_int()):
+            output['tools'].append({
+                'tool': dictionary.tools[self.get_int()],
+                'version': self.get_int()
+            })
+
+        return output
+
     def parse_lcs(self, offset, size, nlcs, slcs):
         """Determine which load commands are present and parse each one
         accordingly. Return as a list.
@@ -855,6 +875,8 @@ class Parser():
                 self.__macho['lcs'].append(self.parse_rpath(cmd, cmd_size))
             elif cmd == 'MAIN':
                 self.__macho['lcs'].append(self.parse_main(cmd, cmd_size))
+            elif cmd == 'BUILD_VERSION':
+                self.__macho['lcs'].append(self.parse_build_version(cmd, cmd_size))
 
     def parse_syms(self, offset, size, lc_symtab):
         """Parse symbol and string tables.
