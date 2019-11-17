@@ -1330,7 +1330,7 @@ class Parser():
         else:
             return ' UNKNOWN MATCH TYPE "{}"'.format(match_type)
 
-    def parse_expression(self, in_or=False):
+    def parse_expression(self, in_and=False):
         """Parse requirement expression. Recurse if necessary"""
 
         # Zero out flags in high byte (TODO: Look into flags field)
@@ -1361,21 +1361,17 @@ class Parser():
             expression += 'info[{}] = "{}"'.format(
                 self.parse_data().decode(), self.parse_data().decode())
         elif operator == 'And':
-            if in_or:
-                expression += '({} and {})'.format(
-                    self.parse_expression(), self.parse_expression())
-            else:
-                expression += '{} and {}'.format(
-                    self.parse_expression(), self.parse_expression())
+            expression += '{} and {}'.format(
+                self.parse_expression(True), self.parse_expression(True))
         elif operator == 'Or':
-            if in_or:
+            if in_and:
                 expression += '({} or {})'.format(
-                    self.parse_expression(in_or=True),
-                    self.parse_expression(in_or=True))
+                    self.parse_expression(),
+                    self.parse_expression())
             else:
                 expression += '{} or {}'.format(
-                    self.parse_expression(in_or=True),
-                    self.parse_expression(in_or=True))
+                    self.parse_expression(),
+                    self.parse_expression())
         elif operator == 'Not':
             expression += '! {}'.format(self.parse_expression())
         elif operator == 'CDHash':
