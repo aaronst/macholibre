@@ -1241,7 +1241,7 @@ class Parser():
         # first byte is composite (q1, q2)
         oid1, p = self.get_oid(data_bytes, p)
 
-        q1 = min(oid1 / 40, 2)
+        q1 = min(oid1 // 40, 2)
 
         data = str(q1) + '.' + str(oid1 - q1 * 40)
 
@@ -1344,7 +1344,7 @@ class Parser():
         elif operator == 'True':
             expression += 'always'
         elif operator == 'Ident':
-            expression += 'identity "{}"'.format(self.parse_data().decode())
+            expression += 'identifier "{}"'.format(self.parse_data().decode())
         elif operator == 'AppleAnchor':
             expression += 'anchor apple'
         elif operator == 'AppleGenericAnchor':
