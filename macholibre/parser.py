@@ -1018,7 +1018,7 @@ class Parser():
             value = self.get_string()
 
             if lc_dylibs is not None:  # If created with two-level namespace
-                dylib = sym['dylib']
+                dylib = sym.get('dylib') or 0
 
                 if dylib == 0:
                     dylib = 'SELF_LIBRARY'
