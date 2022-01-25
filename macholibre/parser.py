@@ -786,7 +786,11 @@ class Parser():
                                      '"{}".'.format(
                                          cmd, self.__file.tell() - 8))
 
-                self.__file.read(cmd_size - 8)  # skip load command
+
+                try:
+                    self.__file.read(cmd_size - 8)  # skip load command
+                except:
+                    pass
 
             if cmd == 'SEGMENT' or cmd == 'SEGMENT_64':
                 self.__macho['lcs'].append(
