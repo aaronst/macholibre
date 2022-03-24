@@ -176,7 +176,7 @@ class Parser():
     def parse_section_flags(self, output, flags):
         """Parse section flags into section type and attributes."""
 
-        output['type'] = dictionary.section_types[flags & 0xff]
+        output['type'] = dictionary.section_types.get(flags & 0xff)
 
         attrs = flags & 0xffffff00
 
