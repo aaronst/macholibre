@@ -7,13 +7,6 @@ such as architectures, load commands, dynamic libraries, symbols, function
 imports, and tons more.  Then it packs all of that information into JSON for 
 ease of analysis and integration.
 
-## Python 2
-
-With Python 2 in its sunset years, macholibre has moved on to Python 3.
-However, for those of you that are stuck on Python 2, see the [python2](https://github.com/aaronst/macholibre/tree/python2)
-branch. No promises on long-term support, but the code differences right now
-are minimal and should be fairly easy to maintain.
-
 ## Dependencies
 
 This project requires Python 3.4+ to run, due to API changes in `plistlib`.
