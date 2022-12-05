@@ -176,7 +176,7 @@ class Parser():
     def parse_section_flags(self, output, flags):
         """Parse section flags into section type and attributes."""
 
-        output['type'] = dictionary.section_types[flags & 0xff]
+        output['type'] = dictionary.section_types.get(flags & 0xff)
 
         attrs = flags & 0xffffff00
 
@@ -786,7 +786,11 @@ class Parser():
                                      '"{}".'.format(
                                          cmd, self.__file.tell() - 8))
 
-                self.__file.read(cmd_size - 8)  # skip load command
+
+                try:
+                    self.__file.read(cmd_size - 8)  # skip load command
+                except:
+                    pass
 
             if cmd == 'SEGMENT' or cmd == 'SEGMENT_64':
                 self.__macho['lcs'].append(
@@ -1018,7 +1022,7 @@ class Parser():
             value = self.get_string()
 
             if lc_dylibs is not None:  # If created with two-level namespace
-                dylib = sym['dylib']
+                dylib = sym.get('dylib') or 0
 
                 if dylib == 0:
                     dylib = 'SELF_LIBRARY'
